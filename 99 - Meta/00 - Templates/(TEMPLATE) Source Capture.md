@@ -1,198 +1,106 @@
 <%*
-
     // SOURCE CAPTURE - Smart guided input template
-
     // Requires: Templater plugin
-
     // Place in: 99 - Meta/00 - Templates/
-
-
-
+    
     // --- HELPERS ---
 
-
-
     async function required_prompt(label) {
-
         let val = "";
-
         while (!val) {
-
             val = await tp.system.prompt("REQUIRED: " + label);
-
             if (val === null) { new Notice("Cancelled."); return null; }
-
             val = val.trim();
-
             if (!val) new Notice("This field is required.", 2000);
-
         }
-
         return val;
-
     }
 
-
-
 async function optional_prompt(label) {
-
     const hint = label + "  (Enter to skip)";
-
     const val = await tp.system.prompt(hint);
-
     if (val === null) return null;
-
     return val.trim();
-
 }
-
-
 
 async function date_prompt(label) {
 
     const val = await optional_prompt(label + "  e.g. 2024  or  2024-06  or  2024-06-15");
-
     if (!val) return "";
-
     const ok = /^\d{4}(-\d{2}(-\d{2})?)?$/.test(val);
-
     if (!ok) new Notice("Date should be YYYY, YYYY-MM, or YYYY-MM-DD", 3000);
-
     return val;
-
 }
 
 const originalFile = app.workspace.getActiveFile();
 
-
 // --- SOURCE TYPE DEFINITIONS ---
 
-
-
 const TYPE_LABELS = [
-
     "Book",
-
     "Article",
-
     "Paper",
-
     "YouTube",
-
     "Video",
-
     "Podcast",
-
     "Tweet",
-
     "Thought",
-
     "Lecture"
 ];
 
-
-
 const TYPE_TAGS = {
-
     "Book": "source/book",
-
     "Article": "source/article",
-
     "Paper": "source/paper",
-
     "YouTube": "source/youtube",
-
     "Video": "source/video",
-
     "Podcast": "source/podcast",
-
     "Tweet": "source/tweet",
-
     "Thought": "note/thought",
-
     "Lecture": "source/lecture"
 };
 
-
-
 const TYPE_PREFIX = {
-
     "Book": "{",
-
     "Article": "(",
-
     "Paper": "&",
-
     "YouTube": "+",
-
     "Video": "+",
-
     "Podcast": "%",
-
     "Tweet": "!",
-
     "Thought": "=",
-
     "Lecture": "§"
 };
 
 
-
 // --- STEP 1: SELECT TYPE ---
-
-
-
 const TYPE_ICONS = [
-
     "📚 Book",
-
     "📰 Article",
-
     "📜 Paper",
-
     "🎥 YouTube",
-
     "🎬 Video",
-
     "🎧 Podcast",
-
     "🐦 Tweet",
-
     "💭 Thought",
-
     "🎓 Lecture"
 ];
-
-
 
 const selectedIcon = await tp.system.suggester(TYPE_ICONS, TYPE_LABELS, true, "What type of source is this?");
 
 if (!selectedIcon) { new Notice("Cancelled."); return; }
 
-
-
 const typeName = selectedIcon;
-
 const tag = TYPE_TAGS[typeName];
-
 const prefix = TYPE_PREFIX[typeName];
-
-
 
 // --- STEP 2: COLLECT FIELDS ---
 
-
-
 let data = {};
-
 let noteTitle = "";
 
-
-
 if (typeName === "Book") {
-
     data.isbn = await optional_prompt("ISBN (if you have it)");
-
     if (data.isbn) {
         try {
             const res = await fetch(`https://openlibrary.org/isbn/${encodeURIComponent(data.isbn)}.json`);
@@ -230,13 +138,9 @@ if (typeName === "Book") {
 
 }
 
-
-
 else if (typeName === "Article") {
-
     data.url = await required_prompt("Article URL");
     if (!data.url) return;
-
     // Try automatic metadata
     try {
         const res = await fetch(`https://api.microlink.io/?url=${encodeURIComponent(data.url)}`);
@@ -263,9 +167,7 @@ else if (typeName === "Article") {
 }
 
 
-
 else if (typeName === "Paper") {
-
     data.doi = await optional_prompt("DOI (e.g. 10.1000/xyz123)");
     if (data.doi) {
         try {
@@ -304,54 +206,29 @@ else if (typeName === "Paper") {
 
 }
 
-
-
 else if (typeName === "YouTube") {
-
     data.url = await required_prompt("YouTube URL");
-
     if (!data.url) return;
-
     try {
-
         const res = await fetch("https://youtube.com/oembed?url=" + data.url + "&format=json");
-
         const yt = await res.json();
-
         data.yt_title = yt.title;
-
         data.yt_channel = yt.author_name;
-
         data.yt_chanurl = yt.author_url;
-
         data.yt_thumb = yt.thumbnail_url;
-
         const idMatch = /(?:v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/.exec(data.url);
-
         data.yt_id = idMatch ? idMatch[1] : "";
-
         noteTitle = yt.title.replace(/[:"#^|[\]\\\/]/g, "").trim();
-
         new Notice("Fetched: " + yt.title, 2000);
-
     } catch (e) {
-
         new Notice("Could not auto-fetch YouTube data. Fill manually.", 3000);
-
         data.yt_title = await required_prompt("Video Title (auto-fetch failed)");
-
         if (!data.yt_title) return;
-
         data.yt_channel = await optional_prompt("Channel Name");
-
         data.yt_chanurl = "";
-
         data.yt_thumb = "";
-
         data.yt_id = "";
-
         noteTitle = data.yt_title.replace(/[:"#^|[\]\\\/]/g, "").trim();
-
     }
 
 }
@@ -359,51 +236,29 @@ else if (typeName === "YouTube") {
 
 
 else if (typeName === "Video") {
-
     data.title = await required_prompt("Video Title");
-
     if (!data.title) return;
-
     data.source = await optional_prompt("Platform / Source  e.g. Vimeo, Nebula");
-
     data.channel = await optional_prompt("Channel / Creator");
-
     data.url = await optional_prompt("URL");
-
     data.released = await date_prompt("Release Date");
-
     noteTitle = data.title;
-
 }
-
-
 
 else if (typeName === "Podcast") {
-
     data.title = await required_prompt("Episode Title");
-
     if (!data.title) return;
-
     data.host = await optional_prompt("Host");
-
     data.guest = await optional_prompt("Guest(s)");
-
     data.url = await optional_prompt("Episode URL");
-
     data.publish_date = await date_prompt("Date Published");
-
     data.general_subject = await optional_prompt("Subject / Topic");
-
     noteTitle = data.title;
-
 }
-
-
 
 else if (typeName === "Tweet") {
     data.url = await required_prompt("Tweet URL");
     if (!data.url) return;
-
     let autoFetched = false;
     try {
         const res = await fetch(`https://publish.twitter.com/oembed?url=${encodeURIComponent(data.url)}`);
@@ -433,57 +288,43 @@ else if (typeName === "Tweet") {
 }
 
 else if (typeName === "Thought") {
-
     data.title = await required_prompt("Thought title - one sentence claim or question");
-
     if (!data.title) return;
-
     data.context = await optional_prompt("Relevant context");
-
     data.led_here = await optional_prompt("What led me here?");
-
     noteTitle = data.title;
-
 }
 
 // ==================== NEW LECTURE BLOCK ====================
 
 else if (typeName === "Lecture") {
-
     const COURSE_FOLDER = "04 - MOCs/Courses";
     const UNIT_FOLDER = "04 - MOCs/Units";
     const PEOPLE_FOLDER = "09 - Agents/People";
-
+    
     async function getNotesInFolder(folderPath) {
-
         const folder =
             app.vault.getAbstractFileByPath(folderPath);
-
         if (!folder || !folder.children)
             return [];
-
         return folder.children.filter(
             file => file.extension === "md"
         );
     }
 
     async function createStub(path, content) {
-
         const existing =
             app.vault.getAbstractFileByPath(path);
-
         if (!existing) {
             await app.vault.create(path, content);
         }
     }
-
+    
     async function pickOrCreate(label, existingItems) {
-
         const choices = [
             ...existingItems.sort(),
             "➕ Create New"
         ];
-
         const picked =
             await tp.system.suggester(
                 choices,
@@ -491,39 +332,30 @@ else if (typeName === "Lecture") {
                 false,
                 label
             );
-
         if (!picked) return null;
-
         if (picked !== "➕ Create New")
             return picked;
-
         return await required_prompt(
             `New ${label}`
         );
     }
-
     // =====================
     // COURSE
     // =====================
-
     const courseFiles =
         await getNotesInFolder(
             COURSE_FOLDER
         );
-
     const courseNames =
         courseFiles.map(
             f => f.basename
         );
-
     data.course =
         await pickOrCreate(
             "Course",
             courseNames
         );
-
     if (!data.course) return;
-
     const coursePath =
 `${COURSE_FOLDER}/${data.course}.md`;
 
