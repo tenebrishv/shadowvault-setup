@@ -19,7 +19,7 @@ README: [README](../../README.md)
 ### 1: Clone or copy vault
 
 ```bash
-git clone https://github.com/USERNAME/ShadowVault.git
+git clone https://github.com/tenebrishv/shadowvault-setup.git
 ```
 
 Or download the ZIP and extract it.

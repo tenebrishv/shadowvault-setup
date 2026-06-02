@@ -34,6 +34,7 @@ The goal is to build a system that helps transform information into understandin
 | [DESIGN-PHILOSOPHY.md](99%20-%20Meta/01%20-%20Documentation/DESIGN-PHILOSOPHY.md)         | Core principles behind the vault's design                                                 |
 | [INSPIRATION.md](99%20-%20Meta/01%20-%20Documentation/INSPIRATION.md)                     | Inspirations: Zettelkasten, Evergreen Notes, LYT, Progressive Summarization, Tallguyjenks |
 | [ROADMAP.md](99%20-%20Meta/01%20-%20Documentation/ROADMAP.md)                             | Planned improvements and ideas                                                            |
+| [CHANGELOG.md](CHANGELOG.md)                         | Added, changed, fixed and removed between versions                                                            |
 
 ---
 

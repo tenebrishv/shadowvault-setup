@@ -559,17 +559,101 @@
             "id": "4bb1d82b9d8ac254",
             "type": "leaf",
             "pane-relief:history-v1": {
-              "pos": 1,
+              "pos": 0,
               "stack": [
-                {
-                  "title": "ROADMAP",
-                  "icon": "lucide-file",
-                  "state": "{\"type\":\"markdown\",\"state\":{\"file\":\"99 - Meta/01 - Documentation/ROADMAP.md\",\"mode\":\"source\",\"source\":false},\"icon\":\"lucide-file\",\"title\":\"ROADMAP\"}",
-                  "eState": "{\"cursor\":{\"from\":{\"line\":0,\"ch\":0},\"to\":{\"line\":0,\"ch\":0}},\"scroll\":0}"
-                },
                 {
                   "state": "{}",
                   "eState": "{}"
+                },
+                {
+                  "title": "README",
+                  "icon": "lucide-file",
+                  "state": "{\"type\":\"markdown\",\"state\":{\"file\":\"README.md\",\"mode\":\"preview\",\"source\":true},\"icon\":\"lucide-file\",\"title\":\"README\"}",
+                  "eState": "{\"scroll\":20.4462890625}"
+                },
+                {
+                  "title": "CHANGELOG",
+                  "icon": "lucide-file",
+                  "state": "{\"type\":\"markdown\",\"state\":{\"file\":\"CHANGELOG.md\",\"mode\":\"source\",\"source\":true},\"icon\":\"lucide-file\",\"title\":\"CHANGELOG\"}",
+                  "eState": "{\"cursor\":{\"from\":{\"line\":0,\"ch\":0},\"to\":{\"line\":0,\"ch\":0}},\"scroll\":0.1650429799426934}"
+                },
+                {
+                  "title": "README",
+                  "icon": "lucide-file",
+                  "state": "{\"type\":\"markdown\",\"state\":{\"file\":\"README.md\",\"mode\":\"source\",\"source\":true},\"icon\":\"lucide-file\",\"title\":\"README\"}",
+                  "eState": "{\"cursor\":{\"from\":{\"line\":0,\"ch\":0},\"to\":{\"line\":0,\"ch\":0}}}"
+                },
+                {
+                  "title": "CHANGELOG",
+                  "icon": "lucide-file",
+                  "state": "{\"type\":\"markdown\",\"state\":{\"file\":\"CHANGELOG.md\",\"mode\":\"source\",\"source\":true},\"icon\":\"lucide-file\",\"title\":\"CHANGELOG\"}",
+                  "eState": "{\"cursor\":{\"from\":{\"line\":0,\"ch\":0},\"to\":{\"line\":0,\"ch\":0}}}"
+                },
+                {
+                  "title": "README",
+                  "icon": "lucide-file",
+                  "state": "{\"type\":\"markdown\",\"state\":{\"file\":\"README.md\",\"mode\":\"source\",\"source\":true},\"icon\":\"lucide-file\",\"title\":\"README\"}",
+                  "eState": "{\"cursor\":{\"from\":{\"line\":0,\"ch\":0},\"to\":{\"line\":0,\"ch\":0}}}"
+                },
+                {
+                  "title": "CHANGELOG",
+                  "icon": "lucide-file",
+                  "state": "{\"type\":\"markdown\",\"state\":{\"file\":\"CHANGELOG.md\",\"mode\":\"source\",\"source\":true},\"icon\":\"lucide-file\",\"title\":\"CHANGELOG\"}",
+                  "eState": "{\"cursor\":{\"from\":{\"line\":0,\"ch\":0},\"to\":{\"line\":0,\"ch\":0}}}"
+                },
+                {
+                  "title": "README",
+                  "icon": "lucide-file",
+                  "state": "{\"type\":\"markdown\",\"state\":{\"file\":\"README.md\",\"mode\":\"source\",\"source\":true},\"icon\":\"lucide-file\",\"title\":\"README\"}",
+                  "eState": "{\"cursor\":{\"from\":{\"line\":0,\"ch\":0},\"to\":{\"line\":0,\"ch\":0}}}"
+                },
+                {
+                  "title": "CHANGELOG",
+                  "icon": "lucide-file",
+                  "state": "{\"type\":\"markdown\",\"state\":{\"file\":\"CHANGELOG.md\",\"mode\":\"source\",\"source\":true},\"icon\":\"lucide-file\",\"title\":\"CHANGELOG\"}",
+                  "eState": "{\"cursor\":{\"from\":{\"line\":0,\"ch\":0},\"to\":{\"line\":0,\"ch\":0}}}"
+                },
+                {
+                  "title": "README",
+                  "icon": "lucide-file",
+                  "state": "{\"type\":\"markdown\",\"state\":{\"file\":\"README.md\",\"mode\":\"source\",\"source\":true},\"icon\":\"lucide-file\",\"title\":\"README\"}",
+                  "eState": "{\"cursor\":{\"from\":{\"line\":0,\"ch\":0},\"to\":{\"line\":0,\"ch\":0}}}"
+                },
+                {
+                  "title": "CHANGELOG",
+                  "icon": "lucide-file",
+                  "state": "{\"type\":\"markdown\",\"state\":{\"file\":\"CHANGELOG.md\",\"mode\":\"source\",\"source\":true},\"icon\":\"lucide-file\",\"title\":\"CHANGELOG\"}",
+                  "eState": "{\"cursor\":{\"from\":{\"line\":0,\"ch\":0},\"to\":{\"line\":33,\"ch\":121}},\"scroll\":0}"
+                },
+                {
+                  "title": "README",
+                  "icon": "lucide-file",
+                  "state": "{\"type\":\"markdown\",\"state\":{\"file\":\"README.md\",\"mode\":\"preview\",\"source\":true},\"icon\":\"lucide-file\",\"title\":\"README\"}",
+                  "eState": "{\"scroll\":20.248372395833332}"
+                },
+                {
+                  "title": "TEMPLATES",
+                  "icon": "lucide-file",
+                  "state": "{\"type\":\"markdown\",\"state\":{\"file\":\"99 - Meta/01 - Documentation/TEMPLATES.md\",\"mode\":\"source\",\"source\":false},\"icon\":\"lucide-file\",\"title\":\"TEMPLATES\"}",
+                  "eState": "{\"cursor\":{\"from\":{\"line\":0,\"ch\":0},\"to\":{\"line\":0,\"ch\":0}}}"
+                },
+                {
+                  "title": "CHANGELOG",
+                  "icon": "lucide-file",
+                  "state": "{\"type\":\"markdown\",\"state\":{\"file\":\"CHANGELOG.md\",\"mode\":\"source\",\"source\":false},\"icon\":\"lucide-file\",\"title\":\"CHANGELOG\"}",
+                  "eState": "{\"cursor\":{\"from\":{\"line\":0,\"ch\":0},\"to\":{\"line\":0,\"ch\":0}},\"scroll\":0}"
+                },
+                {
+                  "title": "SETUP",
+                  "icon": "lucide-file",
+                  "state": "{\"type\":\"markdown\",\"state\":{\"file\":\"99 - Meta/01 - Documentation/SETUP.md\",\"mode\":\"source\",\"source\":false},\"icon\":\"lucide-file\",\"title\":\"SETUP\"}",
+                  "eState": "{\"cursor\":{\"from\":{\"line\":38,\"ch\":0},\"to\":{\"line\":38,\"ch\":0}},\"scroll\":83.72916666666667}"
+                },
+                {
+                  "title": "README",
+                  "icon": "lucide-file",
+                  "state": "{\"type\":\"markdown\",\"state\":{\"file\":\"README.md\",\"mode\":\"source\",\"source\":false},\"icon\":\"lucide-file\",\"title\":\"README\"}",
+                  "eState": "{\"cursor\":{\"from\":{\"line\":36,\"ch\":0},\"to\":{\"line\":36,\"ch\":0}},\"scroll\":32.55392283790782}"
                 },
                 {
                   "title": "PLUGINS",
@@ -690,12 +774,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "README.md",
-                "mode": "source",
-                "source": false
+                "file": "CHANGELOG.md",
+                "mode": "preview",
+                "source": true
               },
               "icon": "lucide-file",
-              "title": "README"
+              "title": "CHANGELOG"
             }
           },
           {
@@ -1451,8 +1535,12 @@
   },
   "active": "4bb1d82b9d8ac254",
   "lastOpenFiles": [
-    "99 - Meta/01 - Documentation/ROADMAP.md",
+    "das",
     "README.md",
+    "CHANGELOG.md",
+    "99 - Meta/01 - Documentation/TEMPLATES.md",
+    "99 - Meta/01 - Documentation/SETUP.md",
+    "99 - Meta/01 - Documentation/ROADMAP.md",
     "99 - Meta/01 - Documentation/INSPIRATION.md",
     "99 - Meta/01 - Documentation/DESIGN-PHILOSOPHY.md",
     "99 - Meta/01 - Documentation/EXTERNAL-INTEGRATIONS.md",
@@ -1460,10 +1548,8 @@
     "99 - Meta/01 - Documentation/PLUGINS.md",
     "99 - Meta/01 - Documentation/REVIEW-SYSTEM.md",
     "99 - Meta/01 - Documentation/METADATA.md",
-    "99 - Meta/01 - Documentation/TEMPLATES.md",
     "99 - Meta/01 - Documentation/WORKFLOWS.md",
     "99 - Meta/01 - Documentation/STRUCTURE.md",
-    "99 - Meta/01 - Documentation/SETUP.md",
     "LICENSE.md",
     "99 - Meta/01 - Documentation/SOURCES.md",
     "99 - Meta/01 - Documentation/EXTERNAL_INTEGRATIONS.md",
@@ -1477,8 +1563,6 @@
     "04 - MOCs/Courses/lOL.md",
     "04 - MOCs/Units",
     "04 - MOCs/Courses",
-    "99 - Meta/00 - Templates/(TEMPLATE) Person.md",
-    "99 - Meta/00 - Templates/(TEMPLATE) MOC.md",
     "Untitled",
     "09 - Agents/People",
     "04 - MOCS/Units",
