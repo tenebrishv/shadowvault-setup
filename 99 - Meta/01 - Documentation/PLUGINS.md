@@ -2,7 +2,7 @@
 
 ShadowVault relies on a combination of core and community plugins.
 
-README: [[README]]
+README: [README](../../README.md)
 
 ## Core Plugins (Obsidian built‑in, enabled)
 File Explorer, Global Search, Graph View, Backlinks, Canvas, Outgoing Links, Tag Pane, Properties, Page Preview, Daily Notes, Templates, Note Composer, Command Palette, Slash Commands, Bookmarks, Unique Note Creator (ZK Prefixer), Outline, Word Count, File Recovery.

@@ -17,5 +17,14 @@
       ],
       "key": "E"
     }
+  ],
+  "obsidian-link-converter:convert-wikis-to-md-in-active-file": [
+    {
+      "modifiers": [
+        "Mod",
+        "Shift"
+      ],
+      "key": "L"
+    }
   ]
 }

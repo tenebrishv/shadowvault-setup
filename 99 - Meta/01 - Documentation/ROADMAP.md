@@ -2,7 +2,7 @@
 
 This is a living document. Suggestions and pull requests welcome.
 
-README:[[README]]
+README:[README](../../README.md)
 
 ---
 
@@ -62,7 +62,7 @@ README:[[README]]
 - [ ] Integrate with Obsidian‑Leaflet or similar map plugins.
 - [ ] **Groups of people** – new note type `Group` (e.g., research team, family, reading group) with YAML:
     ```yaml
-    members: [[Person1]], [[Person2]]
+    members: [Person1](Person1), [Person2](Person2)
     type: formal | informal
     purpose:
     ```

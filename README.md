@@ -18,7 +18,7 @@ The goal is to build a system that helps transform information into understandin
 
 ## Documentation
 
-**Full documentation** lives in [[99 - Meta/01 - Documentation/]]
+**Full documentation** lives in [99 - Meta/01 - Documentation/](99%20-%20Meta/01%20-%20Documentation/)
 
 | File                                                                                      | Description                                                                               |
 | ----------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
@@ -39,7 +39,7 @@ The goal is to build a system that helps transform information into understandin
 
 ## Quick Start
 
-Full guide on [[SETUP]]
+Full guide on [SETUP](99%20-%20Meta/01%20-%20Documentation/SETUP.md)
 1. **Clone this repository** into your Obsidian vault folder.
 2. Install required plugins: **Templater**, **Dataview**.
 3. Run `(TEMPLATE) Source Capture` via Templater to add your first source.
@@ -78,7 +78,7 @@ MOC / Project
 
 Not every note reaches the end. The purpose is to identify and develop ideas worth keeping.
 
-See [[WORKFLOWS]]
+See [WORKFLOWS](99%20-%20Meta/01%20-%20Documentation/WORKFLOWS.md)
 
 ---
 ## Vault Structure (simplified)
@@ -99,7 +99,7 @@ ShadowVault/
 └── 99 - Meta
 ```
 
-Full structure and reasoning behind it: [[STRUCTURE]]
+Full structure and reasoning behind it: [STRUCTURE](99%20-%20Meta/01%20-%20Documentation/STRUCTURE.md)
 
 ---
 
@@ -116,15 +116,15 @@ Notes progress through four growth stages:
 
 This system encourages gradual refinement instead of forcing perfection during capture.
 
-Check [[WORKFLOWS#Note Maturity Model]]
+Check [](99%20-%20Meta/01%20-%20Documentation/WORKFLOWS.md#Note%20Maturity%20Model)
 
 ---
 
 ## Key Features
 
-- **Smart source capture** – 9 source types (Books, Articles, Papers, YouTube, Video, Podcast, Tweet, Thought, Lecture) with automatic metadata fetching (ISBN, DOI, oEmbed). Check [[TEMPLATES#Main Template `(TEMPLATE) Source Capture.md`]]
-- **Validated lecture system** – picks from existing Courses/Units/People, creates missing ones on the fly. Check [[TEMPLATES#Lecture Automation]]
-- **Note maturity model** – seedling → fern → incubator → evergreen. Check [[WORKFLOWS#Note Maturity Model]]
+- **Smart source capture** – 9 source types (Books, Articles, Papers, YouTube, Video, Podcast, Tweet, Thought, Lecture) with automatic metadata fetching (ISBN, DOI, oEmbed). Check [](99%20-%20Meta/01%20-%20Documentation/TEMPLATES.md#Main%20Template%20`(TEMPLATE)%20Source%20Capture.md`)
+- **Validated lecture system** – picks from existing Courses/Units/People, creates missing ones on the fly. Check [](99%20-%20Meta/01%20-%20Documentation/TEMPLATES.md#Lecture%20Automation)
+- **Note maturity model** – seedling → fern → incubator → evergreen. Check [](99%20-%20Meta/01%20-%20Documentation/WORKFLOWS.md#Note%20Maturity%20Model)
 - **Review system** – scheduled reviews (14 days) plus Dataview queries.
 - **Daily notes with weekly/monthly/yearly reviews**.
 - **CSS themes** – notebook backgrounds, daily note colours, coloured sidebar, general tweaks.

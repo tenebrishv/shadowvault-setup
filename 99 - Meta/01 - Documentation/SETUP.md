@@ -2,7 +2,7 @@
 
 This guide walks through installing and configuring ShadowVault from a fresh Obsidian installation.
 
-README: [[README]]
+README: [README](../../README.md)
 
 ---
 
@@ -37,7 +37,7 @@ Open Obsidian → **Open folder as vault** → select the `ShadowVault` fold
 
 Go to **Settings → Community plugins → Turn on community plugins → Browse**.
 
-Install and enable the plugins listed in [[PLUGINS]].
+Install and enable the plugins listed in [PLUGINS](PLUGINS.md).
 
 ---
 
@@ -74,7 +74,7 @@ Your first captured note will appear in the current folder (you can move it to 
 ## Troubleshooting
 
 - **Templater error "Invalid or unexpected token"**: Ensure the Lecture section doesn’t use optional chaining (`?.`) – the provided code is safe.
-- **Dataview picker shows no courses/units**: Verify that course notes have the tag `#course` and are inside `04 - MOCS/Courses/`. Unit notes must have `#course-unit` and YAML field `course: [[CourseName]]`.
+- **Dataview picker shows no courses/units**: Verify that course notes have the tag `#course` and are inside `04 - MOCS/Courses/`. Unit notes must have `#course-unit` and YAML field `course: [CourseName](CourseName)`.
 - **New course/unit/person not created**: Check that helper templates exist in `99 - Meta/00 - Templates/` with exact names:
     - `(TEMPLATE) Course MOC.md`
     - `(TEMPLATE) Unit MOC.md`
@@ -92,6 +92,6 @@ git pull
 
 before opening Obsidian.
 
-Review [[CHANGELOG]] after each update.
+Review [CHANGELOG](CHANGELOG) after each update.
 
 ---

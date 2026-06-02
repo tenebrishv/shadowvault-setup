@@ -2,7 +2,7 @@
 
 How is data reviewed in the future once it is captured.
 
-README: [[README]]
+README: [README](../../README.md)
 
 ## Scheduled Reviews
 Every source note created by `Source Capture` gets a `review:` date set to **14 days after creation** (e.g., created `2025-02-14` → review `2025-02-28`).

@@ -2,7 +2,7 @@
 
 ShadowVault is not built from scratch. It synthesises ideas and workflows from several established Personal Knowledge Management (PKM) systems. This document credits the thinkers and methods that shaped the vault.
 
-README: [[README]]
+README: [README](../../README.md)
 
 ---
 

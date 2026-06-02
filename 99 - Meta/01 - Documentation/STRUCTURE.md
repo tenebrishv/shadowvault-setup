@@ -2,7 +2,7 @@
 
 ShadowVault uses a shallow folder structure designed to minimize friction and maximize discoverability.
 
-Readme: [[README]]
+Readme: [README](../../README.md)
 
 ---
 

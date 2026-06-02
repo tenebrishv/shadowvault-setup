@@ -2,7 +2,7 @@
 
 This vault is built on a set of core principles. Every folder, template, and automation is shaped by these ideas.
 
-README: [[README]]
+README: [README](../../README.md)
 
 ---
 
@@ -34,7 +34,7 @@ A note titled "Memory" is too broad. "Working memory capacity is limited to 4±1
 
 ## 4. Nothing Is Ever Finished
 
-Notes have a `growth` field (seedling → fern → incubator → evergreen), but even "evergreen" notes can be revised. The goal is **continuous improvement**, not perfection. [[WORKFLOWS#Note Maturity Model]]
+Notes have a `growth` field (seedling → fern → incubator → evergreen), but even "evergreen" notes can be revised. The goal is **continuous improvement**, not perfection. [](WORKFLOWS.md#Note%20Maturity%20Model)
 
 Scheduled reviews (`review:` date) ensure notes do not rot.
 

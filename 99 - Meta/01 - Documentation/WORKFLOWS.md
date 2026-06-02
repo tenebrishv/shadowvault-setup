@@ -5,7 +5,7 @@ This document describes how information moves through ShadowVault.
 
 The objective is to identify, develop, and connect valuable ideas.
 
-README:[[README]]
+README:[README](../../README.md)
 
 ---
 
@@ -33,7 +33,7 @@ Permanent Note (03 - Permanent Notes) – atomic, evergreen idea
 MOC / Project (04 - MOCs / 05 - Projects) – curation & action
 ```
 
-Not every note completes this journey. Some fleeting thoughts are discarded. Some [[SOURCES]] are consumed and summarised without becoming permanent notes. The goal is **not to process everything** – it is to let important ideas rise.
+Not every note completes this journey. Some fleeting thoughts are discarded. Some [SOURCES](SOURCES) are consumed and summarised without becoming permanent notes. The goal is **not to process everything** – it is to let important ideas rise.
 
 ---
 

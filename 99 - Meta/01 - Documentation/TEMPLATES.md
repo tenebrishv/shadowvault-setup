@@ -4,7 +4,7 @@ Templates are the backbone of ShadowVault.
 
 They enforce consistency, automate metadata generation, and reduce friction during capture and processing.
 
-README: [[README]]
+README: [README](../../README.md)
 
 All templates are stored in `99 - Meta/00 - Templates/`.
 
@@ -77,7 +77,7 @@ These are used by `Source Capture` when creating new Courses, Units, or People.
 | File | Used for |
 |------|----------|
 | `(TEMPLATE) Course MOC.md` | New course stub (`#course`, YAML with `default_lecturer`) |
-| `(TEMPLATE) Unit MOC.md` | New unit stub (`#course-unit`, YAML `course: [[]]`) |
+| `(TEMPLATE) Unit MOC.md` | New unit stub (`#course-unit`, YAML `course: [TEMPLATES](.md)`) |
 | `(TEMPLATE) Person.md` | New person stub (`#person`) |
 
 ---

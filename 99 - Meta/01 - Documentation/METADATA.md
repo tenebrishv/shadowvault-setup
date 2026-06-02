@@ -3,7 +3,7 @@
 ShadowVault uses YAML frontmatter to provide structure, automation, and discoverability.
 Metadata should support retrieval and understanding.
 
-README: [[README]]
+README: [README](../../README.md)
 
 ---
 ## Core Frontmatter Fields (present on all notes)
@@ -108,9 +108,9 @@ tweet_text:
 ### Lecture
 
 ```yaml
-course: "[[CourseName]]"
-unit: "[[UnitName]]"       # optional
-lecturer: "[[PersonName]]" # optional
+course: "[CourseName](CourseName)"
+unit: "[UnitName](UnitName)"       # optional
+lecturer: "[PersonName](PersonName)" # optional
 lecture_num: 3
 date_given: YYYY-MM-DD
 url:

@@ -2,7 +2,7 @@
 
 ShadowVault prioritizes functionality over aesthetics. However, a pleasant environment encourages consistent use. The vault includes several CSS snippets for organization and visual clarity.
 
-README:[[README]]
+README:[README](../../README.md)
 
 CSS snippets live in `.obsidian/snippets/`. Toggle them in **Settings → Appearance → CSS snippets**.
 

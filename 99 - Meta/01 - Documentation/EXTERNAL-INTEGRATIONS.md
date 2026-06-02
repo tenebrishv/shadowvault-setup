@@ -3,7 +3,7 @@
 This file tracks tools that connect to your vault.  
 None are currently implemented – add them here as you adopt them.
 
-README: [[README]]
+README: [README](../../README.md)
 
 ---
 
