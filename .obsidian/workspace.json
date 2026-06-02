@@ -171,16 +171,82 @@
             "id": "b69fa22dea897dce",
             "type": "leaf",
             "pane-relief:history-v1": {
-              "pos": 1,
+              "pos": 0,
               "stack": [
                 {
-                  "title": "Unit 1",
-                  "icon": "lucide-file",
-                  "state": "{\"type\":\"markdown\",\"state\":{\"file\":\"04 - MOCS/Units/Unit 1.md\",\"mode\":\"preview\",\"source\":true},\"icon\":\"lucide-file\",\"title\":\"Unit 1\"}",
+                  "state": "{}",
                   "eState": "{}"
                 },
                 {
-                  "state": "{}",
+                  "title": "00 - Inbox Dashboard",
+                  "icon": "lucide-file",
+                  "state": "{\"type\":\"markdown\",\"state\":{\"file\":\"08 - Nexus/00 - Inbox Dashboard.md\",\"mode\":\"source\",\"source\":true},\"icon\":\"lucide-file\",\"title\":\"00 - Inbox Dashboard\"}",
+                  "eState": "{\"cursor\":{\"from\":{\"line\":25,\"ch\":0},\"to\":{\"line\":25,\"ch\":0}},\"scroll\":0}"
+                },
+                {
+                  "title": "01 - Sources Dashboard",
+                  "icon": "lucide-file",
+                  "state": "{\"type\":\"markdown\",\"state\":{\"file\":\"08 - Nexus/01 - Sources Dashboard.md\",\"mode\":\"source\",\"source\":true},\"icon\":\"lucide-file\",\"title\":\"01 - Sources Dashboard\"}",
+                  "eState": "{\"cursor\":{\"from\":{\"line\":0,\"ch\":0},\"to\":{\"line\":0,\"ch\":0}}}"
+                },
+                {
+                  "title": "09 - Main Dashboard",
+                  "icon": "lucide-file",
+                  "state": "{\"type\":\"markdown\",\"state\":{\"file\":\"08 - Nexus/09 - Main Dashboard.md\",\"mode\":\"source\",\"source\":true},\"icon\":\"lucide-file\",\"title\":\"09 - Main Dashboard\"}",
+                  "eState": "{\"cursor\":{\"from\":{\"line\":0,\"ch\":0},\"to\":{\"line\":0,\"ch\":0}}}"
+                },
+                {
+                  "title": "01 - Sources Dashboard",
+                  "icon": "lucide-file",
+                  "state": "{\"type\":\"markdown\",\"state\":{\"file\":\"08 - Nexus/01 - Sources Dashboard.md\",\"mode\":\"source\",\"source\":true},\"icon\":\"lucide-file\",\"title\":\"01 - Sources Dashboard\"}",
+                  "eState": "{\"cursor\":{\"from\":{\"line\":0,\"ch\":0},\"to\":{\"line\":0,\"ch\":0}}}"
+                },
+                {
+                  "title": "00 - Inbox Dashboard",
+                  "icon": "lucide-file",
+                  "state": "{\"type\":\"markdown\",\"state\":{\"file\":\"08 - Nexus/00 - Inbox Dashboard.md\",\"mode\":\"source\",\"source\":true},\"icon\":\"lucide-file\",\"title\":\"00 - Inbox Dashboard\"}",
+                  "eState": "{\"cursor\":{\"from\":{\"line\":0,\"ch\":0},\"to\":{\"line\":0,\"ch\":0}},\"scroll\":0}"
+                },
+                {
+                  "title": "README",
+                  "icon": "lucide-file",
+                  "state": "{\"type\":\"markdown\",\"state\":{\"file\":\"README.md\",\"mode\":\"source\",\"source\":true},\"icon\":\"lucide-file\",\"title\":\"README\"}",
+                  "eState": "{\"cursor\":{\"from\":{\"line\":313,\"ch\":0},\"to\":{\"line\":313,\"ch\":0}},\"scroll\":273.57135953608247}"
+                },
+                {
+                  "title": "(TEMPLATE) Source Capture",
+                  "icon": "lucide-file",
+                  "state": "{\"type\":\"markdown\",\"state\":{\"file\":\"99 - Meta/00 - Templates/(TEMPLATE) Source Capture.md\",\"mode\":\"source\",\"source\":true},\"icon\":\"lucide-file\",\"title\":\"(TEMPLATE) Source Capture\"}",
+                  "eState": "{\"cursor\":{\"from\":{\"line\":4,\"ch\":19},\"to\":{\"line\":4,\"ch\":19}}}"
+                },
+                {
+                  "title": "(TEMPLATE) Permanent Note",
+                  "icon": "lucide-file",
+                  "state": "{\"type\":\"markdown\",\"state\":{\"file\":\"99 - Meta/00 - Templates/(TEMPLATE) Permanent Note.md\",\"mode\":\"preview\",\"source\":true},\"icon\":\"lucide-file\",\"title\":\"(TEMPLATE) Permanent Note\"}",
+                  "eState": "{}"
+                },
+                {
+                  "title": "(TEMPLATE) Daily Enhanced",
+                  "icon": "lucide-file",
+                  "state": "{\"type\":\"markdown\",\"state\":{\"file\":\"99 - Meta/00 - Templates/(TEMPLATE) Daily Enhanced.md\",\"mode\":\"preview\",\"source\":true},\"icon\":\"lucide-file\",\"title\":\"(TEMPLATE) Daily Enhanced\"}",
+                  "eState": "{}"
+                },
+                {
+                  "title": "(TEMPLATE) Course MOC",
+                  "icon": "lucide-file",
+                  "state": "{\"type\":\"markdown\",\"state\":{\"file\":\"99 - Meta/00 - Templates/(TEMPLATE) Course MOC.md\",\"mode\":\"preview\",\"source\":true},\"icon\":\"lucide-file\",\"title\":\"(TEMPLATE) Course MOC\"}",
+                  "eState": "{}"
+                },
+                {
+                  "title": "README",
+                  "icon": "lucide-file",
+                  "state": "{\"type\":\"markdown\",\"state\":{\"file\":\"README.md\",\"mode\":\"preview\",\"source\":true},\"icon\":\"lucide-file\",\"title\":\"README\"}",
+                  "eState": "{}"
+                },
+                {
+                  "title": "Home",
+                  "icon": "lucide-file",
+                  "state": "{\"type\":\"markdown\",\"state\":{\"file\":\"04 - MOCS/Home.md\",\"mode\":\"preview\",\"source\":true},\"icon\":\"lucide-file\",\"title\":\"Home\"}",
                   "eState": "{}"
                 },
                 {
@@ -248,16 +314,57 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "04 - MOCS/Home.md",
-                "mode": "preview",
+                "file": "README.md",
+                "mode": "source",
                 "source": true
               },
               "icon": "lucide-file",
-              "title": "Home"
+              "title": "README"
+            }
+          },
+          {
+            "id": "71060441b38c1bf5",
+            "type": "leaf",
+            "pane-relief:history-v1": {
+              "pos": 0,
+              "stack": [
+                {
+                  "state": "{}",
+                  "eState": "{}"
+                },
+                {
+                  "title": "NICE TO HAVE",
+                  "icon": "lucide-file",
+                  "state": "{\"type\":\"markdown\",\"state\":{\"file\":\"NICE TO HAVE.md\",\"mode\":\"source\",\"source\":true},\"icon\":\"lucide-file\",\"title\":\"NICE TO HAVE\"}",
+                  "eState": "{\"cursor\":{\"from\":{\"line\":170,\"ch\":0},\"to\":{\"line\":170,\"ch\":0}},\"scroll\":146.96875}"
+                },
+                {
+                  "title": "README",
+                  "icon": "lucide-file",
+                  "state": "{\"type\":\"markdown\",\"state\":{\"file\":\"README.md\",\"mode\":\"source\",\"source\":true},\"icon\":\"lucide-file\",\"title\":\"README\"}",
+                  "eState": "{\"cursor\":{\"from\":{\"line\":346,\"ch\":107},\"to\":{\"line\":346,\"ch\":107}},\"scroll\":316.5975158562368}"
+                },
+                {
+                  "title": "NICE TO HAVE",
+                  "icon": "lucide-file",
+                  "state": "{\"type\":\"markdown\",\"state\":{\"file\":\"NICE TO HAVE.md\",\"mode\":\"source\",\"source\":false},\"icon\":\"lucide-file\",\"title\":\"NICE TO HAVE\"}",
+                  "eState": "{\"cursor\":{\"from\":{\"line\":78,\"ch\":0},\"to\":{\"line\":78,\"ch\":0}},\"scroll\":52.53154294400811}"
+                }
+              ]
+            },
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "README.md",
+                "mode": "source",
+                "source": true
+              },
+              "icon": "lucide-file",
+              "title": "README"
             }
           }
         ],
-        "currentTab": 2
+        "currentTab": 3
       }
     ],
     "direction": "vertical"
@@ -341,7 +448,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 363.5
+    "width": 241.5
   },
   "right": {
     "id": "d0a09e732bcab80c",
@@ -494,17 +601,23 @@
       "templater-obsidian:Templater": false
     }
   },
-  "active": "4aa063a41552f82d",
+  "active": "71060441b38c1bf5",
   "lastOpenFiles": [
+    "NICE TO HAVE.md",
     "README.md",
+    "08 - Nexus/00 - Inbox Dashboard.md",
+    "08 - Nexus/01 - Sources Dashboard.md",
+    "08 - Nexus/09 - Main Dashboard.md",
+    "99 - Meta/00 - Templates/(TEMPLATE) Source Capture.md",
+    "99 - Meta/00 - Templates/(TEMPLATE) Permanent Note.md",
+    "99 - Meta/00 - Templates/(TEMPLATE) Daily Enhanced.md",
+    "99 - Meta/00 - Templates/(TEMPLATE) Course MOC.md",
+    "04 - MOCS/Units/Unit 1.md",
     "04 - MOCS/Courses/Physics.md",
     "§ Introduction to Mechanics.md",
     "09 - Agents/People/Antonio Cellamare.md",
     "04 - MOCS/Home.md",
-    "99 - Meta/00 - Templates/(TEMPLATE) Source Capture.md",
     "99 - Meta/00 - Templates/(TEMPLATE) Person.md",
-    "99 - Meta/00 - Templates/(TEMPLATE) Permanent Note.md",
-    "04 - MOCS/Units/Unit 1.md",
     "09 - Agents/People/§ Introduction to mechanics.md",
     "04 - MOCs/Units/Unit 1.md",
     "04 - MOCs/Units",
@@ -518,12 +631,6 @@
     "§ lol.md",
     "§ 12213213.md",
     "09 - Agents/People/Que rico.md",
-    "99 - Meta/00 - Templates/(TEMPLATE) MOC.md",
-    "04 - MOCs/Units/Unidad 1 - Las bases de la constitucion.md",
-    "04 - MOCs/Courses/Régimen de Promoción Industrial.md",
-    "09 - Agents/People/§ veremos esto nuevamente.md",
-    "04 - MOCs/Courses/Redes de distribucion electrica.md",
-    "04 - MOCs/Units/Unidad 1 - Urbanizacion.md",
     "Untitled",
     "09 - Agents/People",
     "04 - MOCS/Units",
