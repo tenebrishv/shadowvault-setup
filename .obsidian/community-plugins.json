@@ -3,7 +3,6 @@
   "url-into-selection",
   "dataview",
   "file-explorer-note-count",
-  "nldates-redux",
   "pane-relief",
   "supercharged-links-obsidian",
   "review-obsidian",
@@ -11,5 +10,6 @@
   "tag-wrangler",
   "obsidian-excalidraw-plugin",
   "folder-links",
-  "obsidian-link-converter"
+  "obsidian-link-converter",
+  "nldates-redux"
 ]

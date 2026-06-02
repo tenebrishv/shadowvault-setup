@@ -566,6 +566,36 @@
                   "eState": "{}"
                 },
                 {
+                  "title": "README",
+                  "icon": "lucide-file",
+                  "state": "{\"type\":\"markdown\",\"state\":{\"file\":\"README.md\",\"mode\":\"preview\",\"source\":true},\"icon\":\"lucide-file\",\"title\":\"README\"}",
+                  "eState": "{\"scroll\":15.850746268656717}"
+                },
+                {
+                  "title": "ROADMAP",
+                  "icon": "lucide-file",
+                  "state": "{\"type\":\"markdown\",\"state\":{\"file\":\"99 - Meta/01 - Documentation/ROADMAP.md\",\"mode\":\"preview\",\"source\":true},\"icon\":\"lucide-file\",\"title\":\"ROADMAP\"}",
+                  "eState": "{\"scroll\":18.642857142857142}"
+                },
+                {
+                  "title": "README",
+                  "icon": "lucide-file",
+                  "state": "{\"type\":\"markdown\",\"state\":{\"file\":\"README.md\",\"mode\":\"preview\",\"source\":true},\"icon\":\"lucide-file\",\"title\":\"README\"}",
+                  "eState": "{\"scroll\":19.40909090909091}"
+                },
+                {
+                  "title": "CSS",
+                  "icon": "lucide-file",
+                  "state": "{\"type\":\"markdown\",\"state\":{\"file\":\"99 - Meta/01 - Documentation/CSS.md\",\"mode\":\"preview\",\"source\":true},\"icon\":\"lucide-file\",\"title\":\"CSS\"}",
+                  "eState": "{\"scroll\":71.58849557522124}"
+                },
+                {
+                  "title": "README",
+                  "icon": "lucide-file",
+                  "state": "{\"type\":\"markdown\",\"state\":{\"file\":\"README.md\",\"mode\":\"preview\",\"source\":true},\"icon\":\"lucide-file\",\"title\":\"README\"}",
+                  "eState": "{\"scroll\":17.166015625}"
+                },
+                {
                   "title": "CHANGELOG",
                   "icon": "lucide-file",
                   "state": "{\"type\":\"markdown\",\"state\":{\"file\":\"CHANGELOG.md\",\"mode\":\"source\",\"source\":true},\"icon\":\"lucide-file\",\"title\":\"CHANGELOG\"}",
@@ -780,12 +810,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "README.md",
+                "file": "99 - Meta/01 - Documentation/CSS.md",
                 "mode": "preview",
                 "source": true
               },
               "icon": "lucide-file",
-              "title": "README"
+              "title": "CSS"
             }
           },
           {
@@ -1541,16 +1571,16 @@
   },
   "active": "4bb1d82b9d8ac254",
   "lastOpenFiles": [
+    "README.md",
+    "99 - Meta/01 - Documentation/ROADMAP.md",
+    "99 - Meta/01 - Documentation/CSS.md",
     "CHANGELOG.md",
     "das",
-    "README.md",
     "99 - Meta/01 - Documentation/TEMPLATES.md",
     "99 - Meta/01 - Documentation/SETUP.md",
-    "99 - Meta/01 - Documentation/ROADMAP.md",
     "99 - Meta/01 - Documentation/INSPIRATION.md",
     "99 - Meta/01 - Documentation/DESIGN-PHILOSOPHY.md",
     "99 - Meta/01 - Documentation/EXTERNAL-INTEGRATIONS.md",
-    "99 - Meta/01 - Documentation/CSS.md",
     "99 - Meta/01 - Documentation/PLUGINS.md",
     "99 - Meta/01 - Documentation/REVIEW-SYSTEM.md",
     "99 - Meta/01 - Documentation/METADATA.md",

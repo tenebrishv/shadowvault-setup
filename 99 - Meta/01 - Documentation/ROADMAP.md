@@ -11,6 +11,7 @@ README:[README](../../README.md)
 - [ ] **Nexus dashboards** – create dedicated files:
   - `08 - Nexus/Dashboards.md` – Dataview queries for reviews, growth stages, unprocessed items.
   - `08 - Nexus/Library.md` – curated collection of key resources, papers, or templates (a personal library index).
+- [ ] **Implement CSS snippets** – add `Notebook Backgrounds.css`, `Daily Note Themes.css`, `Colored Sidebar Items.css`, and `CyanVoxel's General Tweaks.css` to `.obsidian/snippets/`.
 - [ ] **Agents folder expansion** – subfolders or naming prefixes for:
   - `People/` (individuals)
   - `Countries/` (sovereign states)

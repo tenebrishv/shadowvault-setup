@@ -1,6 +1,8 @@
-# CSS Themes & Snippets
+# CSS Themes & Snippets (Planned)
 
-ShadowVault prioritizes functionality over aesthetics. However, a pleasant environment encourages consistent use. The vault includes several CSS snippets for organization and visual clarity.
+> **⚠️ Not yet implemented** – These CSS snippets are **planned** for a future release. The documentation below describes the intended design, but the actual `.css` files are not yet present in `.obsidian/snippets/`.
+
+ShadowVault prioritizes functionality over aesthetics. However, a pleasant environment encourages consistent use. The vault includes several CSS snippets for organization and visual clarity. All of this functionality has not been implemented yet.
 
 README:[README](../../README.md)
 
@@ -78,6 +80,6 @@ Utility classes available on any note:
 
 ## Base Theme
 
-The vault uses **Vanilla AMOLED** theme (pure black background in dark mode). Interface and editor font: **JetBrains Mono Nerd Font Mono**.
+It will be considered to use **Vanilla AMOLED** theme (pure black background in dark mode). Interface and editor font: **JetBrains Mono Nerd Font Mono**.
 
 To change theme: **Settings → Appearance → Themes**.
