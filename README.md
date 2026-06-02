@@ -59,7 +59,7 @@ Full guide on [SETUP](99%20-%20Meta/01%20-%20Documentation/SETUP.md)
 
 ---
 
-# Knowledge Flow
+## Knowledge Flow
 
 Every piece of information follows a path through the vault:
 
