@@ -566,6 +566,12 @@
                   "eState": "{}"
                 },
                 {
+                  "title": "CHANGELOG",
+                  "icon": "lucide-file",
+                  "state": "{\"type\":\"markdown\",\"state\":{\"file\":\"CHANGELOG.md\",\"mode\":\"source\",\"source\":true},\"icon\":\"lucide-file\",\"title\":\"CHANGELOG\"}",
+                  "eState": "{\"cursor\":{\"from\":{\"line\":28,\"ch\":11},\"to\":{\"line\":28,\"ch\":11}},\"scroll\":0}"
+                },
+                {
                   "title": "README",
                   "icon": "lucide-file",
                   "state": "{\"type\":\"markdown\",\"state\":{\"file\":\"README.md\",\"mode\":\"preview\",\"source\":true},\"icon\":\"lucide-file\",\"title\":\"README\"}",
@@ -774,12 +780,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "CHANGELOG.md",
+                "file": "README.md",
                 "mode": "preview",
                 "source": true
               },
               "icon": "lucide-file",
-              "title": "CHANGELOG"
+              "title": "README"
             }
           },
           {
@@ -1535,9 +1541,9 @@
   },
   "active": "4bb1d82b9d8ac254",
   "lastOpenFiles": [
+    "CHANGELOG.md",
     "das",
     "README.md",
-    "CHANGELOG.md",
     "99 - Meta/01 - Documentation/TEMPLATES.md",
     "99 - Meta/01 - Documentation/SETUP.md",
     "99 - Meta/01 - Documentation/ROADMAP.md",
@@ -1569,7 +1575,6 @@
     "04 - MOCS/Course/Untitled",
     "04 - MOCS/Courses",
     "01 - Sources/Papers",
-    "01 - Sources/Courses",
-    "01 - Sources/Lectures"
+    "01 - Sources/Courses"
   ]
 }

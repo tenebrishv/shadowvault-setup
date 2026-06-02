@@ -133,6 +133,9 @@ Check [](99%20-%20Meta/01%20-%20Documentation/WORKFLOWS.md#Note%20Maturity%20Mod
 
 ## License
 
+**✅ Free for hobbyists, students, educators, and personal use.**  
+You are welcome to use, share, and adapt this vault for non‑commercial purposes – including learning, tinkering, and building your own PKM system – as long as you give credit and share alike.
+
 This work © tenebrishv is licensed under a [Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License](http://creativecommons.org/licenses/by-nc-sa/4.0/).
 
 > **Clarification of NonCommercial:**  
@@ -142,9 +145,7 @@ This work © tenebrishv is licensed under a [Creative Commons Attribution-NonCom
 > - Internal corporate use that supports revenue‑generating activities  
 > - Integrating it into a SaaS, web service, or mobile app  
 >  
-> If you are unsure whether your intended use is allowed, please contact [tenebrishv222@gmail.com](mailto:).  
+> If you are unsure whether your intended use is allowed, please contact [tenebrishv222@gmail.com](mailto:tenebrishv222@gmail.com).  
 > The copyright holder reserves the right to grant commercial exceptions on a case‑by‑case basis.
 
 *This clarification does not modify the official license terms. The full legal code is in the `LICENSE` file.*
-
-
