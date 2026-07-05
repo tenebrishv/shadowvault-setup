@@ -29,9 +29,10 @@ ShadowVault/
 ├── 08 - Nexus/ # Dashboards and vault-wide overviews  
 ├── 09 - Agents/ # People notes (lecturers, authors, contacts)  
 └── 99 - Meta/ # Vault infrastructure  
-	├── 00 - Templates/ # All template files
-		├── Sources  
-	└── 01 - Documentation/ # This documentation
+	├── 00 - Templates/ # All template files (Templater scans this for "Insert Template")
+	├── 01 - Documentation/ # This documentation
+	├── 02 - Scripts/ # Templater User Scripts backing Source Capture (kept out of 00 - Templates/ so they don't show up as templates)
+	└── 03 - Scripts-tests/ # Unit tests for 02 - Scripts/ (sibling, not nested, so Templater doesn't load them as scripts)
 ```
 
 ---

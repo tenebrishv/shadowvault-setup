@@ -35,5 +35,5 @@ File Explorer, Global Search, Graph View, Backlinks, Canvas, Outgoing Links, Tag
 | **Extended MathJax**             | Full LaTeX support                                                       |
 ## Installation Notes
 - After installing community plugins, you must **enable** them (toggle on).
-- For Templater, set the template folder to `99 - Meta/00 - Templates/`.
+- For Templater, set the template folder to `99 - Meta/00 - Templates/`, and set the **User Scripts Folder** to `99 - Meta/02 - Scripts/` (required by the `Source Capture` template — see [TEMPLATES.md](TEMPLATES.md#source-capture-architecture)). Keep the User Scripts Folder outside the template folder — Templater's "Insert Template" picker lists everything under `templates_folder`, so `.js` files nested inside it would show up as if they were templates.
 - For Dataview, enable JavaScript queries if you want advanced use (though the template uses basic Dataview API only).
