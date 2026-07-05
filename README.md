@@ -35,6 +35,7 @@ The goal is to build a system that helps transform information into understandin
 | [INSPIRATION.md](99%20-%20Meta/01%20-%20Documentation/INSPIRATION.md)                     | Inspirations: Zettelkasten, Evergreen Notes, LYT, Progressive Summarization, Tallguyjenks |
 | [ROADMAP.md](99%20-%20Meta/01%20-%20Documentation/ROADMAP.md)                             | Planned improvements and ideas                                                            |
 | [CHANGELOG.md](CHANGELOG.md)                         | Added, changed, fixed and removed between versions                                                            |
+| [SUPPORT.md](99%20-%20Meta/01%20-%20Documentation/SUPPORT.md)                             | How to support the project (donations)                                                    |
 
 ---
 
@@ -117,7 +118,9 @@ Notes progress through four growth stages:
 
 This system encourages gradual refinement instead of forcing perfection during capture.
 
-Check [](99%20-%20Meta/01%20-%20Documentation/WORKFLOWS.md#Note%20Maturity%20Model)
+Check [Note Maturity Model](99%20-%20Meta/01%20-%20Documentation/WORKFLOWS.md#Note%20Maturity%20Model)
+
+
 
 ---
 
@@ -149,3 +152,9 @@ This work © tenebrishv is licensed under a [Creative Commons Attribution-NonCom
 > The copyright holder reserves the right to grant commercial exceptions on a case‑by‑case basis.
 
 *This clarification does not modify the official license terms. The full legal code is in the `LICENSE` file.*
+
+## Support
+
+If ShadowVault has been useful to you, consider supporting its development: ☕ [ko-fi.com/tenebrishv](https://ko-fi.com/tenebrishv)
+
+See [SUPPORT.md](99%20-%20Meta/01%20-%20Documentation/SUPPORT.md) for details.
