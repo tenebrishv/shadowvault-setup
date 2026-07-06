@@ -51,12 +51,12 @@ Full guide on [SETUP](99%20-%20Meta/01%20-%20Documentation/SETUP.md)
 
 ## Core Principles
 
-
 - **Links over folders** – navigation happens through connections, not hierarchies.
 - **Atomic notes** – one idea per permanent note, stated as a claim.
-- **Nothing is ever finished** – notes are living, open to revision.
+- **Nothing is ever finished** – notes (including evergreen ones) are living, always open to revision.
 - **Avoid the collector's fallacy** – capture without connection is hoarding.
-- **Knowledge Is Never Finished** –  Evergreen notes are polished but always open to revision.
+
+This is a short excerpt. See the full set of 10 in [DESIGN-PHILOSOPHY.md](99%20-%20Meta/01%20-%20Documentation/DESIGN-PHILOSOPHY.md).
 
 ---
 
@@ -92,7 +92,7 @@ ShadowVault/
 ├── 01 - Sources
 ├── 02 - Literature Notes
 ├── 03 - Permanent Notes
-├── 04 - MOCs
+├── 04 - MOCS
 ├── 05 - Projects
 ├── 06 - Daily
 ├── 07 - Attachments
@@ -128,7 +128,7 @@ Check [Note Maturity Model](99%20-%20Meta/01%20-%20Documentation/WORKFLOWS.md#No
 
 - **Smart source capture** – 9 source types (Books, Articles, Papers, YouTube, Video, Podcast, Tweet, Thought, Lecture) with automatic metadata fetching (ISBN, DOI, oEmbed). Check [Templates](99%20-%20Meta/01%20-%20Documentation/TEMPLATES.md#Main%20Template%20`(TEMPLATE)%20Source%20Capture.md`)
 - **Validated lecture system** – picks from existing Courses/Units/People, creates missing ones on the fly. Check [Templates](99%20-%20Meta/01%20-%20Documentation/TEMPLATES.md#Lecture%20Automation)
-- **Note maturity model** – seedling → fern → incubator → evergreen. Check [](99%20-%20Meta/01%20-%20Documentation/WORKFLOWS.md#Note%20Maturity%20Model)
+- **Note maturity model** – seedling → fern → incubator → evergreen. Check [Note Maturity Model](99%20-%20Meta/01%20-%20Documentation/WORKFLOWS.md#Note%20Maturity%20Model)
 - **Review system** – scheduled reviews (14 days) plus Dataview queries.
 - **Daily notes with weekly/monthly/yearly reviews**.
 - **CSS themes (planned)** – notebook backgrounds, daily note colours, coloured sidebar, general tweaks will be added in a future release.

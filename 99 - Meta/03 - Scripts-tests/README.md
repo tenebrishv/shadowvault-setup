@@ -1,7 +1,8 @@
-# Source Capture script tests
+# Scripts tests
 
-Unit tests for `99 - Meta/02 - Scripts/*.js`, using Node's built-in
-test runner (`node:test` — ships with Node, no install needed).
+Unit tests for `99 - Meta/02 - Scripts/*.js` — the Source Capture modules and
+`periodicNoteHelpers.js` — using Node's built-in test runner (`node:test` —
+ships with Node, no install needed).
 
 ## Running
 
@@ -26,10 +27,19 @@ sequencing, auto-fetch success/fallback branches, and the generated
 `yamlFields`/`body`/`noteTitle` strings — using mocked `tp`, `app`, `fetch`,
 and `Notice` (see `_testUtils.js`).
 
+`periodicNoteHelpers.js` (shared by the Daily/Weekly/Monthly/Yearly templates)
+is tested the same way, with one difference: `installMockMoment()` mocks the
+global `moment` as a call-recording spy, not a real calendar — it verifies
+*what* the helper asks moment to do (which `startOf`/`add`/`subtract` unit
+and amount), not that the resulting dates are calendrically correct. Trust
+moment.js for that.
+
 They do **not** test the real Obsidian/Templater integration: actual modal
-rendering, the real file rename (`app.fileManager.renameFile`), real network
-calls, or Templater's own date formatting. Verify those by running
-`(TEMPLATE) Source Capture` for real in Obsidian after any change here.
+rendering, the real file rename (`app.fileManager.renameFile` /
+`tp.file.rename`), real network calls, Templater's own date formatting, or
+real ISO-week/month/year boundary arithmetic. Verify those by running
+`(TEMPLATE) Source Capture` or the periodic note templates for real in
+Obsidian after any change here.
 
 ## Why a separate folder from `02 - Scripts/`
 

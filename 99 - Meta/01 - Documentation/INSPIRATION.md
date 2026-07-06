@@ -12,7 +12,7 @@ README: [README](../../README.md)
 
 **Influences on ShadowVault:**
 - **Atomic notes** – each permanent note contains exactly one idea.
-- **Unique IDs** – every note gets a timestamp ID (`YYYYMMDDHHmm`), inspired by Luhmann's alphanumeric IDs.
+- **Unique IDs** – every note gets a timestamp ID (`YYYYMMDDHHmm`). This is a looser nod to Luhmann's practice of giving every slip a permanent, collision-free identifier – not his actual alphanumeric *folgezettel* branching scheme (`3/1a2b3`, etc.). Adopting real Luhmann-style IDs is tracked as an open idea in [ROADMAP.md](ROADMAP.md#ideas-under-consideration).
 - **Links over folders** – the primary organisation is through connections between notes, not hierarchical folders.
 - **Bottom‑up structure** – ideas emerge from notes, not from a predetermined outline.
 
@@ -41,11 +41,11 @@ README: [README](../../README.md)
 **Influences on ShadowVault:**
 - **Maps of Content (MOCs)** – home notes that provide structure without rigidity.
 - **The ACE (Atlas, Calendar, Efforts) framework** – adapted into folders:
-  - *Atlas* → `04 - MOCs/`
+  - *Atlas* → `04 - MOCS/`
   - *Calendar* → `06 - Daily/`
   - *Efforts* → `05 - Projects/`
 - **Idea emergence** – let structure emerge from the notes, not pre‑defined categories.
-- **Home note** – `04 - MOCs/Home.md` as the vault's entry point.
+- **Home note** – `04 - MOCS/Home.md` as the vault's entry point.
 
 **Further reading:** [Linking Your Thinking](https://www.linkingyourthinking.com/) (website and YouTube channel).
 
@@ -56,7 +56,7 @@ README: [README](../../README.md)
 **Tiago Forte** – creator of *Building a Second Brain* (BASB).
 
 **Influences on ShadowVault:**
-- **Layers of distillation** – implemented in the `(TEMPLATE) Literature Note.md` and source note bodies (e.g., highlights → meaning → summary → significance).
+- **Layers of distillation** – implemented as the Source → Literature → Permanent → MOC pipeline, each layer reducing volume while increasing insight density (see [DESIGN-PHILOSOPHY.md](DESIGN-PHILOSOPHY.md#6-progressive-summarization)). Note this is ShadowVault's own layering, not Forte's specific bold/highlight passes — the vault's actual highlight convention is a Zettelkasten-style importance/reaction color scheme (Yellow/Green/Pink/Purple/Blue), documented in [WORKFLOWS.md](WORKFLOWS.md#book-workflow).
 - **The collector's fallacy** – captured in the philosophy: "capturing without connecting and refining is hoarding, not thinking."
 - **Review as compression** – scheduled reviews encourage re‑distilling notes into even shorter forms.
 
@@ -80,5 +80,5 @@ README: [README](../../README.md)
 
 ## Synthesis
 
-ShadowVault does not follow any single system strictly. It takes what works from each system. The goal is **practical thinking**, not ideological purity.
+ShadowVault does not follow any single system strictly. It takes what works from each system.
 

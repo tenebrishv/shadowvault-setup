@@ -4,8 +4,8 @@
  * Returns { noteTitle, yamlFields, body }, or null if cancelled.
  */
 
-const COURSE_FOLDER = "04 - MOCs/Courses";
-const UNIT_FOLDER = "04 - MOCs/Units";
+const COURSE_FOLDER = "04 - MOCS/Courses";
+const UNIT_FOLDER = "04 - MOCS/Units";
 const AGENTS_FOLDER = "09 - Entities/Agents";
 const PERSON_TAG = "agent/person";
 

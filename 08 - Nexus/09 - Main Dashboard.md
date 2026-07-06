@@ -106,7 +106,7 @@ LIMIT 7
 
 ```dataview
 TABLE length(file.inlinks) AS "Notes Linked"
-FROM "04 - MOCs"
+FROM "04 - MOCS"
 SORT length(file.inlinks) DESC
 ```
 

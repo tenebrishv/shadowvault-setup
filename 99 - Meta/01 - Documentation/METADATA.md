@@ -14,7 +14,7 @@ id:           # YYYYMMDDHHmm – unique timestamp ID
 title:        # Human‑readable title (usually same as file name without prefix)
 type:         # source | permanent | literature | fleeting | moc | thought | daily | entity
 growth:       # seedling | fern | incubator | evergreen
-status:       # inbox | processing | completed | archived
+status:       # inbox | processing | active | completed | archived
 created:      # YYYY-MM-DDTHH:mm
 review:       # YYYY-MM-DD – next scheduled review date
 tags:         # list of broad categories eg: sources/book
@@ -37,6 +37,7 @@ cssclasses:   # for CSS snippets (e.g., page-white, pen-blue)
 	- How far is it in the processing
 	- inbox: not started
 	- processing: started, not completed
+	- active: ongoing, open-ended (default for Permanent/Literature/Fleeting/MOC templates — these are never really "completed", just continuously revised)
 	- completed: completed
 	- archived: this no longer serves a purpose
 
