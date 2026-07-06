@@ -1,13 +1,13 @@
 ---
 type: entity
-tags: agent/person
+tags: agent/synthetic
 aliases:
   - "<% tp.file.title %>"
 created: <% tp.date.now("YYYY-MM-DDTHH:mm") %>
-role:
-organization:
-contact:
-website:
+creator:
+release_date:
+model_family:
+url:
 ---
 # <% tp.file.title %>
 
@@ -17,6 +17,6 @@ website:
 ## Related
 ```dataview
 LIST
-FROM [[]] AND !#agent/person
+FROM [[]] AND !#agent/synthetic
 SORT file.name ASC
 ```

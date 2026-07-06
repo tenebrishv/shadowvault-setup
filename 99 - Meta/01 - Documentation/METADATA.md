@@ -12,7 +12,7 @@ README: [README](../../README.md)
 ---
 id:           # YYYYMMDDHHmm – unique timestamp ID
 title:        # Human‑readable title (usually same as file name without prefix)
-type:         # source | permanent | literature | fleeting | moc | thought | daily
+type:         # source | permanent | literature | fleeting | moc | thought | daily | entity
 growth:       # seedling | fern | incubator | evergreen
 status:       # inbox | processing | completed | archived
 created:      # YYYY-MM-DDTHH:mm
@@ -124,6 +124,99 @@ context:
 led_here:
 ```
 
+## Entity Fields (`09 - Entities/`)
+
+Entity notes (`09 - Entities/Agents/` and `09 - Entities/Non-Agents/`) use a **lightweight** schema — no `id`/`growth`/`status`/`review`, since they're reference facts about the world, not ideas being processed toward evergreen:
+
+```yaml
+---
+type: entity
+tags:         # subtype tag, e.g. agent/person, nonagent/place
+aliases:
+created:
+---
+```
+
+Plus subtype-specific structured fields:
+
+### Person (`agent/person`)
+```yaml
+role:
+organization:     # [[link]]
+contact:
+website:
+```
+
+### Organization (`agent/organization`)
+```yaml
+founded:
+sector:
+website:
+headquarters:     # [[link]] to a Place entity
+key_people:       # list of [[link]]s to Person entities
+```
+
+### Country (`agent/country`)
+```yaml
+government_type:
+established:
+capital:          # [[link]] to a Place entity
+leader:           # [[link]] to a Person entity
+```
+
+### Synthetic Agent — AI/algorithms (`agent/synthetic`)
+```yaml
+creator:          # [[link]]
+release_date:
+model_family:
+url:
+```
+
+### Place (`nonagent/place`)
+```yaml
+coordinates:
+region:
+country:          # [[link]]
+historical:       # true/false, optional
+```
+
+### Artifact (`nonagent/artifact`)
+```yaml
+creator:          # [[link]]
+date_created:
+location:         # [[link]] to current Place
+medium:
+```
+
+### Tool (`nonagent/tool`)
+```yaml
+creator:          # [[link]]
+category:
+version:          # optional
+```
+
+### System (`nonagent/system`)
+```yaml
+scope:
+origin_date:
+components:       # optional list
+```
+
+### Natural Entity (`nonagent/natural`)
+```yaml
+location:         # [[link]]
+classification:
+```
+
+### Event (`nonagent/event`)
+```yaml
+date:
+location:         # [[link]]
+participants:     # list of [[link]]s to Agent entities
+```
+
+Classification (Agent vs. Non-Agent) is a folder decision, made once, based on whether the entity can decide/act. Subtype within that folder is a tag, not a subfolder — a note never needs to move when your understanding of its finer category changes. See [Entities MOC](../../04%20-%20MOCS/Entities.md) for the curated Dataview browse view.
+
 ## Tags System
 
 Tags are **broad categorical umbrellas**. Links carry meaning. Tags tell you _what category_ something is; links tell you _what it connects to_.
@@ -141,7 +234,16 @@ Tags are **broad categorical umbrellas**. Links carry meaning. Tags tell you _
 |`note/thought`|Thought notes|
 |`course`|Course MOCs|
 |`course-unit`|Unit MOCs|
-|`person`|People notes|
+|`agent/person`|Person entity notes|
+|`agent/organization`|Organization entity notes|
+|`agent/country`|Country entity notes|
+|`agent/synthetic`|Synthetic/AI agent entity notes|
+|`nonagent/place`|Place entity notes|
+|`nonagent/artifact`|Artifact entity notes|
+|`nonagent/tool`|Tool entity notes|
+|`nonagent/system`|System entity notes|
+|`nonagent/natural`|Natural entity notes|
+|`nonagent/event`|Event entity notes|
 |`Daily`|Daily notes (capital D)|
 
 Do not use tags for growth stage (`seedling`, etc.) – those are kept in `growth:` field so Dataview can filter them easily.

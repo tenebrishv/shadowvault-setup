@@ -97,7 +97,7 @@ ShadowVault/
 ├── 06 - Daily
 ├── 07 - Attachments
 ├── 08 - Nexus
-├── 09 - Agents
+├── 09 - Entities (Agents / Non-Agents)
 └── 99 - Meta
 ```
 
@@ -126,8 +126,8 @@ Check [Note Maturity Model](99%20-%20Meta/01%20-%20Documentation/WORKFLOWS.md#No
 
 ## Key Features
 
-- **Smart source capture** – 9 source types (Books, Articles, Papers, YouTube, Video, Podcast, Tweet, Thought, Lecture) with automatic metadata fetching (ISBN, DOI, oEmbed). Check [](99%20-%20Meta/01%20-%20Documentation/TEMPLATES.md#Main%20Template%20`(TEMPLATE)%20Source%20Capture.md`)
-- **Validated lecture system** – picks from existing Courses/Units/People, creates missing ones on the fly. Check [](99%20-%20Meta/01%20-%20Documentation/TEMPLATES.md#Lecture%20Automation)
+- **Smart source capture** – 9 source types (Books, Articles, Papers, YouTube, Video, Podcast, Tweet, Thought, Lecture) with automatic metadata fetching (ISBN, DOI, oEmbed). Check [Templates](99%20-%20Meta/01%20-%20Documentation/TEMPLATES.md#Main%20Template%20`(TEMPLATE)%20Source%20Capture.md`)
+- **Validated lecture system** – picks from existing Courses/Units/People, creates missing ones on the fly. Check [Templates](99%20-%20Meta/01%20-%20Documentation/TEMPLATES.md#Lecture%20Automation)
 - **Note maturity model** – seedling → fern → incubator → evergreen. Check [](99%20-%20Meta/01%20-%20Documentation/WORKFLOWS.md#Note%20Maturity%20Model)
 - **Review system** – scheduled reviews (14 days) plus Dataview queries.
 - **Daily notes with weekly/monthly/yearly reviews**.

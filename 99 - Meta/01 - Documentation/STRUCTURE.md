@@ -27,7 +27,9 @@ ShadowVault/
 ├── 06 - Daily/ # Daily, weekly, monthly, annual notes  
 ├── 07 - Attachments/ # Images, PDFs, diagrams  
 ├── 08 - Nexus/ # Dashboards and vault-wide overviews  
-├── 09 - Agents/ # People notes (lecturers, authors, contacts)  
+├── 09 - Entities/ # Real-world nouns, split by decision-making capacity  
+	├── Agents/ # People, Organizations, Countries, Synthetic/AI — act with intentional or decision-making power  
+	└── Non-Agents/ # Places, Artifacts, Tools, Systems, Natural entities, Events — structural/relational influence only  
 └── 99 - Meta/ # Vault infrastructure  
 	├── 00 - Templates/ # All template files (Templater scans this for "Insert Template")
 	├── 01 - Documentation/ # This documentation
@@ -54,11 +56,12 @@ ShadowVault/
 | Course MOC | `Course Name` | `Cognitive Psychology` |
 | Unit MOC | `Unit Name` | `Unit 1 – Memory Systems` |
 | Person note | `Full Name` | `Dr. Eleanor Vance` |
+| Entity note (Organization/Place/etc.) | Descriptive Name | `United Nations`, `Paris` |
 
 ## Special Folders
 - **`00 - Inbox/`** – All new notes (except those created by Source Capture, which can be moved here manually) should land here. Process regularly.
 - **`08 - Nexus/`** – Contains Dataview dashboards that aggregate information across the vault (e.g., due reviews, unprocessed inbox items).
-- **`09 - Agents/`** – People notes. Every lecturer, author, or collaborator gets a note here, tagged `#person`.
+- **`09 - Entities/`** – Real-world nouns. Split into two flat folders by whether the entity can decide/act (`Agents/`) or only exerts structural/relational influence (`Non-Agents/`). Subtype (Person, Organization, Place, Artifact, etc.) is a tag, not a subfolder — see [METADATA](METADATA.md#tags-system).
 -
 ## Folder Definitions
 
@@ -73,7 +76,8 @@ ShadowVault/
 | `06 - Daily` | Daily, weekly, monthly, yearly notes. Temporal backbone and primary capture space. |
 | `07 - Attachments` | Non‑markdown files: PDFs, images, diagrams. No notes here. |
 | `08 - Nexus` | Vault‑wide dashboards (reviews, reading, growth). Operational control centre. |
-| `09 - Agents` | People notes (authors, lecturers, researchers). Nodes in the knowledge graph. |
+| `09 - Entities/Agents` | People, Organizations, Countries, Synthetic/AI systems — entities with decision-making power. |
+| `09 - Entities/Non-Agents` | Places, Artifacts, Tools, Systems, Natural entities, Events — entities with structural/relational influence only. |
 | `99 - Meta` | Infrastructure: templates, documentation, configuration. Supports the system itself. |
 
 ## Why Folders Are Shallow

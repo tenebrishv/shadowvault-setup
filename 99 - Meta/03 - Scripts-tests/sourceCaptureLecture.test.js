@@ -10,12 +10,12 @@ test("Lecture: picking existing Course/Unit/Lecturer creates no new stubs", asyn
         folders: {
             "04 - MOCs/Courses": ["Cognitive Psychology"],
             "04 - MOCs/Units": ["Unit 1"],
-            "09 - Agents/People": ["Dr. Vance"],
+            "09 - Entities/Agents": ["Dr. Vance"],
         },
         files: {
             "04 - MOCs/Courses/Cognitive Psychology.md": { frontmatter: { default_lecturer: "Dr. Vance" } },
             "04 - MOCs/Units/Unit 1.md": { frontmatter: { course: "[[Cognitive Psychology]]" } },
-            "09 - Agents/People/Dr. Vance.md": { frontmatter: {} },
+            "09 - Entities/Agents/Dr. Vance.md": { frontmatter: { tags: "agent/person" } },
         },
     });
     const tp = createMockTp({
@@ -66,8 +66,8 @@ test("Lecture: choosing '➕ Create New' at every step stubs out Course, Unit, a
     assert.match(course.content, /tags:\n {2}- course/);
     assert.equal(unit.path, "04 - MOCs/Units/Unit 1.md");
     assert.match(unit.content, /course: "\[\[Neuroscience 101\]\]"/);
-    assert.equal(person.path, "09 - Agents/People/Dr. Smith.md");
-    assert.match(person.content, /tags:\n {2}- person/);
+    assert.equal(person.path, "09 - Entities/Agents/Dr. Smith.md");
+    assert.match(person.content, /tags: agent\/person/);
 });
 
 test("Lecture: cancelling the course picker aborts capture before any prompts", async () => {

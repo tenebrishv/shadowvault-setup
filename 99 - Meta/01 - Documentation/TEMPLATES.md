@@ -34,7 +34,7 @@ The primary intake tool. Run via Templater command: **Insert Template** → `(TE
   - Lists existing Courses (`#course` in `04 - MOCS/Courses/`)
   - Lists Units belonging to that course (via `course:` frontmatter)
   - Pre‑fills Lecturer from course's `default_lecturer` field
-  - Creates missing Courses/Units/People on the fly (stubbed from helper templates)
+  - Creates missing Courses/Units/People on the fly (stubbed inline, matching `(TEMPLATE) Person.md`'s schema)
 - Renames file with type prefix (e.g., `{` for Book, `§` for Lecture)
 - Adds YAML frontmatter with `id`, `created`, `review`, `status: inbox`, `growth: seedling`
 - Generates a rich note body (callouts, tables, timestamp placeholders)
@@ -105,7 +105,26 @@ These are used by `Source Capture` when creating new Courses, Units, or People.
 |------|----------|
 | `(TEMPLATE) Course MOC.md` | New course stub (`#course`, YAML with `default_lecturer`) |
 | `(TEMPLATE) Unit MOC.md` | New unit stub (`#course-unit`, YAML `course: [TEMPLATES](.md)`) |
-| `(TEMPLATE) Person.md` | New person stub (`#person`) |
+| `(TEMPLATE) Person.md` | New person stub (`agent/person`) — the Lecturer picker in `sourceCaptureLecture.js` only offers `09 - Entities/Agents` notes tagged `agent/person`, since that folder also holds Organizations/Countries/Synthetic agents |
+
+---
+
+## Entity Templates (Manual Use)
+
+One template per Entity subtype, in `09 - Entities/Agents/` (decision-making power) or `09 - Entities/Non-Agents/` (structural/relational influence only). All use a lightweight schema (`type: entity`, no `id`/`growth`/`status`/`review`) plus structured YAML fields per subtype — see [METADATA.md#entity-fields](METADATA.md#entity-fields-09---entities). Browse everything via the [Entities MOC](../../04%20-%20MOCS/Entities.md).
+
+| Template | Tag | Folder |
+|----------|-----|--------|
+| `(TEMPLATE) Person.md` | `agent/person` | `Agents/` |
+| `(TEMPLATE) Organization.md` | `agent/organization` | `Agents/` |
+| `(TEMPLATE) Country.md` | `agent/country` | `Agents/` |
+| `(TEMPLATE) Synthetic Agent.md` | `agent/synthetic` | `Agents/` |
+| `(TEMPLATE) Place.md` | `nonagent/place` | `Non-Agents/` |
+| `(TEMPLATE) Artifact.md` | `nonagent/artifact` | `Non-Agents/` |
+| `(TEMPLATE) Tool.md` | `nonagent/tool` | `Non-Agents/` |
+| `(TEMPLATE) System.md` | `nonagent/system` | `Non-Agents/` |
+| `(TEMPLATE) Natural Entity.md` | `nonagent/natural` | `Non-Agents/` |
+| `(TEMPLATE) Event.md` | `nonagent/event` | `Non-Agents/` |
 
 ---
 

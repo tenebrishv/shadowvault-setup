@@ -6,12 +6,26 @@
 
 const COURSE_FOLDER = "04 - MOCs/Courses";
 const UNIT_FOLDER = "04 - MOCs/Units";
-const PEOPLE_FOLDER = "09 - Agents/People";
+const AGENTS_FOLDER = "09 - Entities/Agents";
+const PERSON_TAG = "agent/person";
 
 async function getNotesInFolder(folderPath) {
     const folder = app.vault.getAbstractFileByPath(folderPath);
     if (!folder || !folder.children) return [];
     return folder.children.filter(file => file.extension === "md");
+}
+
+function noteHasTag(file, tag) {
+    const cache = app.metadataCache.getFileCache(file);
+    const tags = cache?.frontmatter?.tags;
+    if (!tags) return false;
+    const list = Array.isArray(tags) ? tags : [tags];
+    return list.some(t => String(t).trim() === tag);
+}
+
+async function getPersonNotes(folderPath) {
+    const files = await getNotesInFolder(folderPath);
+    return files.filter(file => noteHasTag(file, PERSON_TAG));
 }
 
 async function createStub(path, content) {
@@ -115,7 +129,7 @@ async function pickLecturer(tp, helpers, coursePath) {
         defaultLecturer = cache?.frontmatter?.default_lecturer || "";
     }
 
-    const peopleFiles = await getNotesInFolder(PEOPLE_FOLDER);
+    const peopleFiles = await getPersonNotes(AGENTS_FOLDER);
     let peopleNames = peopleFiles.map(f => f.basename);
     if (defaultLecturer && !peopleNames.includes(defaultLecturer)) {
         peopleNames.unshift(defaultLecturer);
@@ -124,23 +138,22 @@ async function pickLecturer(tp, helpers, coursePath) {
     const lecturer = await pickOrCreate(tp, helpers, "Lecturer", peopleNames);
     if (!lecturer) return null;
 
-    const personPath = `${PEOPLE_FOLDER}/${lecturer}.md`;
+    const personPath = `${AGENTS_FOLDER}/${lecturer}.md`;
     await createStub(
         personPath,
         `---
-tags:
-  - person
+type: entity
+tags: ${PERSON_TAG}
 aliases:
   - "${lecturer}"
-created: ${tp.date.now("YYYY-MM-DDTHH:mm")}---
+created: ${tp.date.now("YYYY-MM-DDTHH:mm")}
+role:
+organization:
+contact:
+website:
+---
 
 # ${lecturer}
-
-> [!info]- About
-> Role:
-> Organisation:
-> Contact:
-> Website:
 
 ## Notes
 
@@ -150,7 +163,7 @@ created: ${tp.date.now("YYYY-MM-DDTHH:mm")}---
 
 \`\`\`dataview
 LIST
-FROM [[]] AND !#person
+FROM [[]] AND !#${PERSON_TAG}
 SORT file.name ASC
 \`\`\`
 `
