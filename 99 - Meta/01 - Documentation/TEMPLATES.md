@@ -104,14 +104,14 @@ These are used by `Source Capture` when creating new Courses, Units, or People.
 | File | Used for |
 |------|----------|
 | `(TEMPLATE) Course MOC.md` | New course stub (`#course`, YAML with `default_lecturer`) |
-| `(TEMPLATE) Unit MOC.md` | New unit stub (`#course-unit`, YAML `course: [TEMPLATES](.md)`) |
+| `(TEMPLATE) Unit MOC.md` | New unit stub (`#course-unit`, YAML `course: [CourseName](CourseName)`) |
 | `(TEMPLATE) Person.md` | New person stub (`agent/person`) — the Lecturer picker in `sourceCaptureLecture.js` only offers `09 - Entities/Agents` notes tagged `agent/person`, since that folder also holds Organizations/Countries/Synthetic agents |
 
 ---
 
 ## Entity Templates (Manual Use)
 
-One template per Entity subtype, in `09 - Entities/Agents/` (decision-making power) or `09 - Entities/Non-Agents/` (structural/relational influence only). All use a lightweight schema (`type: entity`, no `id`/`growth`/`status`/`review`) plus structured YAML fields per subtype — see [METADATA.md#entity-fields](METADATA.md#entity-fields-09---entities). Browse everything via the [Entities MOC](../../04%20-%20MOCS/Entities.md).
+One template per Entity subtype. All use a lightweight schema (`type: entity`, no `id`/`growth`/`status`/`review`) plus structured YAML fields per subtype — see [METADATA.md#entity-fields](METADATA.md#entity-fields-09---entities). Browse everything via the [Entities MOC](../../04%20-%20MOCS/Entities.md). Templates themselves live in `99 - Meta/00 - Templates/`; the table's "Folder" column is the destination folder for the resulting *note*, not the template file.
 
 | Template | Tag | Folder |
 |----------|-----|--------|
@@ -140,6 +140,10 @@ One template per Entity subtype, in `09 - Entities/Agents/` (decision-making pow
 | `(TEMPLATE) Weekly.md` | Weekly review template |
 | `(TEMPLATE) Monthly.md` | Monthly review |
 | `(TEMPLATE) Yearly.md` | Annual review |
+
+### Periodic Note Architecture
+
+`Daily Enhanced`, `Weekly`, `Monthly`, and `Yearly` all prompt for (or default to) their target period, rename the note to the canonical label themselves (no manual pre-naming), and link up to their parent period (Daily → `week:`, Weekly → `month:`, Monthly → `year:`) alongside the existing prev/next navigation. The shared logic behind this — anchor resolution, label/prev/next computation, and the parent-period lookup — lives in one Templater User Script, `99 - Meta/02 - Scripts/periodicNoteHelpers.js` (exposed as `tp.user.periodicNoteHelpers.*`), the same pattern as `sourceCaptureHelpers.js`. It has its own unit tests in `99 - Meta/03 - Scripts-tests/periodicNoteHelpers.test.js`; real calendar arithmetic (ISO week boundaries, month/year rollover) is verified by using the templates in Obsidian, not by the test suite, which mocks `moment` as a call-recording spy rather than reimplementing it.
 
 
 

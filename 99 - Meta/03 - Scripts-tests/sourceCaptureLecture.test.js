@@ -8,13 +8,13 @@ test("Lecture: picking existing Course/Unit/Lecturer creates no new stubs", asyn
     installMockNotice();
     const created = installMockApp({
         folders: {
-            "04 - MOCs/Courses": ["Cognitive Psychology"],
-            "04 - MOCs/Units": ["Unit 1"],
+            "04 - MOCS/Courses": ["Cognitive Psychology"],
+            "04 - MOCS/Units": ["Unit 1"],
             "09 - Entities/Agents": ["Dr. Vance"],
         },
         files: {
-            "04 - MOCs/Courses/Cognitive Psychology.md": { frontmatter: { default_lecturer: "Dr. Vance" } },
-            "04 - MOCs/Units/Unit 1.md": { frontmatter: { course: "[[Cognitive Psychology]]" } },
+            "04 - MOCS/Courses/Cognitive Psychology.md": { frontmatter: { default_lecturer: "Dr. Vance" } },
+            "04 - MOCS/Units/Unit 1.md": { frontmatter: { course: "[[Cognitive Psychology]]" } },
             "09 - Entities/Agents/Dr. Vance.md": { frontmatter: { tags: "agent/person" } },
         },
     });
@@ -62,9 +62,9 @@ test("Lecture: choosing '➕ Create New' at every step stubs out Course, Unit, a
 
     assert.equal(created.length, 3);
     const [course, unit, person] = created;
-    assert.equal(course.path, "04 - MOCs/Courses/Neuroscience 101.md");
+    assert.equal(course.path, "04 - MOCS/Courses/Neuroscience 101.md");
     assert.match(course.content, /tags:\n {2}- course/);
-    assert.equal(unit.path, "04 - MOCs/Units/Unit 1.md");
+    assert.equal(unit.path, "04 - MOCS/Units/Unit 1.md");
     assert.match(unit.content, /course: "\[\[Neuroscience 101\]\]"/);
     assert.equal(person.path, "09 - Entities/Agents/Dr. Smith.md");
     assert.match(person.content, /tags: agent\/person/);

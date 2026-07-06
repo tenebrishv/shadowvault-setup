@@ -18,7 +18,7 @@ default_lecturer: [[]]
 
 ```dataview
 LIST
-FROM "04 - MOCs/Units" AND #course-unit
+FROM "04 - MOCS/Units" AND #course-unit
 WHERE contains(course, [[]])
 SORT file.name ASC
 ```

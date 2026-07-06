@@ -14,6 +14,24 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ### Removed
 - 
 
+## [2.1.0] – 2026-07-06
+
+### Added
+- `(TEMPLATE) Weekly.md`, `(TEMPLATE) Monthly.md`, `(TEMPLATE) Yearly.md` — the periodic note templates referenced by `WORKFLOWS.md`/`REVIEW-SYSTEM.md`/`TEMPLATES.md` but previously missing from the vault.
+- `99 - Meta/02 - Scripts/periodicNoteHelpers.js` — shared Templater User Script behind all four periodic templates (anchor resolution, period label/prev/next computation, parent-period lookup), exposed as `tp.user.periodicNoteHelpers.*`, mirroring `sourceCaptureHelpers.js`. Unit tested in `periodicNoteHelpers.test.js` (36 tests total in the suite, up from 30).
+- Parent-linking hierarchy — Daily → `week:`, Weekly → `month:`, Monthly → `year:` — as a frontmatter wikilink field (Dataview-queryable) plus a `↑ Parent` body link, alongside the existing prev/next navigation.
+- `aliases:` field on Daily/Weekly/Monthly/Yearly frontmatter, so any period note can carry a custom name without affecting its date-based filename or the navigation/hierarchy above.
+- Design Philosophy Principle 11, "Entities: Agency as the Dividing Line," reconciling the `09 - Entities/Agents` vs. `Non-Agents` folder split with Principle 2 ("Links Over Folders"); also acknowledged the Entity `growth`/`status`/`review` carve-out under Principles 4 and 9.
+
+### Changed
+- `(TEMPLATE) Daily Enhanced.md` reworked to derive weekday, heading, notes-query, and navigation from one consistent anchor date. Previously the weekday/heading parsed the filename while the notes-query/nav always meant "today" — silently wrong for backfilled notes. Now falls back to today and self-renames if the filename isn't a parseable date, same as the new periodic templates.
+- `04 - MOCs` corrected to `04 - MOCS` (the folder's actual on-disk casing) across `sourceCaptureLecture.js`, its unit tests, dashboards, and all documentation — was previously inconsistent and would have broken the Lecture Course/Unit picker on a case-sensitive filesystem.
+- `status` frontmatter enum documented in `METADATA.md`/`CLAUDE.md` corrected to include `active` — it was already the real default baked into the Permanent Note, Literature Note, Fleeting Note, and MOC templates; the docs were stale, not the templates.
+- Various documentation corrections: stale `SETUP.md` CSS-snippet and Lecture-troubleshooting instructions, missing Templater User Scripts Folder setup step, broken/malformed links, `STRUCTURE.md`'s phantom Podcasts subfolder, README's duplicated Core Principles bullet, a `TEMPLATES.md` copy-paste artifact, overstated Luhmann/Forte lineage claims in `INSPIRATION.md`.
+
+### Fixed
+- Dataview `date(...)` calls in the periodic templates are now properly quoted — unquoted, Templater-rendered dates parse as arithmetic (bare hyphens), not date literals, silently returning empty dashboard results.
+
 ## [2.0.0] – 2026-07-06
 
 ### Added
@@ -45,7 +63,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Lecture system with validated pickers for Courses, Units, and People.
 - Automatic metadata fetching (ISBN, DOI, oEmbed) for supported sources.
 - Full documentation split into multiple files inside `99 - Meta/01 - Documentation/`.
-- CSS snippets: Notebook Backgrounds, Daily Note Themes, Colored Sidebar Items, General Tweaks.
+- Documented CSS snippets (planned, not yet implemented): Notebook Backgrounds, Daily Note Themes, Colored Sidebar Items, General Tweaks.
 - MIT‑style license replaced with **CC BY‑NC‑SA 4.0** (added in commit `853f87c`).
 
 ### Changed
@@ -60,6 +78,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ---
 
+[2.1.0]: https://github.com/tenebrishv/shadowvault-setup/releases/tag/v2.1.0
 [2.0.0]: https://github.com/tenebrishv/shadowvault-setup/releases/tag/v2.0.0
-[1.0.0]: [https://github.com/tenebrishv/ShadowVault/releases/tag/v1.0.0](https://github.com/tenebrishv/shadowvault-setup)
+[1.0.0]: https://github.com/tenebrishv/shadowvault-setup/releases/tag/v1.0.0
 

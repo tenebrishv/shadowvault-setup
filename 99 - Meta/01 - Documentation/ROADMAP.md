@@ -14,7 +14,7 @@ README:[README](../../README.md)
 - [ ] **Implement CSS snippets** – add `Notebook Backgrounds.css`, `Daily Note Themes.css`, `Colored Sidebar Items.css`, and `CyanVoxel's General Tweaks.css` to `.obsidian/snippets/`.
 - [ ] **Lecture naming convention** – update `Source Capture` to use:
   - `§ YYYY-MM-DD – CourseCode – Lecture Title` (e.g., `§ 2025-02-14 – PSY101 – Introduction to Memory`)
-- [ ] **Split source templates** – maintain a single `Source Capture` entry point but internally refactor into separate template files per source type for easier maintenance (e.g., `(TEMPLATE) Lecture.md`, `(TEMPLATE) Book.md`, etc.).
+- [x] **Split source templates** — done in commit `a5ed1fd`: `Source Capture` is a thin orchestrator dispatching to per-type `sourceCapture<Type>.js` Templater User Scripts in `99 - Meta/02 - Scripts/`.
 - [ ] **Unit template with semester tag** – add YAML field `semester: "YYYY-SS"` to `(TEMPLATE) Unit MOC.md`.
 - [ ]  **Zotero integration** – set up Better BibTeX + Zotero Integration plugin; define highlight colour convention.
 - [ ] **Media Extended OR Obsidian Web Clipper** –  Capturing web/YouTube content directly in Obsidian.

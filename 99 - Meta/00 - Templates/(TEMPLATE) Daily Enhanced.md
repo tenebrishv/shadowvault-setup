@@ -1,14 +1,19 @@
----
-date: <%tp.date.now("YYYY-MM-DD")%>T<%tp.date.now("HH:mm")%>
+<%*
+const anchor = await tp.user.periodicNoteHelpers.resolveDailyAnchor(tp);
+const weekLabel = tp.user.periodicNoteHelpers.parentLabel(anchor, "isoWeek", "GGGG-[W]WW");
+%>---
+date: <% anchor.format("YYYY-MM-DD") %>T<% tp.date.now("HH:mm") %>
 tags:
   - Daily
+aliases:
 cssclasses:
   - daily
-  <% "- " + tp.date.now("dddd", 0, tp.file.title, "YYYYMMDD").toLowerCase() %>
+  - <% anchor.format("dddd").toLowerCase() %>
+week: "[[<% weekLabel %>]]"
 ---
 
 # DAILY NOTE
-## <% tp.date.now("dddd, MMMM Do, YYYY", 0, tp.file.title, "YYYYMMDD") %>
+## <% anchor.format("dddd, MMMM Do, YYYY") %>
 
 ***
 
@@ -41,7 +46,7 @@ cssclasses:
 ```dataview
 LIST
 FROM ""
-WHERE file.cday = date("<% tp.date.now("YYYY-MM-DD") %>")
+WHERE file.cday = date("<% anchor.format("YYYY-MM-DD") %>")
 AND type != "daily"
 SORT file.ctime ASC
 ```
@@ -73,4 +78,6 @@ SORT file.ctime ASC
 
 ### 🗓️ Navigation
 
-← [[<% tp.date.now("YYYYMMDD", -1) %>]] | [[<% tp.date.now("YYYYMMDD", 1) %>]] →
+↑ Week: [[<% weekLabel %>]]
+
+← [[<% anchor.clone().subtract(1, "day").format("YYYYMMDD") %>]] | [[<% anchor.clone().add(1, "day").format("YYYYMMDD") %>]] →

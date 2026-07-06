@@ -44,20 +44,15 @@ Install and enable the plugins listed in [PLUGINS](PLUGINS.md).
 ### 4. Configure Templater
 
 - Settings → Templater → **Template folder location**: `99 - Meta/00 - Templates/`
+- Settings → Templater → **User Scripts folder location**: `99 - Meta/02 - Scripts/` — **required** for `Source Capture` to work, since its per-type logic lives there as Templater User Scripts (see [TEMPLATES.md#source-capture-architecture](TEMPLATES.md#source-capture-architecture)). Already set in this vault's `.obsidian/plugins/templater-obsidian/data.json`, but re-check this after cloning fresh.
 - Enable **Trigger Templater on new file creation** (optional)
 - Enable **Automatic jump to cursor** (recommended)
 
 ---
 
-### 5. (Optional) Enable CSS snippets
+### 5. (Optional) CSS snippets — planned, not yet available
 
-- Settings → Appearance → **CSS snippets** → toggle on:    
-    - `Notebook Backgrounds.css`
-    - `Daily Note Themes.css`
-    - `Colored Sidebar Items.css`
-    - `CyanVoxel's General Tweaks.css`
-
-Snippets are located in `.obsidian/snippets/`. If missing, copy them from the repository.
+CSS snippets (notebook backgrounds, daily note themes, colored sidebar, general tweaks) are **designed but not yet implemented** — see [CSS.md](CSS.md). There is nothing to enable yet; this step will apply once the `.css` files ship.
 
 ---
 
@@ -73,7 +68,7 @@ Your first captured note will appear in the current folder (you can move it to 
 
 ## Troubleshooting
 
-- **Templater error "Invalid or unexpected token"**: Ensure the Lecture section doesn’t use optional chaining (`?.`) – the provided code is safe.
+- **Templater error "Invalid or unexpected token"**: Confirm the **User Scripts folder location** points at `99 - Meta/02 - Scripts/` and run **Templater: Reload templates** (it caches loaded user scripts). If a script was edited, ensure it doesn't use syntax your Obsidian's JS engine rejects (e.g. optional chaining `?.` on older installs) — see `sourceCaptureLecture.js` and the other `sourceCapture*.js` modules.
 - **Dataview picker shows no courses/units**: Verify that course notes have the tag `#course` and are inside `04 - MOCS/Courses/`. Unit notes must have `#course-unit` and YAML field `course: [CourseName](CourseName)`.
 - **New course/unit/person not created**: Check that helper templates exist in `99 - Meta/00 - Templates/` with exact names:
     - `(TEMPLATE) Course MOC.md`
@@ -92,6 +87,6 @@ git pull
 
 before opening Obsidian.
 
-Review [CHANGELOG](CHANGELOG) after each update.
+Review [CHANGELOG](../../CHANGELOG.md) after each update.
 
 ---
