@@ -104,7 +104,7 @@ These are used by `Source Capture` when creating new Courses, Units, or People.
 | File | Used for |
 |------|----------|
 | `(TEMPLATE) Course MOC.md` | New course stub (`#course`, YAML with `default_lecturer`) |
-| `(TEMPLATE) Unit MOC.md` | New unit stub (`#course-unit`, YAML `course: [CourseName](CourseName)`) |
+| `(TEMPLATE) Unit MOC.md` | New unit stub (`#course-unit`, YAML `course: [CourseName](CourseName)`, `semester: "YYYY-SS"`) |
 | `(TEMPLATE) Person.md` | New person stub (`agent/person`) — the Lecturer picker in `sourceCaptureLecture.js` only offers `09 - Entities/Agents` notes tagged `agent/person`, since that folder also holds Organizations/Countries/Synthetic agents |
 
 ---

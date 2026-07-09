@@ -98,6 +98,7 @@ async function pickUnit(tp, helpers, course) {
 tags:
   - course-unit
 course: "[[${course}]]"
+semester:
 aliases:
   - "${unit}"
 created: ${tp.date.now("YYYY-MM-DDTHH:mm")}
@@ -191,7 +192,16 @@ module.exports = async function sourceCaptureLecture(tp, helpers) {
     data.date_given = await datePrompt(tp, "Lecture Date");
     data.url = await optionalPrompt(tp, "Recording URL");
     data.keywords = await optionalPrompt(tp, "Keywords");
-    const noteTitle = data.title;
+
+    // "§ YYYY-MM-DD – CourseCode – Lecture Title" (roadmap naming convention).
+    // The "§ " prefix is added by the orchestrator template; noteTitle only
+    // covers the date/course/title portion, since it's also reused as the
+    // in-body heading (see sourceCaptureTweet.js for the same pattern).
+    const datePart = data.date_given || tp.date.now("YYYY-MM-DD");
+    const noteTitle = `${datePart} – ${data.course} – ${data.title}`
+        .replace(/[\\/:*?"<>|#^\[\]]/g, "")
+        .replace(/\n/g, " ")
+        .trim();
 
     let yamlFields = "";
     yamlFields += `course: "[[${data.course}]]"\n`;

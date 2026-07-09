@@ -269,7 +269,9 @@ Examples:
 ```text
 { Thinking Fast and Slow
 & Attention and Working Memory
-§ Introduction to Statistics
+§ 2025-02-14 – PSY101 – Introduction to Memory
 ```
+
+Lecture notes are titled `§ YYYY-MM-DD – CourseCode – Lecture Title`, where `CourseCode` is the linked Course MOC's name — see [TEMPLATES.md](TEMPLATES.md).
 
 ---

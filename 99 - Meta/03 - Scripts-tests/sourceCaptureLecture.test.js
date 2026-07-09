@@ -25,14 +25,14 @@ test("Lecture: picking existing Course/Unit/Lecturer creates no new stubs", asyn
 
     const result = await sourceCaptureLecture(tp, helpers);
 
-    assert.equal(result.noteTitle, "Intro to Memory");
+    assert.equal(result.noteTitle, "2024-03-01 – Cognitive Psychology – Intro to Memory");
     assert.match(result.yamlFields, /course: "\[\[Cognitive Psychology\]\]"\n/);
     assert.match(result.yamlFields, /unit: "\[\[Unit 1\]\]"\n/);
     assert.match(result.yamlFields, /lecturer: "\[\[Dr\. Vance\]\]"\n/);
     assert.match(result.yamlFields, /lecture_num: "3"\n/);
     assert.match(result.yamlFields, /date_given: "2024-03-01"\n/);
     assert.match(result.yamlFields, /keywords: "memory, encoding"\n/);
-    assert.match(result.body, /^# Intro to Memory/);
+    assert.match(result.body, /^# 2024-03-01 – Cognitive Psychology – Intro to Memory/);
     assert.equal(created.length, 0, "no stubs should be created when everything already exists");
 });
 
@@ -55,7 +55,7 @@ test("Lecture: choosing '➕ Create New' at every step stubs out Course, Unit, a
 
     const result = await sourceCaptureLecture(tp, helpers);
 
-    assert.equal(result.noteTitle, "Synapses");
+    assert.equal(result.noteTitle, "2024-01-10 – Neuroscience 101 – Synapses");
     assert.match(result.yamlFields, /course: "\[\[Neuroscience 101\]\]"\n/);
     assert.match(result.yamlFields, /unit: "\[\[Unit 1\]\]"\n/);
     assert.match(result.yamlFields, /lecturer: "\[\[Dr\. Smith\]\]"\n/);

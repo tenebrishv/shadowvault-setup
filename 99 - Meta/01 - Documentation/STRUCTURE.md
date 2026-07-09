@@ -47,7 +47,7 @@ ShadowVault/
 | Note type | Format | Example |
 |-----------|--------|---------|
 | Source (captured) | `{ Title` (book) | `{ The Art of Learning` |
-| Source (lecture) | `§ Title` | `§ Introduction to Cognition` |
+| Source (lecture) | `§ YYYY-MM-DD – CourseCode – Title` | `§ 2025-02-14 – PSY101 – Introduction to Cognition` |
 | Permanent note | `YYYYMMDDHHmm Idea` | `202502141430 Learning compounds over time` |
 | Daily note | `YYYYMMDD` | `20250214` |
 | Weekly note | `YYYY-Www` | `2025-W07` |

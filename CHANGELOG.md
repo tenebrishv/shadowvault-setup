@@ -6,11 +6,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ## [Unreleased]
 
 ### Added
-- 
+- `semester:` YAML field on `(TEMPLATE) Unit MOC.md` and on the Unit stub `sourceCaptureLecture.js` creates inline.
+
 ### Changed
-- 
+- Lecture notes are now titled `§ YYYY-MM-DD – CourseCode – Lecture Title` instead of just the bare lecture title, per the roadmap's lecture naming convention — `sourceCaptureLecture.js`'s `noteTitle` now composes the lecture date, course, and title (falling back to today's date if none was given), matching the pattern already used by `sourceCaptureTweet.js`.
+
 ### Fixed
-- 
+- `periodicNoteHelpers.js` exported `PERIOD_PRESETS`, a plain object, alongside its functions — Templater's User Scripts loader requires every exported property to be a function and refused to load the whole module ("Exported object ... must contain only functions"), breaking Daily/Weekly/Monthly/Yearly note creation entirely. `PERIOD_PRESETS` is only used internally by `resolvePeriod`, so it's no longer exported. The mocked unit test suite didn't catch this because it `require()`s the module directly, bypassing Templater's own export validation.
 ### Removed
 - 
 

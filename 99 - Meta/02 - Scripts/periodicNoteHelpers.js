@@ -67,7 +67,6 @@ function parentLabel(anchor, startOfUnit, labelFormat) {
 }
 
 module.exports = {
-    PERIOD_PRESETS,
     resolvePeriod,
     resolveDailyAnchor,
     parentLabel,

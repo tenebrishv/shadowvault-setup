@@ -12,10 +12,9 @@ README:[README](../../README.md)
   - `08 - Nexus/Dashboards.md` – Dataview queries for reviews, growth stages, unprocessed items.
   - `08 - Nexus/Library.md` – curated collection of key resources, papers, or templates (a personal library index).
 - [ ] **Implement CSS snippets** – add `Notebook Backgrounds.css`, `Daily Note Themes.css`, `Colored Sidebar Items.css`, and `CyanVoxel's General Tweaks.css` to `.obsidian/snippets/`.
-- [ ] **Lecture naming convention** – update `Source Capture` to use:
-  - `§ YYYY-MM-DD – CourseCode – Lecture Title` (e.g., `§ 2025-02-14 – PSY101 – Introduction to Memory`)
+- [x] **Lecture naming convention** – `sourceCaptureLecture.js` now titles notes `§ YYYY-MM-DD – CourseCode – Lecture Title` (e.g., `§ 2025-02-14 – PSY101 – Introduction to Memory`).
 - [x] **Split source templates** — done in commit `a5ed1fd`: `Source Capture` is a thin orchestrator dispatching to per-type `sourceCapture<Type>.js` Templater User Scripts in `99 - Meta/02 - Scripts/`.
-- [ ] **Unit template with semester tag** – add YAML field `semester: "YYYY-SS"` to `(TEMPLATE) Unit MOC.md`.
+- [x] **Unit template with semester tag** – added YAML field `semester:` to `(TEMPLATE) Unit MOC.md` and to the Unit stub created inline by `sourceCaptureLecture.js`.
 - [ ]  **Zotero integration** – set up Better BibTeX + Zotero Integration plugin; define highlight colour convention.
 - [ ] **Media Extended OR Obsidian Web Clipper** –  Capturing web/YouTube content directly in Obsidian.
 
