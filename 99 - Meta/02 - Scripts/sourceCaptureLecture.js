@@ -67,7 +67,7 @@ default_lecturer:
 
 \`\`\`dataview
 LIST
-FROM #course-unit
+FROM #course-unit AND "${UNIT_FOLDER}"
 WHERE contains(course, this.file.link)
 SORT file.name ASC
 \`\`\`

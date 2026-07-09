@@ -21,28 +21,28 @@ cssclasses:
 ### People
 ```dataview
 LIST
-FROM #agent/person
+FROM #agent/person AND "09 - Entities/Agents"
 SORT file.name ASC
 ```
 
 ### Organizations
 ```dataview
 LIST
-FROM #agent/organization
+FROM #agent/organization AND "09 - Entities/Agents"
 SORT file.name ASC
 ```
 
 ### Countries
 ```dataview
 LIST
-FROM #agent/country
+FROM #agent/country AND "09 - Entities/Agents"
 SORT file.name ASC
 ```
 
 ### Synthetic Agents (AI / Algorithms)
 ```dataview
 LIST
-FROM #agent/synthetic
+FROM #agent/synthetic AND "09 - Entities/Agents"
 SORT file.name ASC
 ```
 
@@ -53,41 +53,41 @@ SORT file.name ASC
 ### Places
 ```dataview
 LIST
-FROM #nonagent/place
+FROM #nonagent/place AND "09 - Entities/Non-Agents"
 SORT file.name ASC
 ```
 
 ### Artifacts
 ```dataview
 LIST
-FROM #nonagent/artifact
+FROM #nonagent/artifact AND "09 - Entities/Non-Agents"
 SORT file.name ASC
 ```
 
 ### Tools
 ```dataview
 LIST
-FROM #nonagent/tool
+FROM #nonagent/tool AND "09 - Entities/Non-Agents"
 SORT file.name ASC
 ```
 
 ### Systems
 ```dataview
 LIST
-FROM #nonagent/system
+FROM #nonagent/system AND "09 - Entities/Non-Agents"
 SORT file.name ASC
 ```
 
 ### Natural Entities
 ```dataview
 LIST
-FROM #nonagent/natural
+FROM #nonagent/natural AND "09 - Entities/Non-Agents"
 SORT file.name ASC
 ```
 
 ### Events
 ```dataview
 LIST
-FROM #nonagent/event
+FROM #nonagent/event AND "09 - Entities/Non-Agents"
 SORT file.name ASC
 ```
