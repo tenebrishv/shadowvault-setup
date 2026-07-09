@@ -6,3 +6,11 @@ CLAUDE.md
 
 # Claude Code skills (kept local only, not published)
 .claude/skills/
+
+# Obsidian local view state (churns from normal app usage, not real config)
+.obsidian/workspace.json
+.obsidian/workspace-mobile.json
+.obsidian/graph.json
+
+# obsidian-git plugin's local auth/state (device-specific, not shared)
+.obsidian/plugins/obsidian-git/data.json
