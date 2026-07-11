@@ -79,13 +79,17 @@ Your first captured note will appear in the current folder (you can move it to 
 
 ## Updating the Vault
 
-If installed through Git:
+Close Obsidian, then run the updater for your OS:
 
-```bash
-git pull
+```powershell
+powershell -ExecutionPolicy Bypass -File "99 - Meta/04 - Tooling/update-vault.ps1"
 ```
 
-before opening Obsidian.
+```bash
+bash "99 - Meta/04 - Tooling/update-vault.sh"
+```
+
+It touches only framework-owned files (templates, scripts, docs, dashboards) — your notes are never modified. Full guide, flags, and troubleshooting: [UPDATING](UPDATING.md).
 
 Review [CHANGELOG](../../CHANGELOG.md) after each update.
 

@@ -23,6 +23,7 @@ The goal is to build a system that helps transform information into understandin
 | File                                                                                      | Description                                                                               |
 | ----------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
 | [SETUP.md](99%20-%20Meta/01%20-%20Documentation/SETUP.md)                                 | Installation, plugin setup, first run                                                     |
+| [UPDATING.md](99%20-%20Meta/01%20-%20Documentation/UPDATING.md)                           | Updating the vault to a new release without touching your notes                           |
 | [STRUCTURE.md](99%20-%20Meta/01%20-%20Documentation/STRUCTURE.md)                         | Folder tree, naming conventions, philosophy                                               |
 | [WORKFLOWS.md](99%20-%20Meta/01%20-%20Documentation/WORKFLOWS.md)                         | Knowledge flow, note maturity, daily notes                                                |
 | [TEMPLATES.md](99%20-%20Meta/01%20-%20Documentation/TEMPLATES.md)                         | All templates and the Source Capture system                                               |
@@ -46,6 +47,7 @@ Full guide on [SETUP](99%20-%20Meta/01%20-%20Documentation/SETUP.md)
 2. Install required plugins: **Templater**, **Dataview**.
 3. Run `(TEMPLATE) Source Capture` via Templater to add your first source.
 4. Start with the **Home MOC** (`04 - MOCS/Home.md`).
+5. To update later, run `99 - Meta/04 - Tooling/update-vault.ps1` (Windows) or `update-vault.sh` (macOS/Linux) — see [UPDATING](99%20-%20Meta/01%20-%20Documentation/UPDATING.md).
 
 ---
 
