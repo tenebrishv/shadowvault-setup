@@ -5,6 +5,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+## [2.3.0] – 2026-07-11
+
+### Added
+- **Framework update system** — vaults can now update to new releases without git and without touching the owner's notes:
+  - `framework-manifest.json` (vault root, machine-generated) — the versioned list of framework-owned files with SHA-256 hashes; the single source of truth for what an update may touch.
+  - `99 - Meta/04 - Tooling/update-vault.ps1` / `update-vault.sh` — cross-platform updater: fetches the latest GitHub release, overwrites only manifest-listed files, backs up user-modified `core` files to `99 - Meta/05 - Backups/` before overwriting, never overwrites user-modified `config` files (`.obsidian` settings — the new version is saved alongside the backups for manual diffing), applies framework deletions, and writes an `update-report.md`. Supports `-DryRun`/`--dry-run`, `-ZipPath`/`--zip-path` (offline), `-Force`, `-Yes`.
+  - `99 - Meta/04 - Tooling/generate-manifest.ps1` — dev-side manifest generator with a git drift check, run when cutting a release.
+  - `99 - Meta/01 - Documentation/UPDATING.md` — end-user updating guide; `SETUP.md`'s "Updating the Vault" section and the README Quick Start now point to it.
+
 ## [2.2.0] – 2026-07-10
 
 ### Added
