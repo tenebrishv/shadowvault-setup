@@ -1,0 +1,111 @@
+/*
+ * Growth / Status / Type badges for [[links]], the file explorer, backlinks,
+ * and outgoing-link panes.
+ *
+ * Powered by the Supercharged Links plugin, which stamps each internal link
+ * with data-link-<field> attributes read from the target note's frontmatter
+ * (see .obsidian/plugins/supercharged-links-obsidian/data.json).
+ *
+ * Canonical emoji mapping lives in:
+ *   99 - Meta/01 - Documentation/METADATA.md#visual-badges
+ * If that mapping changes, update it here first, then mirror the change here.
+ *
+ * Toggle this snippet: Settings → Appearance → CSS snippets → growth-badges
+ *
+ * --- Why the selectors look like this ---
+ * Reading mode and Live Preview render links through different DOM shapes:
+ * Reading mode decorates the actual <a class="internal-link"> element, which
+ * ends up carrying BOTH `.data-link-icon` and `.data-link-icon-after` classes
+ * at once (main.js: setLinkNewProps). Live Preview instead splits the link
+ * into two SEPARATE widget spans (main.js:1195-1256) — a "before" widget
+ * (class `.data-link-icon`, inserted unconditionally) and an "after" widget
+ * (class `.data-link-icon-after`, inserted only when flushed on a later
+ * syntax-tree node). The after-widget does not reliably survive Live
+ * Preview's per-line reparsing, so anything that must show in edit view has
+ * to live on `.data-link-icon`, never `.data-link-icon-after`. That's why
+ * BOTH ::before and ::after rules below target `.data-link-icon` — in
+ * Reading mode that single class is on the one <a>, so nothing changes
+ * there; in Live Preview both pseudo-elements ride the reliable widget, so
+ * type+growth+status all render (clustered before the link text, since the
+ * unreliable after-widget position isn't usable).
+ */
+
+/* ---------- size & weight: read as a quiet tag, not competing with text ---------- */
+.data-link-icon::before,
+.data-link-icon::after {
+	font-size: 0.65em;
+	opacity: 0.5;
+}
+
+/* ---------- type (before) ---------- */
+.data-link-icon[data-link-type="permanent"]::before  { content: "💡 "; }
+.data-link-icon[data-link-type="literature"]::before { content: "📝 "; }
+.data-link-icon[data-link-type="source"]::before     { content: "📚 "; }
+.data-link-icon[data-link-type="fleeting"]::before   { content: "🌫️ "; }
+.data-link-icon[data-link-type="moc"]::before        { content: "🗺️ "; }
+.data-link-icon[data-link-type="thought"]::before    { content: "💭 "; }
+.data-link-icon[data-link-type="daily"]::before      { content: "📅 "; }
+.data-link-icon[data-link-type="entity"]::before     { content: "🧩 "; }
+
+/* ---------- growth + status combined (after) ----------
+ * Both fields have to be read off ONE pseudo-element (content only accepts a
+ * single value), so this lists every growth×status pair rather than two
+ * independent rules that would just clobber each other. */
+.data-link-icon[data-link-growth="seedling"][data-link-status="inbox"]::after      { content: " 🌱📥"; }
+.data-link-icon[data-link-growth="seedling"][data-link-status="processing"]::after { content: " 🌱⚙️"; }
+.data-link-icon[data-link-growth="seedling"][data-link-status="active"]::after     { content: " 🌱🟢"; }
+.data-link-icon[data-link-growth="seedling"][data-link-status="completed"]::after  { content: " 🌱✅"; }
+.data-link-icon[data-link-growth="seedling"][data-link-status="archived"]::after   { content: " 🌱🗄️"; }
+
+.data-link-icon[data-link-growth="fern"][data-link-status="inbox"]::after      { content: " 🌿📥"; }
+.data-link-icon[data-link-growth="fern"][data-link-status="processing"]::after { content: " 🌿⚙️"; }
+.data-link-icon[data-link-growth="fern"][data-link-status="active"]::after     { content: " 🌿🟢"; }
+.data-link-icon[data-link-growth="fern"][data-link-status="completed"]::after  { content: " 🌿✅"; }
+.data-link-icon[data-link-growth="fern"][data-link-status="archived"]::after   { content: " 🌿🗄️"; }
+
+.data-link-icon[data-link-growth="incubator"][data-link-status="inbox"]::after      { content: " 🔆📥"; }
+.data-link-icon[data-link-growth="incubator"][data-link-status="processing"]::after { content: " 🔆⚙️"; }
+.data-link-icon[data-link-growth="incubator"][data-link-status="active"]::after     { content: " 🔆🟢"; }
+.data-link-icon[data-link-growth="incubator"][data-link-status="completed"]::after  { content: " 🔆✅"; }
+.data-link-icon[data-link-growth="incubator"][data-link-status="archived"]::after   { content: " 🔆🗄️"; }
+
+.data-link-icon[data-link-growth="evergreen"][data-link-status="inbox"]::after      { content: " 🌲📥"; }
+.data-link-icon[data-link-growth="evergreen"][data-link-status="processing"]::after { content: " 🌲⚙️"; }
+.data-link-icon[data-link-growth="evergreen"][data-link-status="active"]::after     { content: " 🌲🟢"; }
+.data-link-icon[data-link-growth="evergreen"][data-link-status="completed"]::after  { content: " 🌲✅"; }
+.data-link-icon[data-link-growth="evergreen"][data-link-status="archived"]::after   { content: " 🌲🗄️"; }
+
+/* Entities (no growth/status) and MOCs (no growth) simply get no after-badge —
+   the before-badge (type) still shows independently. */
+
+/* ---------- cursor-line reveal: plain [[link]] text while you're editing it ----------
+ * Obsidian stamps `.cm-active` on the .cm-line the cursor is currently in.
+ * The widget spans are descendants of that line, so hiding their pseudo-
+ * elements there collapses the link back to plain, undecorated text — exactly
+ * while you're editing it — without touching any other line. Reading mode has
+ * no .cm-active, so this has no effect there. */
+.cm-active .data-link-icon::before,
+.cm-active .data-link-icon::after {
+	content: none !important;
+}
+.cm-active .data-link-text {
+	border-bottom: none !important;
+}
+
+/* ---------- file explorer / recent files / starred: TYPE only ----------
+ * These panes go through the same reading-mode-style decoration as the <a>
+ * itself, so without this override every filename would show type AND
+ * growth+status. Suppress the after-badge and the underline there, keep the
+ * type before-badge as a single per-file icon. */
+.nav-file-title-content::after {
+	content: none !important;
+}
+.nav-file-title-content.data-link-text {
+	border-bottom: none !important;
+}
+
+/* ---------- subtle underline tint by growth stage (in-text link, not file explorer) ---------- */
+.data-link-text[data-link-growth="seedling"]  { border-bottom: 1px solid #8bc34a55; }
+.data-link-text[data-link-growth="fern"]      { border-bottom: 1px solid #4caf5055; }
+.data-link-text[data-link-growth="incubator"] { border-bottom: 1px solid #ffb30055; }
+.data-link-text[data-link-growth="evergreen"] { border-bottom: 1px solid #2e7d3255; }

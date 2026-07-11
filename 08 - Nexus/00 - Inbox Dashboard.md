@@ -14,7 +14,10 @@ tags:
 ## 🆕 Unprocessed — Fleeting Notes
 
 ```dataview
-TABLE file.ctime AS "Captured", tags
+TABLE
+  choice(growth="seedling","🌱 Seedling", choice(growth="fern","🌿 Fern", choice(growth="incubator","🔆 Incubator", choice(growth="evergreen","🌲 Evergreen", growth)))) AS "Growth",
+  choice(type="permanent","💡 Permanent", choice(type="literature","📝 Literature", choice(type="source","📚 Source", choice(type="fleeting","🌫️ Fleeting", choice(type="moc","🗺️ MOC", choice(type="thought","💭 Thought", choice(type="daily","📅 Daily", choice(type="entity","🧩 Entity", type)))))))) AS "Type",
+  file.ctime AS "Captured", tags
 FROM "00 - Inbox"
 WHERE !contains(tags, "processed")
 SORT file.ctime ASC

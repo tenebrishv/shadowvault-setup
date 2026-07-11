@@ -7,12 +7,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ### Added
 - `semester:` YAML field on `(TEMPLATE) Unit MOC.md` and on the Unit stub `sourceCaptureLecture.js` creates inline.
+- **Visual Badges system** — `growth`/`status`/`type` now render as emoji badges instead of plain YAML text, with a single canonical mapping documented in `METADATA.md#visual-badges`:
+  - An in-note badge callout (live Dataview `choice()` expressions) under the H1 in the Permanent Note, Literature Note, Fleeting Note, and MOC templates.
+  - Emoji-mapped Growth/Type columns in the Main and Inbox Nexus dashboards (Sources Dashboard intentionally left out — it uses a non-canonical status schema).
+  - Supercharged Links configured (`.obsidian/plugins/supercharged-links-obsidian/data.json`) plus a hand-authored `.obsidian/snippets/growth-badges.css`: a type badge on every file in the file explorer, and type+growth+status badges on in-text `[[links]]` in both Reading mode and Live Preview — badges on the active editing line collapse back to plain link text via `.cm-active`, so they don't get in the way while typing.
+- `.github/FUNDING.yml` — adds a Ko-fi Sponsor button to the repo page.
 
 ### Changed
 - Lecture notes are now titled `§ YYYY-MM-DD – CourseCode – Lecture Title` instead of just the bare lecture title, per the roadmap's lecture naming convention — `sourceCaptureLecture.js`'s `noteTitle` now composes the lecture date, course, and title (falling back to today's date if none was given), matching the pattern already used by `sourceCaptureTweet.js`.
 
 ### Fixed
 - `periodicNoteHelpers.js` exported `PERIOD_PRESETS`, a plain object, alongside its functions — Templater's User Scripts loader requires every exported property to be a function and refused to load the whole module ("Exported object ... must contain only functions"), breaking Daily/Weekly/Monthly/Yearly note creation entirely. `PERIOD_PRESETS` is only used internally by `resolvePeriod`, so it's no longer exported. The mocked unit test suite didn't catch this because it `require()`s the module directly, bypassing Templater's own export validation.
+- Main Dashboard's growth-stage section headings used inconsistent emoji versus the README's growth-stage table (🌲 for Incubators, 🏔️ for Evergreen) — corrected to 🔆 Incubators / 🌲 Evergreen to match the canonical mapping now documented in `METADATA.md`.
 ### Removed
 - 
 

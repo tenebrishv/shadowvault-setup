@@ -43,6 +43,46 @@ cssclasses:   # for CSS snippets (e.g., page-white, pen-blue)
 
 ---
 
+## Visual Badges
+
+`growth`, `status`, and `type` are rendered as emoji badges wherever a note or a link to it appears — an in-note badge line (Permanent/Literature/Fleeting/MOC templates), the Nexus dashboards, and decorated `[[links]]`/backlinks via the Supercharged Links plugin. This is the **single source of truth** for the emoji mapping; every surface below must match it.
+
+**growth**
+
+| Value | Badge |
+|---|---|
+| seedling | 🌱 Seedling |
+| fern | 🌿 Fern |
+| incubator | 🔆 Incubator |
+| evergreen | 🌲 Evergreen |
+
+**status**
+
+| Value | Badge |
+|---|---|
+| inbox | 📥 Inbox |
+| processing | ⚙️ Processing |
+| active | 🟢 Active |
+| completed | ✅ Completed |
+| archived | 🗄️ Archived |
+
+**type**
+
+| Value | Badge |
+|---|---|
+| permanent | 💡 Permanent |
+| literature | 📝 Literature |
+| source | 📚 Source |
+| fleeting | 🌫️ Fleeting |
+| moc | 🗺️ MOC |
+| thought | 💭 Thought |
+| daily | 📅 Daily |
+| entity | 🧩 Entity |
+
+If this mapping changes, update it here first, then propagate to the templates, `08 - Nexus/` dashboards, and `.obsidian/snippets/growth-badges.css`.
+
+---
+
 ## Source‑Specific Fields (added by Source Capture)
 
 ### Book
