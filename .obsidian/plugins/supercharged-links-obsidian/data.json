@@ -1,0 +1,5 @@
+{
+	"targetAttributes": ["growth", "status", "type"],
+	"targetTags": false,
+	"getFromInlineField": true
+}

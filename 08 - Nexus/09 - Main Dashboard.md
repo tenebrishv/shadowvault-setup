@@ -22,7 +22,10 @@ SORT length(rows) DESC
 ## 📥 Inbox — Needs Processing
 
 ```dataview
-TABLE growth, created AS "Created", file.mtime AS "Modified"
+TABLE
+  choice(growth="seedling","🌱 Seedling", choice(growth="fern","🌿 Fern", choice(growth="incubator","🔆 Incubator", choice(growth="evergreen","🌲 Evergreen", growth)))) AS "Growth",
+  choice(type="permanent","💡 Permanent", choice(type="literature","📝 Literature", choice(type="source","📚 Source", choice(type="fleeting","🌫️ Fleeting", choice(type="moc","🗺️ MOC", choice(type="thought","💭 Thought", choice(type="daily","📅 Daily", choice(type="entity","🧩 Entity", type)))))))) AS "Type",
+  created AS "Created", file.mtime AS "Modified"
 FROM "00 - Inbox"
 SORT file.mtime DESC
 LIMIT 20
@@ -54,7 +57,7 @@ LIMIT 15
 
 ---
 
-## 🌲 Incubators — Needs Connections
+## 🔆 Incubators — Needs Connections
 
 ```dataview
 TABLE length(file.outlinks) AS "Links", created
@@ -67,7 +70,7 @@ LIMIT 15
 
 ---
 
-## 🏔️ Evergreen — Mature Notes
+## 🌲 Evergreen — Mature Notes
 
 ```dataview
 TABLE length(file.inlinks) AS "Inlinks", length(file.outlinks) AS "Outlinks", modified
@@ -115,7 +118,9 @@ SORT length(file.inlinks) DESC
 ## 🔍 Orphan Notes — Needs Linking
 
 ```dataview
-TABLE growth, type
+TABLE
+  choice(growth="seedling","🌱 Seedling", choice(growth="fern","🌿 Fern", choice(growth="incubator","🔆 Incubator", choice(growth="evergreen","🌲 Evergreen", growth)))) AS "Growth",
+  choice(type="permanent","💡 Permanent", choice(type="literature","📝 Literature", choice(type="source","📚 Source", choice(type="fleeting","🌫️ Fleeting", choice(type="moc","🗺️ MOC", choice(type="thought","💭 Thought", choice(type="daily","📅 Daily", choice(type="entity","🧩 Entity", type)))))))) AS "Type"
 FROM "03 - Permanent Notes"
 WHERE length(file.inlinks) = 0
 AND length(file.outlinks) = 0
@@ -128,7 +133,10 @@ LIMIT 10
 ## 📆 Due for Review
 
 ```dataview
-TABLE review, growth
+TABLE
+  review AS "Review Date",
+  choice(growth="seedling","🌱 Seedling", choice(growth="fern","🌿 Fern", choice(growth="incubator","🔆 Incubator", choice(growth="evergreen","🌲 Evergreen", growth)))) AS "Growth",
+  choice(type="permanent","💡 Permanent", choice(type="literature","📝 Literature", choice(type="source","📚 Source", choice(type="fleeting","🌫️ Fleeting", choice(type="moc","🗺️ MOC", choice(type="thought","💭 Thought", choice(type="daily","📅 Daily", choice(type="entity","🧩 Entity", type)))))))) AS "Type"
 FROM "03 - Permanent Notes"
 WHERE review <= date(today)
 SORT review ASC

@@ -17,6 +17,9 @@ cssclasses:
 
 # <% tp.file.title %>
 
+> [!abstract]- Badges
+> `= choice(this.growth="seedling","🌱 Seedling", choice(this.growth="fern","🌿 Fern", choice(this.growth="incubator","🔆 Incubator", choice(this.growth="evergreen","🌲 Evergreen", this.growth))))` · `= choice(this.status="inbox","📥 Inbox", choice(this.status="processing","⚙️ Processing", choice(this.status="active","🟢 Active", choice(this.status="completed","✅ Completed", choice(this.status="archived","🗄️ Archived", this.status)))))`
+
 > [!quote] From the Source
 > *Paste the key quote or idea you're responding to here.*
 
