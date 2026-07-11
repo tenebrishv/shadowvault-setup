@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+## [2.2.0] – 2026-07-10
+
 ### Added
 - `semester:` YAML field on `(TEMPLATE) Unit MOC.md` and on the Unit stub `sourceCaptureLecture.js` creates inline.
 - **Visual Badges system** — `growth`/`status`/`type` now render as emoji badges instead of plain YAML text, with a single canonical mapping documented in `METADATA.md#visual-badges`:
@@ -19,8 +21,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ### Fixed
 - `periodicNoteHelpers.js` exported `PERIOD_PRESETS`, a plain object, alongside its functions — Templater's User Scripts loader requires every exported property to be a function and refused to load the whole module ("Exported object ... must contain only functions"), breaking Daily/Weekly/Monthly/Yearly note creation entirely. `PERIOD_PRESETS` is only used internally by `resolvePeriod`, so it's no longer exported. The mocked unit test suite didn't catch this because it `require()`s the module directly, bypassing Templater's own export validation.
 - Main Dashboard's growth-stage section headings used inconsistent emoji versus the README's growth-stage table (🌲 for Incubators, 🏔️ for Evergreen) — corrected to 🔆 Incubators / 🌲 Evergreen to match the canonical mapping now documented in `METADATA.md`.
-### Removed
-- 
 
 ## [2.1.0] – 2026-07-06
 
@@ -86,6 +86,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ---
 
+[2.2.0]: https://github.com/tenebrishv/shadowvault-setup/releases/tag/v2.2.0
 [2.1.0]: https://github.com/tenebrishv/shadowvault-setup/releases/tag/v2.1.0
 [2.0.0]: https://github.com/tenebrishv/shadowvault-setup/releases/tag/v2.0.0
 [1.0.0]: https://github.com/tenebrishv/shadowvault-setup/releases/tag/v1.0.0
