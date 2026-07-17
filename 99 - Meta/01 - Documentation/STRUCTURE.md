@@ -74,7 +74,7 @@ ShadowVault/
 | `04 - MOCS` | Maps of Content. Curated navigation paths that reflect understanding, not classification. |
 | `05 - Projects` | Work with a defined outcome and deadline (courses, research, writing, etc.). |
 | `06 - Daily` | Daily, weekly, monthly, yearly notes. Temporal backbone and primary capture space. |
-| `07 - Attachments` | Non‑markdown files: PDFs, images, diagrams. No notes here. |
+| `07 - Attachments` | Non‑markdown files: PDFs, images, diagrams. No notes here. **One flat folder — no subfolders by type, source, or date.** Attachments are storage; you find them through the note that embeds them (a link), never by browsing this folder, so structure here would be friction with no payoff. Pasted images and new attachments land here automatically (set in `.obsidian/app.json`). |
 | `08 - Nexus` | Vault‑wide dashboards (reviews, reading, growth). Operational control centre. |
 | `09 - Entities/Agents` | People, Organizations, Countries, Synthetic/AI systems — entities with decision-making power. |
 | `09 - Entities/Non-Agents` | Places, Artifacts, Tools, Systems, Natural entities, Events — entities with structural/relational influence only. |
