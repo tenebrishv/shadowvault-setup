@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+## [2.4.0] – 2026-07-17
+
 ### Changed
 - **Default file locations** (`.obsidian/app.json`) — new notes now default to `00 - Inbox` (`newFileLocation`/`newFileFolderPath`) and pasted images / new attachments default to `07 - Attachments` (`attachmentFolderPath`), so the capture-then-process flow works without manually moving files. `SETUP.md` documents both under a new "Files & Links" step (issue #2).
 - **Attachment organization rule** — `07 - Attachments` is one flat folder: no subfolders by type, source, or date. Attachments are storage found through the embedding note's link, not by browsing, so structure there would be friction with no payoff. Documented in `STRUCTURE.md`'s folder definitions (issue #2).
