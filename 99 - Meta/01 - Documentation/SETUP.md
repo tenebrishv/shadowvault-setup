@@ -50,13 +50,22 @@ Install and enable the plugins listed in [PLUGINS](PLUGINS.md).
 
 ---
 
-### 5. (Optional) CSS snippets — planned, not yet available
+### 5. Files & Links
+
+These ship pre-set in this vault's `.obsidian/app.json`, so a fresh clone already has them — verify under **Settings → Files and links** if anything looks off:
+
+- **Default location for new notes**: `In the folder specified below` → `00 - Inbox`. Everything starts in the Inbox and gets processed out (Source Capture notes can be moved there manually).
+- **Default location for new attachments**: `In the folder specified below` → `07 - Attachments`. Pasted images and new attachments all land in one flat folder — see the [attachment rule in STRUCTURE.md](STRUCTURE.md#folder-definitions).
+
+---
+
+### 6. (Optional) CSS snippets — planned, not yet available
 
 CSS snippets (notebook backgrounds, daily note themes, colored sidebar, general tweaks) are **designed but not yet implemented** — see [CSS.md](CSS.md). There is nothing to enable yet; this step will apply once the `.css` files ship.
 
 ---
 
-### 6. First run
+### 7. First run
 
 - Open command palette (`Cmd/Ctrl + P`) → `Templater: Open Insert Template modal`
 - Choose `(TEMPLATE) Source Capture`
