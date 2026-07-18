@@ -324,9 +324,12 @@ for (const [type, contract] of Object.entries(schema.CAPTURE)) {
 const metadataDoc = fs.readFileSync(METADATA_DOC, "utf8");
 
 // Field names from every fenced ```yaml block.
+// NOTE: every line-break match here is \r?\n. Git checks this repo out with
+// CRLF on Windows, so an \n-only regex silently matches NOTHING — the doc
+// parses as zero fields and the bidirectional checks fail wholesale.
 function documentedFields(doc) {
     const found = new Set();
-    for (const block of doc.matchAll(/```yaml\n([\s\S]*?)```/g)) {
+    for (const block of doc.matchAll(/```yaml\r?\n([\s\S]*?)```/g)) {
         for (const line of block[1].split(/\r?\n/)) {
             const m = KEY_LINE.exec(line);
             if (m) found.add(m[1]);
@@ -341,7 +344,7 @@ function documentedFields(doc) {
 //   |---|---|
 //   | seedling | 🌱 Seedling |
 function documentedEnum(doc, field) {
-    const re = new RegExp(`\\*\\*${field}\\*\\*\\s*\\n\\n((?:\\|.*\\n)+)`, "i");
+    const re = new RegExp(`\\*\\*${field}\\*\\*\\s*\\r?\\n\\r?\\n((?:\\|.*\\r?\\n)+)`, "i");
     const m = re.exec(doc);
     if (!m) return null;
     return m[1]
@@ -353,6 +356,16 @@ function documentedEnum(doc, field) {
 // Both directions report EVERY violation at once. A first-failure-only
 // assertion turns "the docs are missing six fields" into six sequential
 // red-fix-red cycles.
+test("Doc parser: reads CRLF documents as well as LF", () => {
+    // Git checks this repo out with CRLF on Windows. An \n-only regex matches
+    // nothing at all — the doc parses as zero fields, and BOTH bidirectional
+    // checks below fail wholesale with a misleading "79 fields undocumented".
+    const crlf = '**growth**\r\n\r\n| Value | Badge |\r\n|---|---|\r\n| seedling | x |\r\n\r\n' +
+                 '```yaml\r\nid:\r\ntitle:\r\n```\r\n';
+    assert.deepEqual([...documentedFields(crlf)].sort(), ["id", "title"]);
+    assert.deepEqual(documentedEnum(crlf, "growth"), ["seedling"]);
+});
+
 test("Schema: every documented field is in the fixture vocabulary", () => {
     const unknown = [...documentedFields(metadataDoc)].filter(f => !KNOWN_FIELDS.has(f));
     assert.deepEqual(
