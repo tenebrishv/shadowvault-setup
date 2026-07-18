@@ -1,6 +1,6 @@
 ---
 tags: course-unit
-course: [[]]
+course: # "[[link to a course]]"
 semester:
 aliases:
   - "<% tp.file.title %>"

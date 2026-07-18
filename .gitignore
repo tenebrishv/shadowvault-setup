@@ -7,6 +7,11 @@ CLAUDE.md
 # Claude Code skills (kept local only, not published)
 .claude/skills/
 
+# Agent-skill config and agent-facing dev docs (kept local only, not published)
+docs/
+CONTEXT.md
+CONTEXT-MAP.md
+
 # Obsidian local view state (churns from normal app usage, not real config)
 .obsidian/workspace.json
 .obsidian/workspace-mobile.json

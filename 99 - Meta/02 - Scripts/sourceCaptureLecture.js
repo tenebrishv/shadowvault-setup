@@ -1,6 +1,9 @@
 /*
  * Lecture capture: validated Course -> Unit -> Lecturer picker, creating
  * stub notes for any that don't exist yet, then the lecture details.
+ * Stubs are born from the real template files via Templater, so the
+ * templates stay the single source of note shape; this module only knows
+ * template names plus the frontmatter fills the picker has already learned.
  * Returns { noteTitle, yamlFields, body }, or null if cancelled.
  */
 
@@ -8,6 +11,12 @@ const COURSE_FOLDER = "04 - MOCS/Courses";
 const UNIT_FOLDER = "04 - MOCS/Units";
 const AGENTS_FOLDER = "09 - Entities/Agents";
 const PERSON_TAG = "agent/person";
+
+const TEMPLATES = {
+    course: "(TEMPLATE) Course MOC",
+    unit: "(TEMPLATE) Unit MOC",
+    person: "(TEMPLATE) Person",
+};
 
 async function getNotesInFolder(folderPath) {
     const folder = app.vault.getAbstractFileByPath(folderPath);
@@ -28,11 +37,35 @@ async function getPersonNotes(folderPath) {
     return files.filter(file => noteHasTag(file, PERSON_TAG));
 }
 
-async function createStub(path, content) {
-    const existing = app.vault.getAbstractFileByPath(path);
-    if (!existing) {
-        await app.vault.create(path, content);
+// Births a stub from its template file. `fills` are frontmatter values the
+// picker already knows (e.g. the unit's course). Returns true if a note was
+// actually created, false if it already existed.
+async function createStub(tp, templateName, folder, name, fills) {
+    const path = `${folder}/${name}.md`;
+    if (app.vault.getAbstractFileByPath(path)) return false;
+
+    const template = tp.file.find_tfile(templateName);
+    if (!template) throw new Error(`Missing template: ${templateName}`);
+    const file = (await tp.file.create_new(template, name, false, folder))
+        ?? app.vault.getAbstractFileByPath(path);
+
+    if (fills && file) {
+        await app.fileManager.processFrontMatter(file, fm => Object.assign(fm, fills));
     }
+    return true;
+}
+
+// Normalizes a link-valued frontmatter field to a bare note name. Accepts
+// "Name", "[[Name]]", "[[Name|alias]]", and the nested-array shape YAML
+// gives an unquoted [[Name]].
+function linkTargetName(value) {
+    if (!value) return "";
+    const flat = Array.isArray(value) ? (value.flat(Infinity)[0] ?? "") : value;
+    return String(flat)
+        .replace(/^\s*\[\[/, "")
+        .replace(/\]\]\s*$/, "")
+        .split("|")[0]
+        .trim();
 }
 
 async function pickOrCreate(tp, helpers, label, existingItems) {
@@ -50,33 +83,8 @@ async function pickCourse(tp, helpers) {
     if (!course) return null;
 
     const coursePath = `${COURSE_FOLDER}/${course}.md`;
-    await createStub(
-        coursePath,
-        `---
-tags:
-  - course
-aliases:
-  - "${course}"
-created: ${tp.date.now("YYYY-MM-DDTHH:mm")}
-default_lecturer:
----
-
-# ${course}
-
-## Units
-
-\`\`\`dataview
-LIST
-FROM #course-unit AND "${UNIT_FOLDER}"
-WHERE contains(course, this.file.link)
-SORT file.name ASC
-\`\`\`
-
-## Core Concepts
-
-`
-    );
-    return { course, coursePath };
+    const created = await createStub(tp, TEMPLATES.course, COURSE_FOLDER, course);
+    return { course, coursePath, created };
 }
 
 async function pickUnit(tp, helpers, course) {
@@ -91,34 +99,7 @@ async function pickUnit(tp, helpers, course) {
     const unit = await pickOrCreate(tp, helpers, "Unit", unitNames);
     if (!unit) return null;
 
-    const unitPath = `${UNIT_FOLDER}/${unit}.md`;
-    await createStub(
-        unitPath,
-        `---
-tags:
-  - course-unit
-course: "[[${course}]]"
-semester:
-aliases:
-  - "${unit}"
-created: ${tp.date.now("YYYY-MM-DDTHH:mm")}
----
-
-# ${unit}
-
-## Lectures
-
-\`\`\`dataview
-LIST
-FROM #source/lecture
-WHERE contains(unit, [[]])
-SORT date_given ASC
-\`\`\`
-
-## Core Concepts
-
-`
-    );
+    await createStub(tp, TEMPLATES.unit, UNIT_FOLDER, unit, { course: `[[${course}]]` });
     return unit;
 }
 
@@ -127,7 +108,7 @@ async function pickLecturer(tp, helpers, coursePath) {
     const courseFile = app.vault.getAbstractFileByPath(coursePath);
     if (courseFile) {
         const cache = app.metadataCache.getFileCache(courseFile);
-        defaultLecturer = cache?.frontmatter?.default_lecturer || "";
+        defaultLecturer = linkTargetName(cache?.frontmatter?.default_lecturer);
     }
 
     const peopleFiles = await getPersonNotes(AGENTS_FOLDER);
@@ -139,36 +120,7 @@ async function pickLecturer(tp, helpers, coursePath) {
     const lecturer = await pickOrCreate(tp, helpers, "Lecturer", peopleNames);
     if (!lecturer) return null;
 
-    const personPath = `${AGENTS_FOLDER}/${lecturer}.md`;
-    await createStub(
-        personPath,
-        `---
-type: entity
-tags: ${PERSON_TAG}
-aliases:
-  - "${lecturer}"
-created: ${tp.date.now("YYYY-MM-DDTHH:mm")}
-role:
-organization:
-contact:
-website:
----
-
-# ${lecturer}
-
-## Notes
-
--
-
-## Related
-
-\`\`\`dataview
-LIST
-FROM [[]] AND !#${PERSON_TAG}
-SORT file.name ASC
-\`\`\`
-`
-    );
+    await createStub(tp, TEMPLATES.person, AGENTS_FOLDER, lecturer);
     return lecturer;
 }
 
@@ -185,6 +137,17 @@ module.exports = async function sourceCaptureLecture(tp, helpers) {
 
     data.lecturer = await pickLecturer(tp, helpers, courseResult.coursePath);
     if (!data.lecturer) return null;
+
+    // A brand-new course self-populates its default lecturer from the first
+    // capture, so the picker pre-selects them next time without hand-editing.
+    if (courseResult.created) {
+        const courseFile = app.vault.getAbstractFileByPath(courseResult.coursePath);
+        if (courseFile) {
+            await app.fileManager.processFrontMatter(courseFile, fm => {
+                fm.default_lecturer = `[[${data.lecturer}]]`;
+            });
+        }
+    }
 
     data.title = await requiredPrompt(tp, "Lecture Title");
     if (!data.title) return null;
@@ -257,4 +220,12 @@ module.exports = async function sourceCaptureLecture(tp, helpers) {
     body += "```\n";
 
     return { noteTitle, yamlFields, body };
+};
+
+// Exposed so the test suite's guard test can verify these template files
+// actually exist in the vault without restating the names. A function (not
+// a plain object) because Templater's User Scripts loader rejects modules
+// with non-function exports (see CHANGELOG 2.2.0, periodicNoteHelpers).
+module.exports.stubTemplates = function stubTemplates() {
+    return { ...TEMPLATES };
 };

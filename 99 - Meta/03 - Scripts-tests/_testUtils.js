@@ -8,6 +8,7 @@
  *   - tp.system.prompt / tp.system.suggester (scripted answers, in call order)
  *   - tp.date.now (returns a deterministic marker instead of a real date)
  *   - tp.file.title / tp.file.rename (periodicNoteHelpers.js only)
+ *   - tp.file.find_tfile / tp.file.create_new (Lecture stub creation)
  *   - global Notice (no-op, records messages)
  *   - global fetch (scripted per test)
  *   - a fake app.vault / app.metadataCache (Lecture module only)
@@ -15,10 +16,14 @@
  *     calendar arithmetic; see installMockMoment)
  */
 
-function createMockTp({ prompts = [], suggestions = [], fileTitle } = {}) {
+// `templates`: template basenames tp.file.find_tfile should resolve.
+// `vaultState`: the `state` handle returned by installMockApp — when given,
+// tp.file.create_new registers the new note there so later
+// app.vault.getAbstractFileByPath / processFrontMatter calls can find it.
+function createMockTp({ prompts = [], suggestions = [], fileTitle, templates = [], vaultState = null } = {}) {
     const promptQueue = [...prompts];
     const suggestionQueue = [...suggestions];
-    const calls = { prompts: [], suggestions: [], renames: [] };
+    const calls = { prompts: [], suggestions: [], renames: [], createNew: [] };
 
     return {
         system: {
@@ -49,6 +54,18 @@ function createMockTp({ prompts = [], suggestions = [], fileTitle } = {}) {
             title: fileTitle,
             async rename(newTitle) {
                 calls.renames.push(newTitle);
+            },
+            find_tfile(name) {
+                if (!templates.includes(name)) return null;
+                return { basename: name, extension: "md", path: `99 - Meta/00 - Templates/${name}.md` };
+            },
+            async create_new(template, filename, openNew, folder) {
+                calls.createNew.push({ template: template.basename, filename, folder });
+                const path = `${folder}/${filename}.md`;
+                if (vaultState && !vaultState.files[path]) {
+                    vaultState.files[path] = { frontmatter: {} };
+                }
+                return { path, basename: filename, extension: "md" };
             },
         },
         _calls: calls,
@@ -104,11 +121,18 @@ function failingFetch() {
     installMockFetch(async () => { throw new Error("network error (mocked)"); });
 }
 
-// Fake app.vault / app.metadataCache for the Lecture module.
+// Fake app.vault / app.metadataCache / app.fileManager for the Lecture module.
 // folders: { "04 - MOCS/Courses": ["Existing Course"] } - basenames present in that folder
 // files:   { "04 - MOCS/Courses/Existing Course.md": { frontmatter: {...} } } - existence + frontmatter
+// Returns { created, frontmatterEdits, state }:
+//   created         — direct app.vault.create calls (should stay empty now that
+//                     stubs are born from template files)
+//   frontmatterEdits — every processFrontMatter application, as { path, frontmatter }
+//   state           — live { folders, files }; pass as createMockTp's vaultState
 function installMockApp({ folders = {}, files = {} } = {}) {
     const created = [];
+    const frontmatterEdits = [];
+    const state = { folders, files };
     globalThis.app = {
         vault: {
             getAbstractFileByPath(path) {
@@ -134,6 +158,14 @@ function installMockApp({ folders = {}, files = {} } = {}) {
                 created.push({ path, content });
             },
         },
+        fileManager: {
+            async processFrontMatter(file, fn) {
+                const entry = (files[file.path] ??= { frontmatter: {} });
+                entry.frontmatter ??= {};
+                fn(entry.frontmatter);
+                frontmatterEdits.push({ path: file.path, frontmatter: { ...entry.frontmatter } });
+            },
+        },
         metadataCache: {
             getFileCache(file) {
                 const meta = files[file.path];
@@ -141,7 +173,7 @@ function installMockApp({ folders = {}, files = {} } = {}) {
             },
         },
     };
-    return created;
+    return { created, frontmatterEdits, state };
 }
 
 module.exports = {

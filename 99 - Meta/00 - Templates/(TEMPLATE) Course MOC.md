@@ -4,7 +4,7 @@ aliases:
   - "<% tp.file.title %>"
 created: <% tp.date.now("YYYY-MM-DDTHH:mm") %>
 institution: 
-default_lecturer: [[]]
+default_lecturer: # "[[link to an agent/person]]"
 ---
 
 # <% tp.file.title %>
@@ -31,4 +31,7 @@ FROM #source/lecture
 WHERE contains(course, [[]])
 SORT date_given ASC
 ```
+
+## Core Concepts
+
 

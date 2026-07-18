@@ -34,7 +34,7 @@ The primary intake tool. Run via Templater command: **Insert Template** → `(TE
   - Lists existing Courses (`#course` in `04 - MOCS/Courses/`)
   - Lists Units belonging to that course (via `course:` frontmatter)
   - Pre‑fills Lecturer from course's `default_lecturer` field
-  - Creates missing Courses/Units/People on the fly (stubbed inline, matching `(TEMPLATE) Person.md`'s schema)
+  - Creates missing Courses/Units/People on the fly — stubs are born from the real template files (`(TEMPLATE) Course MOC.md`, `(TEMPLATE) Unit MOC.md`, `(TEMPLATE) Person.md`) via Templater, so stub and template can't drift apart
 - Renames file with type prefix (e.g., `{` for Book, `§` for Lecture)
 - Adds YAML frontmatter with `id`, `created`, `review`, `status: inbox`, `growth: seedling`
 - Generates a rich note body (callouts, tables, timestamp placeholders)
@@ -99,13 +99,13 @@ To add a new source type: create `sourceCapture<Type>.js` following the existing
 
 ## Helper Templates
 
-These are used by `Source Capture` when creating new Courses, Units, or People.
+`Source Capture`'s lecture flow births missing Courses, Units, and People directly *from* these template files (`tp.file.find_tfile` + `tp.file.create_new`), then fills in what the picker already knows via `processFrontMatter` — the template file is the single source of the note's shape, so a stub-born note and a manually templated note are identical by construction.
 
-| File | Used for |
-|------|----------|
-| `(TEMPLATE) Course MOC.md` | New course stub (`#course`, YAML with `default_lecturer`) |
-| `(TEMPLATE) Unit MOC.md` | New unit stub (`#course-unit`, YAML `course: [CourseName](CourseName)`, `semester: "YYYY-SS"`) |
-| `(TEMPLATE) Person.md` | New person stub (`agent/person`) — the Lecturer picker in `sourceCaptureLecture.js` only offers `09 - Entities/Agents` notes tagged `agent/person`, since that folder also holds Organizations/Countries/Synthetic agents |
+| File | Used for | Filled on creation |
+|------|----------|--------------------|
+| `(TEMPLATE) Course MOC.md` | New course stub (`#course`) | `default_lecturer` is written back (as a quoted wikilink) once the first lecture's lecturer is picked |
+| `(TEMPLATE) Unit MOC.md` | New unit stub (`#course-unit`) | `course` is set to the picked course |
+| `(TEMPLATE) Person.md` | New person stub (`agent/person`) — the Lecturer picker in `sourceCaptureLecture.js` only offers `09 - Entities/Agents` notes tagged `agent/person`, since that folder also holds Organizations/Countries/Synthetic agents | — |
 
 ---
 
