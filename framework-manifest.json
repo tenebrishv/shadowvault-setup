@@ -2,7 +2,7 @@
   "name": "shadowvault",
   "repo": "tenebrishv/shadowvault-setup",
   "version": "2.6.0",
-  "generated": "2026-07-18T22:29:49Z",
+  "generated": "2026-07-18T22:35:26Z",
   "files": [
     { "path": ".obsidian/app.json", "sha256": "baac3c47062134887a96386e38df528eaf3e7a2a11b17c7525bfa1fe902a6e67", "class": "config" },
     { "path": ".obsidian/appearance.json", "sha256": "5049650c43322e897ae482156afa3bd5cdb43d959db902d3bbcc356dad2da6dd", "class": "config" },
@@ -141,7 +141,7 @@
     { "path": "99 - Meta/04 - Tooling/generate-manifest.ps1", "sha256": "6a7f09067f28fd8c483d7bf2979353e7308cd044b660cc1e2938be0d5aa5a985", "class": "core" },
     { "path": "99 - Meta/04 - Tooling/update-vault.ps1", "sha256": "83fe2e1cb6553260d1f5b0605249fd6a28121888e5776fc2d158c2b51b5e9bb2", "class": "core" },
     { "path": "99 - Meta/04 - Tooling/update-vault.sh", "sha256": "9675b5fc06bef782a0c23cfe807d1ea07c452c2e834612a74ece2329ce4be65b", "class": "core" },
-    { "path": "CHANGELOG.md", "sha256": "06e8fd8bc84aa0872cdd2e807cef1a4efec0186dd067404b85b2f65eb72d6b44", "class": "core" },
+    { "path": "CHANGELOG.md", "sha256": "a7370a4dc53b378b1eee7b4c8114383307a6561d150bb3d375b4802ae5162edb", "class": "core" },
     { "path": "LICENSE", "sha256": "047d2259741a3ebb30d8c8a43d4ba79b5b229a069acd1d2bea49f22b297d8e98", "class": "core" },
     { "path": "README.md", "sha256": "ede97c07714abb8faf65ae1c0dfe931901c136fbd5aeab69342948b5f7eb8d29", "class": "core" }
   ]

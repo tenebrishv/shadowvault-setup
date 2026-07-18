@@ -10,23 +10,23 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ### Added
 - **Frontmatter schema conformance test** — a single fixture (`99 - Meta/03 - Scripts-tests/_frontmatterSchema.js`) now describes core fields, per-type fields, and enum values, and `frontmatterSchema.test.js` checks every producer against it: all 21 templates (enumerated from disk, so a new template cannot opt out by being forgotten), the `buildBaseYaml` helper, all 9 capture modules invoked down their manual-prompt fallback, and `METADATA.md`'s own field tables. Still zero dependencies — `node --test`, no install step (issue #12).
 - **`period` frontmatter field** on periodic notes — `daily | weekly | monthly | quarterly | half-yearly | yearly`. Calendar grain now lives in its own field so adding a quarterly or half-yearly note later needs no new `type` value and no badge changes. `quarterly` and `half-yearly` are reserved ahead of their templates so the spelling is inherited, not invented.
+- **Course `default_lecturer` self-populates** — when the lecture flow creates a brand-new Course, the lecturer picked for that first capture is written back as `default_lecturer: "[[Name]]"`, so the picker pre-selects them on the next capture without hand-editing YAML. `pickLecturer` also normalizes every form the field is written in (`Name`, `"[[Name]]"`, unquoted `[[Name]]`).
 
 ### Changed
+- **Lecture stubs are now born from the template files** — `sourceCaptureLecture.js` no longer hand-writes Course/Unit/Person stub content as inline strings; it creates missing notes *from* `(TEMPLATE) Course MOC.md` / `(TEMPLATE) Unit MOC.md` / `(TEMPLATE) Person.md` via Templater (`tp.file.find_tfile` + `tp.file.create_new`), then fills picker-known frontmatter (`course` on new Units) via `processFrontMatter`. The template file is the single source of note shape, so stub-born and manually templated notes are identical by construction (issue: architecture review, candidate 1).
+- **Course template reconciled to the union of the two drifted shapes** — `(TEMPLATE) Course MOC.md` keeps `institution`, the Course Info callout, `## Units`, and `## Lectures`, and gains the `## Core Concepts` section that stub-born courses always had.
+- **Link-affordance comments** — the unset link-valued fields `default_lecturer` (Course) and `course` (Unit) now carry their hint as a YAML comment (`default_lecturer: # "[[link to an agent/person]]"`) instead of a bare `[[]]` value, which parsed as a truthy nested array and could poison the lecturer picker's default. Documented in `METADATA.md`.
 - **`type: periodic` replaces `type: daily`** — the Daily/Weekly/Monthly/Yearly templates never emitted a `type` at all, so periodic notes had no type to query or badge on. All four now emit `type: periodic` plus their `period`. The vestigial `daily` value is dropped from the enum (no producer ever wrote it) and `📆 Periodic` added to the badge table in `METADATA.md`. **The dashboards are not yet updated to match**: the `choice(type=…)` badge cascades in `08 - Nexus/` still have a `daily` arm and no `periodic` arm, so periodic notes continue to render a blank Type badge until the dashboards realignment lands. Likewise the Weekly/Monthly templates still filter `AND type != "daily"`, which no longer excludes anything — both are the dashboards issue's to fix, against the enums this change pins.
 - **Course and Unit MOCs now emit `type: moc`** — they previously carried no `type`, so `WHERE type = "moc"` missed them entirely and their Type badge rendered blank.
 - **`METADATA.md` reconciled against what the pipeline actually writes.** Nine disagreements fixed: `publish` (emitted, undocumented) and `modified` (emitted by three templates, undocumented) are now documented; `abstract` is removed from the Paper field list (it is written into the body, not the frontmatter); Literature's `source-*` fields, the Course/Unit MOC schema, and the periodic schema all gained sections; the `Weekly`/`Monthly`/`Yearly` tags were added to the tag table. The core-fields heading no longer claims the fields are "present on all notes" — that phrasing was false for every entity, curriculum, and periodic note, and it is what licensed the drift.
 - **`title` documented as template-only** — it is written by the Permanent/Literature/MOC/Fleeting templates and never by Source Capture, which carries the title in the filename instead. (Issue #12 assumed nothing emitted it; that was not accurate.)
 - **`(TEMPLATE) Natural Entity.md`** now quotes its alias like its ten sibling entity templates.
 
-## [2.5.0] – 2026-07-17
-
-### Changed
-- **Lecture stubs are now born from the template files** — `sourceCaptureLecture.js` no longer hand-writes Course/Unit/Person stub content as inline strings; it creates missing notes *from* `(TEMPLATE) Course MOC.md` / `(TEMPLATE) Unit MOC.md` / `(TEMPLATE) Person.md` via Templater (`tp.file.find_tfile` + `tp.file.create_new`), then fills picker-known frontmatter (`course` on new Units) via `processFrontMatter`. The template file is the single source of note shape, so stub-born and manually templated notes are identical by construction (issue: architecture review, candidate 1).
-- **Course template reconciled to the union of the two drifted shapes** — `(TEMPLATE) Course MOC.md` keeps `institution`, the Course Info callout, `## Units`, and `## Lectures`, and gains the `## Core Concepts` section that stub-born courses always had.
-- **Link-affordance comments** — the unset link-valued fields `default_lecturer` (Course) and `course` (Unit) now carry their hint as a YAML comment (`default_lecturer: # "[[link to an agent/person]]"`) instead of a bare `[[]]` value, which parsed as a truthy nested array and could poison the lecturer picker's default. Documented in `METADATA.md`.
-
-### Added
-- **Course `default_lecturer` self-populates** — when the lecture flow creates a brand-new Course, the lecturer picked for that first capture is written back as `default_lecturer: "[[Name]]"`, so the picker pre-selects them on the next capture without hand-editing YAML. `pickLecturer` also normalizes every form the field is written in (`Name`, `"[[Name]]"`, unquoted `[[Name]]`).
+> **Note:** 2.6.0 also contains the lecture-stub work that was briefly staged as a
+> 2.5.0 section (commit `Cut 2.5.0`). That version was never tagged or published —
+> its tree predates the manifest-regeneration step, so releasing it would have
+> shipped a `framework-manifest.json` claiming 2.4.0 and broken the updater's
+> version gate. The entries were folded here instead; no version 2.5.0 exists.
 
 ## [2.4.0] – 2026-07-17
 
@@ -125,7 +125,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ---
 
 [2.6.0]: https://github.com/tenebrishv/shadowvault-setup/releases/tag/v2.6.0
-[2.5.0]: https://github.com/tenebrishv/shadowvault-setup/releases/tag/v2.5.0
 [2.4.0]: https://github.com/tenebrishv/shadowvault-setup/releases/tag/v2.4.0
 [2.3.0]: https://github.com/tenebrishv/shadowvault-setup/releases/tag/v2.3.0
 [2.2.0]: https://github.com/tenebrishv/shadowvault-setup/releases/tag/v2.2.0
