@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+## [2.6.0] – 2026-07-18
+
 ### Added
 - **Frontmatter schema conformance test** — a single fixture (`99 - Meta/03 - Scripts-tests/_frontmatterSchema.js`) now describes core fields, per-type fields, and enum values, and `frontmatterSchema.test.js` checks every producer against it: all 21 templates (enumerated from disk, so a new template cannot opt out by being forgotten), the `buildBaseYaml` helper, all 9 capture modules invoked down their manual-prompt fallback, and `METADATA.md`'s own field tables. Still zero dependencies — `node --test`, no install step (issue #12).
 - **`period` frontmatter field** on periodic notes — `daily | weekly | monthly | quarterly | half-yearly | yearly`. Calendar grain now lives in its own field so adding a quarterly or half-yearly note later needs no new `type` value and no badge changes. `quarterly` and `half-yearly` are reserved ahead of their templates so the spelling is inherited, not invented.
@@ -122,6 +124,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ---
 
+[2.6.0]: https://github.com/tenebrishv/shadowvault-setup/releases/tag/v2.6.0
+[2.5.0]: https://github.com/tenebrishv/shadowvault-setup/releases/tag/v2.5.0
 [2.4.0]: https://github.com/tenebrishv/shadowvault-setup/releases/tag/v2.4.0
 [2.3.0]: https://github.com/tenebrishv/shadowvault-setup/releases/tag/v2.3.0
 [2.2.0]: https://github.com/tenebrishv/shadowvault-setup/releases/tag/v2.2.0
