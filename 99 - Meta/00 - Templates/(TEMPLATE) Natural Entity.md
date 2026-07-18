@@ -2,7 +2,7 @@
 type: entity
 tags: nonagent/natural
 aliases:
-  - <% tp.file.title %>
+  - "<% tp.file.title %>"
 created: <% tp.date.now("YYYY-MM-DDTHH:mm") %>
 location:
 classification:

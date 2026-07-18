@@ -2,6 +2,8 @@
 const anchor = await tp.user.periodicNoteHelpers.resolveDailyAnchor(tp);
 const weekLabel = tp.user.periodicNoteHelpers.parentLabel(anchor, "isoWeek", "GGGG-[W]WW");
 %>---
+type: periodic
+period: daily
 date: <% anchor.format("YYYY-MM-DD") %>T<% tp.date.now("HH:mm") %>
 tags:
   - Daily

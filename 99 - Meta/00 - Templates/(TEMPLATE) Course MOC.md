@@ -1,4 +1,5 @@
 ---
+type: moc
 tags: course
 aliases:
   - "<% tp.file.title %>"

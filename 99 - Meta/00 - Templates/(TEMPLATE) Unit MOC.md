@@ -1,4 +1,5 @@
 ---
+type: moc
 tags: course-unit
 course: # "[[link to a course]]"
 semester:
