@@ -2,6 +2,8 @@
 const { periodStart: monthStart, periodEnd: monthEnd, prevLabel, nextLabel } = await tp.user.periodicNoteHelpers.resolvePeriod(tp, "monthly");
 const yearLabel = tp.user.periodicNoteHelpers.parentLabel(monthStart, "year", "YYYY-[Y]");
 %>---
+type: periodic
+period: monthly
 date: <% monthStart.format("YYYY-MM-DD") %>
 tags:
   - Monthly

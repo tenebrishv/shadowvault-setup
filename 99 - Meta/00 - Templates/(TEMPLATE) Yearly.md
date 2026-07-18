@@ -1,6 +1,8 @@
 <%*
 const { periodStart: yearStart, periodEnd: yearEnd, prevLabel, nextLabel } = await tp.user.periodicNoteHelpers.resolvePeriod(tp, "yearly");
 %>---
+type: periodic
+period: yearly
 date: <% yearStart.format("YYYY-MM-DD") %>
 tags:
   - Yearly

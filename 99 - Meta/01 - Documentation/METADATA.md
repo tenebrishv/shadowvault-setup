@@ -6,22 +6,57 @@ Metadata should support retrieval and understanding.
 README: [README](../../README.md)
 
 ---
-## Core Frontmatter Fields (present on all notes)
+## Core Frontmatter Fields
+
+These are the fields carried by notes moving through the pipeline — Permanent,
+Literature, MOC, Fleeting, and captured Sources. They are **not** universal:
+entity, curriculum-MOC, and periodic notes use their own lighter schemas,
+documented further down.
 
 ```yaml
 ---
 id:           # YYYYMMDDHHmm – unique timestamp ID
 title:        # Human‑readable title (usually same as file name without prefix)
-type:         # source | permanent | literature | fleeting | moc | thought | daily | entity
+type:         # source | permanent | literature | fleeting | moc | thought | entity | periodic
 growth:       # seedling | fern | incubator | evergreen
 status:       # inbox | processing | active | completed | archived
 created:      # YYYY-MM-DDTHH:mm
+modified:     # YYYY-MM-DD – last substantive revision
 review:       # YYYY-MM-DD – next scheduled review date
+publish:      # true/false – set by Source Capture
 tags:         # list of broad categories eg: sources/book
 aliases:      # alternative titles
 cssclasses:   # for CSS snippets (e.g., page-white, pen-blue)
 ---
 ```
+
+Not every core note emits every field. The split below is real and enforced by
+the conformance test in `99 - Meta/03 - Scripts-tests/frontmatterSchema.test.js`:
+
+| Field | Permanent | Literature | MOC | Fleeting | Source Capture |
+|---|---|---|---|---|---|
+| `id` | ✓ | ✓ | ✓ | ✓ | ✓ |
+| `title` | ✓ | ✓ | ✓ | ✓ | — |
+| `type` | ✓ | ✓ | ✓ | ✓ | ✓ |
+| `growth` | ✓ | ✓ | — | ✓ | ✓ |
+| `status` | ✓ | ✓ | ✓ | ✓ | ✓ |
+| `created` | ✓ | ✓ | ✓ | ✓ | ✓ |
+| `modified` | ✓ | ✓ | ✓ | — | — |
+| `review` | ✓ | — | — | — | ✓ |
+| `publish` | — | — | — | — | ✓ |
+| `tags` | ✓ | ✓ | ✓ | ✓ | ✓ |
+| `aliases` | ✓ | ✓ | ✓ | — | ✓ |
+| `cssclasses` | ✓ | ✓ | ✓ | ✓ | — |
+
+Notes on the asymmetries, all of them deliberate as of this writing:
+
+- **`title` is written by the hand-authored templates, never by Source Capture** —
+  captured notes carry the title in the filename (with its type prefix) instead.
+- **`publish` is written only by Source Capture.**
+- **`cssclasses` is written only by the hand-authored templates.**
+- **Fleeting Note omits `aliases`, `review`, and `modified`** — it is the deliberate
+  minimal template (ADR 0001); speed of capture wins over structure.
+- **MOC omits `growth`** — MOCs are navigation, not ideas ripening toward evergreen.
 
 - id
 	- Permanent reference
@@ -76,7 +111,7 @@ cssclasses:   # for CSS snippets (e.g., page-white, pen-blue)
 | fleeting | 🌫️ Fleeting |
 | moc | 🗺️ MOC |
 | thought | 💭 Thought |
-| daily | 📅 Daily |
+| periodic | 📆 Periodic |
 | entity | 🧩 Entity |
 
 If this mapping changes, update it here first, then propagate to the templates, `08 - Nexus/` dashboards, and `.obsidian/snippets/growth-badges.css`.
@@ -115,8 +150,10 @@ url:
 publish_date:
 keywords:
 general_subject:
-abstract:
 ```
+
+The paper's abstract is **not** a frontmatter field — `sourceCapturePaper.js`
+writes it into the note body as an `> [!abstract]` callout.
 ### YouTube / Video
 
 ```yaml
@@ -166,6 +203,83 @@ The Course and Unit MOC templates hold **link-valued fields** (`default_lecturer
 context:
 led_here:
 ```
+
+---
+
+## Literature Note Fields (`02 - Literature Notes/`)
+
+A Literature Note records **your** reading of a source, so it carries a pointer
+back to that source alongside the core fields. These are distinct from the
+Source Capture fields above: those describe the source note itself, these
+describe the link from your summary to it.
+
+```yaml
+source-title:
+source-author:
+source-type:     # book | article | paper | video | podcast | lecture …
+source-url:
+```
+
+---
+
+## Curriculum MOC Fields (`04 - MOCS/Courses`, `04 - MOCS/Units`)
+
+Course and Unit MOCs use a **structural** schema — no `id`/`growth`/`status`/
+`review`, since they are navigation scaffolding rather than ideas ripening
+toward evergreen. They do carry `type: moc`, so they render and query as MOCs.
+
+### Course MOC
+
+```yaml
+type: moc
+institution:
+default_lecturer:   # "[[link to an agent/person]]"
+```
+
+### Unit MOC
+
+```yaml
+type: moc
+course:             # "[[link to a course]]"
+semester:
+```
+
+Both are created by hand or born as stubs by the lecture capture flow; either
+way the template file is the single source of their shape.
+
+---
+
+## Periodic Note Fields (`06 - Daily/`)
+
+Daily, Weekly, Monthly, and Yearly notes all carry `type: periodic`. The
+calendar grain lives in a separate `period` field rather than in `type`, so
+adding a quarterly or half-yearly note later needs no new `type` value and no
+change to the badge mappings.
+
+```yaml
+type: periodic
+period:      # see the value table below
+date:        # YYYY-MM-DD – first day of the period
+week:        # "[[GGGG-Www]]" – parent week (Daily only)
+month:       # "[[YYYY-MMM]]" – parent month (Weekly only)
+year:        # "[[YYYY-Y]]"   – parent year (Monthly only)
+```
+
+**period**
+
+| Value | Grain |
+|---|---|
+| daily | One day |
+| weekly | One ISO week |
+| monthly | One calendar month |
+| quarterly | One quarter (no template yet) |
+| half-yearly | Six months (no template yet) |
+| yearly | One calendar year |
+
+`quarterly` and `half-yearly` are reserved: the vocabulary is pinned so that
+whoever adds those templates inherits the spelling rather than inventing one.
+
+---
 
 ## Entity Fields (`09 - Entities/`)
 
@@ -288,6 +402,9 @@ Tags are **broad categorical umbrellas**. Links carry meaning. Tags tell you _
 |`nonagent/natural`|Natural entity notes|
 |`nonagent/event`|Event entity notes|
 |`Daily`|Daily notes (capital D)|
+|`Weekly`|Weekly notes (capital W)|
+|`Monthly`|Monthly notes (capital M)|
+|`Yearly`|Yearly notes (capital Y)|
 
 Do not use tags for growth stage (`seedling`, etc.) – those are kept in `growth:` field so Dataview can filter them easily.
 

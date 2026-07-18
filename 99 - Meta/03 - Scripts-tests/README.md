@@ -34,6 +34,19 @@ global `moment` as a call-recording spy, not a real calendar — it verifies
 and amount), not that the resulting dates are calendrically correct. Trust
 moment.js for that.
 
+`frontmatterSchema.test.js` is different in kind: rather than testing one
+module, it checks every frontmatter **producer** in the vault — all 21
+templates (read from `00 - Templates/` on disk), the `buildBaseYaml` helper,
+all 9 capture modules, and `METADATA.md`'s own field tables — against the
+single fixture in `_frontmatterSchema.js`. Read the header comment in that
+fixture before editing it: the `required` lists are deliberately
+hand-transcribed rather than computed, and contracts are keyed on template
+filename rather than on the `type` field. Both look like oversights and are
+not; see `docs/adr/0003`.
+
+If you add a template, add a fixture entry — an unclassified template fails
+the suite by design.
+
 They do **not** test the real Obsidian/Templater integration: actual modal
 rendering, the real file rename (`app.fileManager.renameFile` /
 `tp.file.rename`), real network calls, Templater's own date formatting, or

@@ -5,6 +5,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+### Added
+- **Frontmatter schema conformance test** — a single fixture (`99 - Meta/03 - Scripts-tests/_frontmatterSchema.js`) now describes core fields, per-type fields, and enum values, and `frontmatterSchema.test.js` checks every producer against it: all 21 templates (enumerated from disk, so a new template cannot opt out by being forgotten), the `buildBaseYaml` helper, all 9 capture modules invoked down their manual-prompt fallback, and `METADATA.md`'s own field tables. Still zero dependencies — `node --test`, no install step (issue #12).
+- **`period` frontmatter field** on periodic notes — `daily | weekly | monthly | quarterly | half-yearly | yearly`. Calendar grain now lives in its own field so adding a quarterly or half-yearly note later needs no new `type` value and no badge changes. `quarterly` and `half-yearly` are reserved ahead of their templates so the spelling is inherited, not invented.
+
+### Changed
+- **`type: periodic` replaces `type: daily`** — the Daily/Weekly/Monthly/Yearly templates never emitted a `type` at all, so periodic notes had no type to query or badge on. All four now emit `type: periodic` plus their `period`. The vestigial `daily` value is dropped from the enum (no producer ever wrote it) and `📆 Periodic` added to the badge table in `METADATA.md`. **The dashboards are not yet updated to match**: the `choice(type=…)` badge cascades in `08 - Nexus/` still have a `daily` arm and no `periodic` arm, so periodic notes continue to render a blank Type badge until the dashboards realignment lands. Likewise the Weekly/Monthly templates still filter `AND type != "daily"`, which no longer excludes anything — both are the dashboards issue's to fix, against the enums this change pins.
+- **Course and Unit MOCs now emit `type: moc`** — they previously carried no `type`, so `WHERE type = "moc"` missed them entirely and their Type badge rendered blank.
+- **`METADATA.md` reconciled against what the pipeline actually writes.** Nine disagreements fixed: `publish` (emitted, undocumented) and `modified` (emitted by three templates, undocumented) are now documented; `abstract` is removed from the Paper field list (it is written into the body, not the frontmatter); Literature's `source-*` fields, the Course/Unit MOC schema, and the periodic schema all gained sections; the `Weekly`/`Monthly`/`Yearly` tags were added to the tag table. The core-fields heading no longer claims the fields are "present on all notes" — that phrasing was false for every entity, curriculum, and periodic note, and it is what licensed the drift.
+- **`title` documented as template-only** — it is written by the Permanent/Literature/MOC/Fleeting templates and never by Source Capture, which carries the title in the filename instead. (Issue #12 assumed nothing emitted it; that was not accurate.)
+- **`(TEMPLATE) Natural Entity.md`** now quotes its alias like its ten sibling entity templates.
+
 ## [2.5.0] – 2026-07-17
 
 ### Changed

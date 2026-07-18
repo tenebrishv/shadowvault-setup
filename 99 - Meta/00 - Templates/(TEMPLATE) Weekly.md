@@ -2,6 +2,8 @@
 const { periodStart: weekStart, periodEnd: weekEnd, prevLabel, nextLabel } = await tp.user.periodicNoteHelpers.resolvePeriod(tp, "weekly");
 const monthLabel = tp.user.periodicNoteHelpers.parentLabel(weekStart, "month", "YYYY-MMM");
 %>---
+type: periodic
+period: weekly
 date: <% weekStart.format("YYYY-MM-DD") %>
 tags:
   - Weekly
