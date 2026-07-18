@@ -5,6 +5,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+## [2.5.0] – 2026-07-17
+
+### Changed
+- **Lecture stubs are now born from the template files** — `sourceCaptureLecture.js` no longer hand-writes Course/Unit/Person stub content as inline strings; it creates missing notes *from* `(TEMPLATE) Course MOC.md` / `(TEMPLATE) Unit MOC.md` / `(TEMPLATE) Person.md` via Templater (`tp.file.find_tfile` + `tp.file.create_new`), then fills picker-known frontmatter (`course` on new Units) via `processFrontMatter`. The template file is the single source of note shape, so stub-born and manually templated notes are identical by construction (issue: architecture review, candidate 1).
+- **Course template reconciled to the union of the two drifted shapes** — `(TEMPLATE) Course MOC.md` keeps `institution`, the Course Info callout, `## Units`, and `## Lectures`, and gains the `## Core Concepts` section that stub-born courses always had.
+- **Link-affordance comments** — the unset link-valued fields `default_lecturer` (Course) and `course` (Unit) now carry their hint as a YAML comment (`default_lecturer: # "[[link to an agent/person]]"`) instead of a bare `[[]]` value, which parsed as a truthy nested array and could poison the lecturer picker's default. Documented in `METADATA.md`.
+
+### Added
+- **Course `default_lecturer` self-populates** — when the lecture flow creates a brand-new Course, the lecturer picked for that first capture is written back as `default_lecturer: "[[Name]]"`, so the picker pre-selects them on the next capture without hand-editing YAML. `pickLecturer` also normalizes every form the field is written in (`Name`, `"[[Name]]"`, unquoted `[[Name]]`).
+
 ## [2.4.0] – 2026-07-17
 
 ### Changed

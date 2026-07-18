@@ -158,6 +158,8 @@ url:
 keywords:
 ```
 
+The Course and Unit MOC templates hold **link-valued fields** (`default_lecturer` on Course, `course` on Unit). When unset, the template leaves the field empty with a YAML comment hint — e.g. `default_lecturer: # "[[link to an agent/person]]"` — so the parsed value stays genuinely empty while the raw frontmatter still teaches what belongs there. When set, the value is a quoted wikilink (`default_lecturer: "[[Jane Doe]]"`), which Obsidian renders as a link in the Properties panel. The lecture capture flow fills both automatically: a new Unit gets its `course`, and a newly created Course gets `default_lecturer` set to the first captured lecture's lecturer.
+
 ### Thought
 
 ```yaml
