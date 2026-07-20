@@ -13,14 +13,21 @@ tags:
 
 ## 🆕 Unprocessed — Fleeting Notes
 
-```dataview
-TABLE
-  choice(growth="seedling","🌱 Seedling", choice(growth="fern","🌿 Fern", choice(growth="incubator","🔆 Incubator", choice(growth="evergreen","🌲 Evergreen", growth)))) AS "Growth",
-  choice(type="permanent","💡 Permanent", choice(type="literature","📝 Literature", choice(type="source","📚 Source", choice(type="fleeting","🌫️ Fleeting", choice(type="moc","🗺️ MOC", choice(type="thought","💭 Thought", choice(type="daily","📅 Daily", choice(type="entity","🧩 Entity", type)))))))) AS "Type",
-  file.ctime AS "Captured", tags
-FROM "00 - Inbox"
-WHERE !contains(tags, "processed")
-SORT file.ctime ASC
+> [!info]- Badge table needs Dataview → Enable JavaScript Queries
+> The Growth/Type columns below render through the shared view at `99 - Meta/05 - Views/badge-table/`. If this section shows raw code instead of a table, turn on **Enable JavaScript Queries** in Dataview's settings.
+
+```dataviewjs
+dv.view("99 - Meta/05 - Views/badge-table", {
+  pages: dv.pages('"00 - Inbox"')
+    .where(p => !p.file.tags.includes("#processed"))
+    .sort(p => p.file.ctime, "asc"),
+  columns: [
+    "growth",
+    "type",
+    ["Captured", p => p.file.ctime],
+    ["Tags", p => p.file.tags],
+  ],
+})
 ```
 
 ---

@@ -49,7 +49,7 @@ week: "[[<% weekLabel %>]]"
 LIST
 FROM ""
 WHERE file.cday = date("<% anchor.format("YYYY-MM-DD") %>")
-AND type != "daily"
+AND type != "periodic"
 SORT file.ctime ASC
 ```
 

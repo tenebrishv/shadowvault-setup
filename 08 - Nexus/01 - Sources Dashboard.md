@@ -7,61 +7,80 @@ tags:
 
 # 📚 SOURCES
 
+> *Sections follow the canonical `status` lifecycle: `inbox → processing → completed`. See `99 - Meta/01 - Documentation/METADATA.md`.*
+>
+> *The Creator/Published columns read `file.frontmatter.*` rather than the bare field. Several capture modules write a field twice — `channel:` in frontmatter and `channel:: [Name](url)` in the note's source callout — and Dataview merges same-named frontmatter and inline fields into one array, so the bare field renders the value twice. Going through `file.frontmatter` takes the canonical copy while leaving genuine multi-value lists (a book's several `authors`) intact.*
+
 ---
 
 ## 🔴 Currently Reading / Consuming
 
 ```dataview
-TABLE medium, author, date-started AS "Started", rating
+TABLE
+  default(default(default(file.frontmatter.authors, file.frontmatter.channel), default(file.frontmatter.host, file.frontmatter.account)), file.frontmatter.lecturer) AS "Creator",
+  default(default(file.frontmatter.publish_date, file.frontmatter.released), file.frontmatter.date_given) AS "Published",
+  url AS "Link"
 FROM "01 - Sources"
-WHERE status = "reading"
-SORT date-started DESC
+WHERE status = "processing" OR status = "active"
+SORT created DESC
 ```
 
 ---
 
-## 🟡 Unread Queue
+## 🟡 Queue — Captured, Not Started
 
 ```dataview
-TABLE medium, author, date-added AS "Added"
+TABLE
+  default(default(default(file.frontmatter.authors, file.frontmatter.channel), default(file.frontmatter.host, file.frontmatter.account)), file.frontmatter.lecturer) AS "Creator",
+  default(default(file.frontmatter.publish_date, file.frontmatter.released), file.frontmatter.date_given) AS "Published",
+  created AS "Captured"
 FROM "01 - Sources"
-WHERE status = "unread"
-SORT date-added ASC
+WHERE status = "inbox"
+SORT created ASC
 ```
 
 ---
 
-## 🟢 Processed — Literature Notes Created
+## 🟢 Completed — Literature Notes Created
 
 ```dataview
-TABLE medium, author, date-finished AS "Finished", rating
+TABLE
+  default(default(default(file.frontmatter.authors, file.frontmatter.channel), default(file.frontmatter.host, file.frontmatter.account)), file.frontmatter.lecturer) AS "Creator",
+  default(default(file.frontmatter.publish_date, file.frontmatter.released), file.frontmatter.date_given) AS "Published",
+  url AS "Link"
 FROM "01 - Sources"
-WHERE status = "processed"
-SORT date-finished DESC
+WHERE status = "completed"
+SORT created DESC
 LIMIT 20
 ```
 
 ---
 
-## 📊 By Medium
+## 📊 By Source Type
 
 ```dataview
 TABLE WITHOUT ID
-  medium AS "Type",
+  key AS "Type",
   length(rows) AS "Count"
 FROM "01 - Sources"
-GROUP BY medium
+FLATTEN file.tags AS Tag
+WHERE startswith(Tag, "#source/")
+GROUP BY Tag
 SORT length(rows) DESC
 ```
 
 ---
 
-## ⭐ Highest Rated
+## ⚠️ Unfiled — Status Missing or Unrecognized
+
+> *Should always be empty. Anything here has a `status` outside the canonical enum — a typo, a hand-edit, or a query written against a stale vocabulary.*
 
 ```dataview
-TABLE medium, author, rating
+TABLE
+  status AS "Raw status",
+  default(default(default(file.frontmatter.authors, file.frontmatter.channel), default(file.frontmatter.host, file.frontmatter.account)), file.frontmatter.lecturer) AS "Creator",
+  created AS "Captured"
 FROM "01 - Sources"
-WHERE rating >= 4
-SORT rating DESC
-LIMIT 10
+WHERE !contains(list("inbox", "processing", "active", "completed", "archived"), status)
+SORT created ASC
 ```

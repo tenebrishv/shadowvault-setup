@@ -5,6 +5,28 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+## [2.7.0] – 2026-07-20
+
+> [!warning] Upgrade note — enable Dataview's JavaScript Queries
+> The Main and Inbox dashboards now render badges through a shared Dataview view, which requires **Settings → Dataview → Enable JavaScript Queries**. Fresh installs get this from the shipped `.obsidian/plugins/dataview/data.json`. **If you already had Dataview settings of your own, the updater keeps them** (`data.json` is `config`-class, so your file wins and the framework's copy goes to `_backup/_new-config/`) — turn the setting on by hand, or those sections will render as raw code. Everything else in the vault is plain DQL and is unaffected.
+
+### Added
+- **Shared badge view** — `99 - Meta/05 - Views/badge-table/view.js` is now the vault's one growth/status/type emoji renderer. The eight inline `choice(…)` cascades across the two dashboards are gone; call sites pass `{pages, columns}` and keep their own query. DQL has no user-function seam, so the four badge-bearing queries became `dataviewjs` blocks — the vault's first. Rationale, rejected alternatives, and the ongoing two-query-languages cost are recorded in `docs/adr/0004` (issue #15).
+- **Dashboard enum conformance test** — `99 - Meta/03 - Scripts-tests/dashboardEnums.test.js` asserts that every `status`/`growth`/`type`/`period` literal in an `08 - Nexus/` dashboard or periodic-note query is a member of the enums in `_frontmatterSchema.js`, and that the badge view's maps are total over those enums and identical to `METADATA.md`'s badge tables. `frontmatterSchema.test.js` pins what the vault *writes*; this pins what it *reads*. A stale literal now fails the suite instead of silently matching nothing.
+- **"⚠️ Unfiled" section on the Sources Dashboard** — catches any source whose `status` falls outside the canonical enum. It should always be empty; anything in it is a typo, a hand-edit, or a query written against a stale vocabulary.
+
+### Changed
+- **Sources Dashboard realigned to the canonical schema** — every query on it filtered `status` on `reading`/`unread`/`processed` and displayed `medium`/`author`/`date-added`, none of which any producer has ever written, so the dashboard rendered empty for real vault content. Sections are now keyed on the documented lifecycle (Queue = `inbox`, Currently Reading = `processing` or `active`, Completed = `completed`; `archived` deliberately excluded), and captured sources appear the moment they are captured. **This supersedes the 2.2.0 note calling the Sources Dashboard's non-canonical status schema intentional** — it was drift, not design.
+- **Source columns are coalesced by meaning, not by field** — no creator field is common to all eight source types (`authors` for book/article/paper, `channel` for youtube/video, `host` for podcast, `account` for tweet, `lecturer` for lecture), so a literal per-field column set would be mostly blank. The dashboards show a single "Creator" and "Published" column resolved across those fields.
+- **"By Medium" → "By Source Type"** — regrouped on the `source/*` tag every capture actually writes, instead of a `medium` field only entity notes have.
+- **Main Dashboard's reading queue** now filters on the canonical statuses and shows a Status badge, Creator, and Published.
+- **`type != "daily"` → `type != "periodic"`** in `(TEMPLATE) Daily Enhanced.md`, `(TEMPLATE) Weekly.md`, and `(TEMPLATE) Monthly.md`. The old filter excluded nothing after 2.6.0 renamed the value, so every periodic note leaked into every other periodic note's "Notes Created" list. Flagged by #12 and fixed here as a named scope extension.
+- **`METADATA.md#visual-badges` propagation list** now points at the shared view rather than the dashboards, and the mapping's agreement with the docs is machine-checked.
+- **Source columns read `file.frontmatter.*`, not the bare field** — the Article/YouTube/Video/Podcast capture modules write `authors`/`channel`/`host`/`released` **twice**, once in frontmatter and once as an inline `field::` in the source callout, and Dataview merges same-named inline and frontmatter fields into one array. The bare field therefore renders each value twice, once as a string and once as a link. Going through `file.frontmatter` takes the canonical copy while leaving genuine multi-value lists (a book's several `authors`) intact. This is a display-layer workaround; the underlying double-write is [#21](https://github.com/tenebrishv/shadowvault-setup/issues/21).
+
+### Removed
+- **"⭐ Highest Rated" section on the Sources Dashboard** — `rating` appeared nowhere in the vault except that query: no template, no capture module, not in the schema vocabulary. Adding a producer would be a schema change, which belongs to a follow-up rather than a realignment.
+
 ## [2.6.0] – 2026-07-18
 
 ### Added
@@ -49,7 +71,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - `semester:` YAML field on `(TEMPLATE) Unit MOC.md` and on the Unit stub `sourceCaptureLecture.js` creates inline.
 - **Visual Badges system** — `growth`/`status`/`type` now render as emoji badges instead of plain YAML text, with a single canonical mapping documented in `METADATA.md#visual-badges`:
   - An in-note badge callout (live Dataview `choice()` expressions) under the H1 in the Permanent Note, Literature Note, Fleeting Note, and MOC templates.
-  - Emoji-mapped Growth/Type columns in the Main and Inbox Nexus dashboards (Sources Dashboard intentionally left out — it uses a non-canonical status schema).
+  - Emoji-mapped Growth/Type columns in the Main and Inbox Nexus dashboards (Sources Dashboard intentionally left out — it uses a non-canonical status schema). *(Superseded in Unreleased: the Sources Dashboard's schema was drift, not a deliberate exception, and is now realigned. Badges are no longer inline in any dashboard.)*
   - Supercharged Links configured (`.obsidian/plugins/supercharged-links-obsidian/data.json`) plus a hand-authored `.obsidian/snippets/growth-badges.css`: a type badge on every file in the file explorer, and type+growth+status badges on in-text `[[links]]` in both Reading mode and Live Preview — badges on the active editing line collapse back to plain link text via `.cm-active`, so they don't get in the way while typing.
 - `.github/FUNDING.yml` — adds a Ko-fi Sponsor button to the repo page.
 
@@ -124,6 +146,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ---
 
+[2.7.0]: https://github.com/tenebrishv/shadowvault-setup/releases/tag/v2.7.0
 [2.6.0]: https://github.com/tenebrishv/shadowvault-setup/releases/tag/v2.6.0
 [2.4.0]: https://github.com/tenebrishv/shadowvault-setup/releases/tag/v2.4.0
 [2.3.0]: https://github.com/tenebrishv/shadowvault-setup/releases/tag/v2.3.0
