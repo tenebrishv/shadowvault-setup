@@ -114,7 +114,7 @@ Notes on the asymmetries, all of them deliberate as of this writing:
 | periodic | 📆 Periodic |
 | entity | 🧩 Entity |
 
-If this mapping changes, update it here first, then propagate to the templates, `08 - Nexus/` dashboards, and `.obsidian/snippets/growth-badges.css`.
+If this mapping changes, update it here first, then propagate to the templates' in-note badge callouts, `99 - Meta/05 - Views/badge-table/view.js`, and `.obsidian/snippets/growth-badges.css`. The `08 - Nexus/` dashboards no longer hold their own copy — they render badges through the shared view, and `dashboardEnums.test.js` fails if the view and the tables above disagree, in either direction.
 
 ---
 

@@ -31,7 +31,7 @@ LIST
 FROM ""
 WHERE file.cday >= date("<% weekStart.format("YYYY-MM-DD") %>")
 AND file.cday < date("<% weekEnd.format("YYYY-MM-DD") %>")
-AND type != "daily"
+AND type != "periodic"
 SORT file.ctime ASC
 ```
 

@@ -8,6 +8,9 @@ tags:
 
 # 🗺️ VAULT DASHBOARD
 
+> [!info]- Badge tables need Dataview → Enable JavaScript Queries
+> The Growth/Type/Status badge columns below render through the shared view at `99 - Meta/05 - Views/badge-table/`. If a section shows raw code instead of a table, turn on **Enable JavaScript Queries** in Dataview's settings.
+
 ```dataview
 TABLE WITHOUT ID
   length(rows) AS "Count"
@@ -21,14 +24,16 @@ SORT length(rows) DESC
 
 ## 📥 Inbox — Needs Processing
 
-```dataview
-TABLE
-  choice(growth="seedling","🌱 Seedling", choice(growth="fern","🌿 Fern", choice(growth="incubator","🔆 Incubator", choice(growth="evergreen","🌲 Evergreen", growth)))) AS "Growth",
-  choice(type="permanent","💡 Permanent", choice(type="literature","📝 Literature", choice(type="source","📚 Source", choice(type="fleeting","🌫️ Fleeting", choice(type="moc","🗺️ MOC", choice(type="thought","💭 Thought", choice(type="daily","📅 Daily", choice(type="entity","🧩 Entity", type)))))))) AS "Type",
-  created AS "Created", file.mtime AS "Modified"
-FROM "00 - Inbox"
-SORT file.mtime DESC
-LIMIT 20
+```dataviewjs
+dv.view("99 - Meta/05 - Views/badge-table", {
+  pages: dv.pages('"00 - Inbox"').sort(p => p.file.mtime, "desc").limit(20),
+  columns: [
+    "growth",
+    "type",
+    ["Created", p => p.created],
+    ["Modified", p => p.file.mtime],
+  ],
+})
 ```
 
 ---
@@ -84,12 +89,29 @@ LIMIT 20
 
 ## 📚 Sources — Reading Queue
 
-```dataview
-TABLE medium, author, status
-FROM "01 - Sources"
-WHERE status = "unread" OR status = "reading"
-SORT date-added DESC
-LIMIT 20
+```dataviewjs
+dv.view("99 - Meta/05 - Views/badge-table", {
+  pages: dv.pages('"01 - Sources"')
+    .where(p => ["inbox", "processing", "active"].includes(p.status))
+    .sort(p => p.created, "desc")
+    .limit(20),
+  columns: [
+    "status",
+    // Coalesced because no creator field is common to all source types:
+    // authors (book/article/paper), channel (youtube/video), host (podcast),
+    // account (tweet), lecturer (lecture).
+    //
+    // Read off file.frontmatter, not the page directly: Article/YouTube/Video/
+    // Podcast write these keys BOTH in frontmatter and as inline `field::` in
+    // the source callout, and Dataview merges same-named inline and frontmatter
+    // fields into one array — so `p.channel` renders the channel twice, once as
+    // a string and once as a link.
+    ["Creator", p => { const f = p.file.frontmatter;
+      return f.authors ?? f.channel ?? f.host ?? f.account ?? f.lecturer; }],
+    ["Published", p => { const f = p.file.frontmatter;
+      return f.publish_date ?? f.released ?? f.date_given; }],
+  ],
+})
 ```
 
 ---
@@ -117,28 +139,30 @@ SORT length(file.inlinks) DESC
 
 ## 🔍 Orphan Notes — Needs Linking
 
-```dataview
-TABLE
-  choice(growth="seedling","🌱 Seedling", choice(growth="fern","🌿 Fern", choice(growth="incubator","🔆 Incubator", choice(growth="evergreen","🌲 Evergreen", growth)))) AS "Growth",
-  choice(type="permanent","💡 Permanent", choice(type="literature","📝 Literature", choice(type="source","📚 Source", choice(type="fleeting","🌫️ Fleeting", choice(type="moc","🗺️ MOC", choice(type="thought","💭 Thought", choice(type="daily","📅 Daily", choice(type="entity","🧩 Entity", type)))))))) AS "Type"
-FROM "03 - Permanent Notes"
-WHERE length(file.inlinks) = 0
-AND length(file.outlinks) = 0
-SORT file.mtime ASC
-LIMIT 10
+```dataviewjs
+dv.view("99 - Meta/05 - Views/badge-table", {
+  pages: dv.pages('"03 - Permanent Notes"')
+    .where(p => p.file.inlinks.length === 0 && p.file.outlinks.length === 0)
+    .sort(p => p.file.mtime, "asc")
+    .limit(10),
+  columns: ["growth", "type"],
+})
 ```
 
 ---
 
 ## 📆 Due for Review
 
-```dataview
-TABLE
-  review AS "Review Date",
-  choice(growth="seedling","🌱 Seedling", choice(growth="fern","🌿 Fern", choice(growth="incubator","🔆 Incubator", choice(growth="evergreen","🌲 Evergreen", growth)))) AS "Growth",
-  choice(type="permanent","💡 Permanent", choice(type="literature","📝 Literature", choice(type="source","📚 Source", choice(type="fleeting","🌫️ Fleeting", choice(type="moc","🗺️ MOC", choice(type="thought","💭 Thought", choice(type="daily","📅 Daily", choice(type="entity","🧩 Entity", type)))))))) AS "Type"
-FROM "03 - Permanent Notes"
-WHERE review <= date(today)
-SORT review ASC
-LIMIT 10
+```dataviewjs
+dv.view("99 - Meta/05 - Views/badge-table", {
+  pages: dv.pages('"03 - Permanent Notes"')
+    // dv.date("today") is a DQL literal, not a JS API parse — it returns null
+    // here, and `review <= null` is false for every note, so the section
+    // rendered permanently empty. Luxon is unambiguous.
+    .where(p => p.review && p.review <= dv.luxon.DateTime.now())
+    .sort(p => p.review, "asc")
+    .limit(10),
+  // "Review Date" leads, as it did before the badge columns were shared.
+  columns: [["Review Date", p => p.review], "growth", "type"],
+})
 ```

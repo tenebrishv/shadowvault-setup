@@ -31,7 +31,7 @@ LIST
 FROM ""
 WHERE file.cday >= date("<% monthStart.format("YYYY-MM-DD") %>")
 AND file.cday < date("<% monthEnd.format("YYYY-MM-DD") %>")
-AND type != "daily"
+AND type != "periodic"
 SORT growth ASC
 ```
 
