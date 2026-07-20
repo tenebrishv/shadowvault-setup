@@ -27,6 +27,21 @@ sequencing, auto-fetch success/fallback branches, and the generated
 `yamlFields`/`body`/`noteTitle` strings — using mocked `tp`, `app`, `fetch`,
 and `Notice` (see `_testUtils.js`).
 
+`sourceCaptureOrchestrator.test.js` covers the capture flow end to end: the
+type picker, registry dispatch, note assembly, and the rename. It drives the
+orchestrator through its real interface — script the type pick on the mocked
+`tp`, hand it a stub capturer via `tp.user`, assert the assembled note and
+the rename that came out — with no assertions on internal call structure.
+It also holds the registry-completeness checks (nine rows, each carrying its
+documented filename prefix, each naming a module that loads). This logic used
+to live inside `(TEMPLATE) Source Capture.md`, where none of it was reachable
+from here; keeping the template a one-line adapter is what preserves that.
+
+`sourceCaptureHelpers.test.js` covers the shared helpers, including
+`sanitizeTitle` (a table test over the characters the old per-module regex
+variants disagreed on) and `fetchWithFallback` (success, failure, skip,
+fill-gaps, and cancellation paths).
+
 `periodicNoteHelpers.js` (shared by the Daily/Weekly/Monthly/Yearly templates)
 is tested the same way, with one difference: `installMockMoment()` mocks the
 global `moment` as a call-recording spy, not a real calendar — it verifies
@@ -48,8 +63,10 @@ If you add a template, add a fixture entry — an unclassified template fails
 the suite by design.
 
 They do **not** test the real Obsidian/Templater integration: actual modal
-rendering, the real file rename (`app.fileManager.renameFile` /
-`tp.file.rename`), real network calls, Templater's own date formatting, or
+rendering, the real file rename (the orchestrator tests assert *that*
+`app.fileManager.renameFile` was called with the right path, against a mock —
+whether Obsidian then performs it is untested), Templater actually loading
+the user scripts, real network calls, Templater's own date formatting, or
 real ISO-week/month/year boundary arithmetic. Verify those by running
 `(TEMPLATE) Source Capture` or the periodic note templates for real in
 Obsidian after any change here.

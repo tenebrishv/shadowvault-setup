@@ -9,6 +9,8 @@
  *   - tp.date.now (returns a deterministic marker instead of a real date)
  *   - tp.file.title / tp.file.rename (periodicNoteHelpers.js only)
  *   - tp.file.find_tfile / tp.file.create_new (Lecture stub creation)
+ *   - tp.user (orchestrator only — the shared helpers plus a stub capturer)
+ *   - app.workspace.getActiveFile / app.fileManager.renameFile (orchestrator)
  *   - global Notice (no-op, records messages)
  *   - global fetch (scripted per test)
  *   - a fake app.vault / app.metadataCache (Lecture module only)

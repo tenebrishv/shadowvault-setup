@@ -50,15 +50,26 @@ test("registry covers all nine source types with one row each", () => {
     assert.equal(new Set(names).size, 9, "type names must be unique");
 });
 
+test("each type carries the filename prefix its convention specifies", () => {
+    // Prefixes are deliberately NOT unique — Video and YouTube share "+" —
+    // so uniqueness is the wrong assertion. Pin each type to its documented
+    // prefix instead (CLAUDE.md's filename-prefix table), which also catches
+    // a row that swapped two valid prefixes.
+    const EXPECTED_PREFIX = {
+        Book: "{", Article: "(", Paper: "&", YouTube: "+", Video: "+",
+        Podcast: "%", Tweet: "!", Thought: "=", Lecture: "§",
+    };
+    const actual = Object.fromEntries(
+        orchestrator.typeRegistry().map(row => [row.name, row.prefix]),
+    );
+    assert.deepEqual(actual, EXPECTED_PREFIX);
+});
+
 test("every registry row is fully populated", () => {
-    // Prefixes are deliberately NOT unique: Video and YouTube share "+",
-    // as documented in CLAUDE.md. Assert each prefix is a known one instead.
-    const KNOWN_PREFIXES = new Set(["{", "(", "&", "+", "%", "!", "=", "§"]);
     for (const row of orchestrator.typeRegistry()) {
         assert.ok(row.name, "name");
         assert.match(row.icon, /\S/, `${row.name} icon`);
         assert.match(row.tag, /^(source|note)\//, `${row.name} tag`);
-        assert.ok(KNOWN_PREFIXES.has(row.prefix), `${row.name} prefix "${row.prefix}" is a known prefix`);
         assert.match(row.capturer, /^sourceCapture\w+$/, `${row.name} capturer name`);
     }
 });
