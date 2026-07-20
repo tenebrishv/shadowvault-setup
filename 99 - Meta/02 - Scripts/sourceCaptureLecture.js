@@ -176,13 +176,17 @@ module.exports = async function sourceCaptureLecture(tp, helpers) {
     yamlFields += yamlField("keywords", data.keywords);
 
     let body = `# ${noteTitle}\n\n`;
+    // Plain markdown, not `key::` inline fields — see docs/adr/0005. Dataview
+    // canonicalises inline keys case-insensitively, so `Course::` collided with
+    // the frontmatter `course` field above; `Date::`/`Lecture::`/`Recording::`
+    // restated `date_given`/`lecture_num`/`url` under second names.
     body += `> [!meta]- Metadata\n`;
-    body += `> Course:: [[${data.course}]]\n`;
-    body += `> Unit:: [[${data.unit}]]\n`;
-    body += `> Lecturer:: [[${data.lecturer}]]\n`;
-    if (data.date_given) body += `> Date:: ${data.date_given}\n`;
-    if (data.lecture_num) body += `> Lecture:: ${data.lecture_num}\n`;
-    if (data.url) body += `> Recording:: ${data.url}\n`;
+    body += `> **Course:** [[${data.course}]]\n`;
+    body += `> **Unit:** [[${data.unit}]]\n`;
+    body += `> **Lecturer:** [[${data.lecturer}]]\n`;
+    if (data.date_given) body += `> **Date:** ${data.date_given}\n`;
+    if (data.lecture_num) body += `> **Lecture:** ${data.lecture_num}\n`;
+    if (data.url) body += `> **Recording:** ${data.url}\n`;
     body += `\n---\n\n`;
 
     body += `# Learning Objectives\n\n- \n\n`;

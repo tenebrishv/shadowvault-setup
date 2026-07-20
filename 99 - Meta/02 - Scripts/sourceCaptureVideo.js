@@ -21,12 +21,15 @@ module.exports = async function sourceCaptureVideo(tp, helpers) {
     yamlFields += yamlField("released", data.released);
     yamlFields += "watched: \"" + tp.date.now("YYYY-MM-DD") + "\"\n";
 
+    // Plain markdown, not `key::` inline fields — see docs/adr/0005. Note the
+    // old `platform::` here restated the frontmatter `source` field (the
+    // platform name) under a second name, while `source::` held the URL.
     let body = "> [!meta]- Metadata\n";
-    body += "> source:: " + (data.url || "") + "\n";
-    body += "> channel:: " + (data.channel || "") + "\n";
-    body += "> platform:: " + (data.source || "") + "\n";
-    body += "> released:: " + (data.released || "") + "\n";
-    body += "> watched:: " + tp.date.now("YYYY-MM-DD") + "\n\n";
+    body += "> **Source:** " + (data.url || "") + "\n";
+    body += "> **Channel:** " + (data.channel || "") + "\n";
+    body += "> **Platform:** " + (data.source || "") + "\n";
+    body += "> **Released:** " + (data.released || "") + "\n";
+    body += "> **Watched:** " + tp.date.now("YYYY-MM-DD") + "\n\n";
     body += "---\n\n- \n";
 
     return { noteTitle, yamlFields, body };

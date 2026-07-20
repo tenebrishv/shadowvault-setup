@@ -17,7 +17,7 @@ test("Video: fully manual capture", async () => {
     assert.match(result.yamlFields, /channel: "Some Creator"\n/);
     assert.match(result.yamlFields, /url: "https:\/\/vimeo\.com\/123"\n/);
     assert.match(result.yamlFields, /released: "2023-05-01"\n/);
-    assert.match(result.body, /platform:: Vimeo/);
+    assert.match(result.body, /\*\*Platform:\*\* Vimeo/);
 });
 
 test("Video: cancelling the required title prompt aborts capture", async () => {

@@ -285,23 +285,31 @@ test("Schema: buildBaseYaml sets type thought for Thought, source otherwise", ()
 // to fail), and the yamlFields string it returns is parsed.
 // ---------------------------------------------------------------------------
 
+// Invokes one capture module down its manual-prompt fallback. Shared by the
+// frontmatter loop and the inline-field loop below so each module's prompt
+// wiring is described once.
+async function runCapture(type, contract) {
+    installMockNotice();
+    failingFetch();
+
+    const mockOptions = { prompts: contract.promptScript };
+    if (contract.suggestions) mockOptions.suggestions = contract.suggestions;
+    if (contract.mockApp) {
+        const { state } = installMockApp(contract.mockApp);
+        mockOptions.vaultState = state;
+        mockOptions.templates = ["(TEMPLATE) Course MOC", "(TEMPLATE) Unit MOC", "(TEMPLATE) Person"];
+    }
+
+    const capture = require(`../02 - Scripts/sourceCapture${type}.js`);
+    const result = await capture(createMockTp(mockOptions), helpers);
+
+    assert.ok(result, `${type}: capture returned null (prompt script out of sync with the module?)`);
+    return result;
+}
+
 for (const [type, contract] of Object.entries(schema.CAPTURE)) {
     test(`Schema: ${type} capture emits its documented fields`, async () => {
-        installMockNotice();
-        failingFetch();
-
-        const mockOptions = { prompts: contract.promptScript };
-        if (contract.suggestions) mockOptions.suggestions = contract.suggestions;
-        if (contract.mockApp) {
-            const { state } = installMockApp(contract.mockApp);
-            mockOptions.vaultState = state;
-            mockOptions.templates = ["(TEMPLATE) Course MOC", "(TEMPLATE) Unit MOC", "(TEMPLATE) Person"];
-        }
-
-        const capture = require(`../02 - Scripts/sourceCapture${type}.js`);
-        const result = await capture(createMockTp(mockOptions), helpers);
-
-        assert.ok(result, `${type}: capture returned null (prompt script out of sync with the module?)`);
+        const result = await runCapture(type, contract);
 
         const fields = parseFrontmatter(`---\n${result.yamlFields}---\n`);
         assert.ok(fields, `${type}: yamlFields did not parse`);
@@ -311,6 +319,85 @@ for (const [type, contract] of Object.entries(schema.CAPTURE)) {
         }
         checkVocabulary(`${type} capture`, fields, new Set([...contract.required, ...(contract.optional || [])]));
         checkEnums(`${type} capture`, fields);
+    });
+}
+
+// ---------------------------------------------------------------------------
+// Source Capture — inline fields in the note BODY (docs/adr/0005)
+//
+// The second surface a capture module writes to. Dataview merges same-named
+// frontmatter and inline declarations into one array, so an inline field that
+// restates a frontmatter key silently doubles it. See the contract comment in
+// _frontmatterSchema.js for why both clauses below are needed.
+// ---------------------------------------------------------------------------
+
+// Dataview inline field on its own line, optionally inside a callout ("> ").
+// Only the line form is matched because that is the only form these modules
+// emit; the bracketed `[key:: value]` form would need its own pattern.
+const INLINE_FIELD = /^\s*>?\s*([A-Za-z0-9_ -]+?)\s*::\s*(.*)$/;
+const FENCE = /^\s*```/;
+
+// Returns [{ key, value, line }] for every inline field declared in a body.
+// Fenced code blocks are skipped: the Lecture module emits Dataview queries,
+// and a query containing "::" is code, not a declaration.
+function parseInlineFields(body) {
+    const found = [];
+    let inFence = false;
+    body.split(/\r?\n/).forEach((line, i) => {
+        if (FENCE.test(line)) { inFence = !inFence; return; }
+        if (inFence) return;
+        const m = INLINE_FIELD.exec(line);
+        if (m) found.push({ key: m[1], value: m[2].trim(), line: i + 1 });
+    });
+    return found;
+}
+
+test("Inline: the placeholder allowlist covers every capture module", () => {
+    assert.deepEqual(
+        Object.keys(schema.CAPTURE_INLINE_PLACEHOLDERS).sort(),
+        Object.keys(schema.CAPTURE).sort(),
+        "every module in CAPTURE needs an entry in CAPTURE_INLINE_PLACEHOLDERS " +
+        "(an empty array is the answer for most of them)",
+    );
+});
+
+for (const [type, contract] of Object.entries(schema.CAPTURE)) {
+    test(`Inline: ${type} capture declares no field twice`, async () => {
+        const result = await runCapture(type, contract);
+
+        const frontmatterKeys = new Set(
+            [...parseFrontmatter(`---\n${result.yamlFields}---\n`).keys()].map(k => k.toLowerCase()),
+        );
+        const allowed = new Set(schema.CAPTURE_INLINE_PLACEHOLDERS[type].map(k => k.toLowerCase()));
+
+        for (const { key, value, line } of parseInlineFields(result.body)) {
+            const lower = key.toLowerCase();
+
+            // Clause 1 — no echo. Case-insensitive: Dataview canonicalises
+            // inline keys, so `Course::` and `course:` are the same field.
+            assert.ok(
+                !frontmatterKeys.has(lower),
+                `${type} capture, body line ${line}: inline field "${key}::" restates the ` +
+                `frontmatter key "${lower}". Dataview merges them into one array, so every ` +
+                `query on "${lower}" gets the value twice. Render it as plain markdown ` +
+                `(**${key}:** …) — that displays identically and declares no field.`,
+            );
+
+            // Clause 2 — no captured value.
+            assert.equal(
+                value, "",
+                `${type} capture, body line ${line}: inline field "${key}::" is written with a ` +
+                `captured value ("${value}"). Values the capture knows belong in frontmatter; ` +
+                `inline fields are empty placeholders for prose written later.`,
+            );
+
+            assert.ok(
+                allowed.has(lower),
+                `${type} capture, body line ${line}: undocumented inline field "${key}::". ` +
+                `Add it to CAPTURE_INLINE_PLACEHOLDERS.${type} in _frontmatterSchema.js if it is ` +
+                `a deliberate placeholder.`,
+            );
+        }
     });
 }
 

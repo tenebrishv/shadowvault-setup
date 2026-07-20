@@ -22,11 +22,12 @@ module.exports = async function sourceCapturePodcast(tp, helpers) {
     yamlFields += yamlField("publish_date", data.publish_date);
     yamlFields += yamlField("general_subject", data.general_subject);
 
+    // Plain markdown, not `key::` inline fields — see docs/adr/0005.
     let body = "> [!meta]- Metadata\n";
-    body += "> host:: " + (data.host || "") + "\n";
-    body += "> guest:: " + (data.guest || "") + "\n";
-    body += "> url:: " + (data.url || "") + "\n";
-    body += "> published:: " + (data.publish_date || "") + "\n\n";
+    body += "> **Host:** " + (data.host || "") + "\n";
+    body += "> **Guest:** " + (data.guest || "") + "\n";
+    body += "> **URL:** " + (data.url || "") + "\n";
+    body += "> **Published:** " + (data.publish_date || "") + "\n\n";
     body += "---\n\n## Notes\n\n";
     body += "%% [mm:ss](" + (data.url || "url") + "?t=0) - Timestamp note %%\n\n- \n";
 
