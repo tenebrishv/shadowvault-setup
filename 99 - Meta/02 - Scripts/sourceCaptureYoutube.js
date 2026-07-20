@@ -34,16 +34,22 @@ module.exports = async function sourceCaptureYoutube(tp, helpers) {
 
     let yamlFields = "";
     yamlFields += yamlField("channel", data.yt_channel);
+    yamlFields += yamlField("channel_url", data.yt_chanurl);
     yamlFields += yamlField("url", data.url);
+    yamlFields += yamlField("thumbnail", data.yt_thumb);
     yamlFields += "watched: \"" + tp.date.now("YYYY-MM-DD") + "\"\n";
     yamlFields += "released:\n";
 
+    // Plain markdown, not `key::` inline fields: every value here is already in
+    // the frontmatter above, and `::` would declare a second copy that Dataview
+    // merges into the first. See docs/adr/0005.
     let body = "> [!meta]- Metadata\n";
-    body += "> source:: [" + data.yt_title + "](" + data.url + ")\n";
-    body += "> channel:: [" + data.yt_channel + "](" + data.yt_chanurl + ")\n";
-    body += "> released::\n";
-    body += "> watched:: " + tp.date.now("YYYY-MM-DD") + "\n";
-    if (data.yt_thumb) body += "> thumbnail:: ![](" + data.yt_thumb + ")\n";
+    body += "> **Source:** [" + data.yt_title + "](" + data.url + ")\n";
+    body += data.yt_chanurl
+        ? "> **Channel:** [" + data.yt_channel + "](" + data.yt_chanurl + ")\n"
+        : "> **Channel:** " + (data.yt_channel || "") + "\n";
+    body += "> **Watched:** " + tp.date.now("YYYY-MM-DD") + "\n";
+    if (data.yt_thumb) body += "> ![](" + data.yt_thumb + ")\n";
     body += "\n---\n\n";
     if (data.yt_id) {
         body += "<iframe src=\"https://www.youtube-nocookie.com/embed/" + data.yt_id + "?vq=hd1080&modestbranding=1&rel=0&iv_load_policy=3\" width=\"569\" height=\"317\" frameborder=\"0\" style=\"margin: 0 auto; display: block;\"></iframe>\n\n";

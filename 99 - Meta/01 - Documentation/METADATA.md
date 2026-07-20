@@ -158,11 +158,18 @@ writes it into the note body as an `> [!abstract]` callout.
 
 ```yaml
 channel:
+channel_url:  # YouTube only — auto-fetched from oEmbed
 url:
+thumbnail:    # YouTube only — auto-fetched from oEmbed
 watched: YYYY-MM-DD
 released:     # optional
 source:       # for non‑YouTube videos (Vimeo, Nebula)
 ```
+
+`channel_url` and `thumbnail` are frontmatter fields, not inline ones, so they
+are queryable — a dashboard can render video cards from `thumbnail` or group by
+`channel_url`. The note body renders both as plain markdown (a linked channel
+name, an embedded image); see the inline-field rule below.
 
 ### Podcast
 ```yaml
@@ -203,6 +210,46 @@ The Course and Unit MOC templates hold **link-valued fields** (`default_lecturer
 context:
 led_here:
 ```
+
+### Inline fields (`key:: value`) — when they are allowed
+
+Dataview reads **two** surfaces on every note: the YAML frontmatter, and inline
+`key:: value` declarations anywhere in the body. Same-named declarations from
+the two surfaces are **merged into one array**. A note with `channel:` in
+frontmatter and `channel::` in the body therefore has `p.channel` equal to
+`["Some Channel", "Some Channel"]` — the same value twice, rendered twice by any
+`TABLE channel`.
+
+Two rules, enforced by `frontmatterSchema.test.js`:
+
+> **1. No echo.** A capture module's inline field names must be disjoint from
+> its own frontmatter field names, compared **case-insensitively** — Dataview
+> canonicalises inline keys, so `Course::` and `course:` are one field.
+>
+> **2. No captured value.** If the capture knows a value, that value goes in
+> frontmatter. Inline fields are emitted **empty**, as placeholders for prose
+> written later.
+
+In short: *inline fields declare data frontmatter doesn't have; they never
+restate it.* The conforming placeholders are Book's `citation::` and Paper's
+`hypothesis::`, `methodology::`, `results::`, `summary::`, `context::` and
+`significance::` — all emitted empty, all holding prose too long for YAML.
+
+**Formatting is not a reason to use `::`.** Dataview renders inline fields as a
+styled key-value row, which makes `::` tempting for a tidy metadata callout —
+but the field declaration comes along with the look, invisibly. Plain markdown
+gives the same rendering and declares nothing:
+
+```markdown
+> channel:: [Some Channel](https://youtube.com/@some)     ← link + a duplicate field
+> **Channel:** [Some Channel](https://youtube.com/@some)  ← link, no field
+```
+
+Both render an identical clickable link. The `[text](url)` makes the link; the
+`::` only ever made the duplicate. Same for images: `> ![](url)` embeds the
+thumbnail with no `thumbnail::` needed.
+
+See `docs/adr/0005-inline-field-contract.md`.
 
 ---
 

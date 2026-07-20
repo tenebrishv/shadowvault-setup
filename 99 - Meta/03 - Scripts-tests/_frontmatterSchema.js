@@ -55,7 +55,8 @@ const VOCABULARY = {
     curriculum: ["institution", "default_lecturer", "course", "semester"],
     literature: ["source-title", "source-author", "source-type", "source-url"],
     source: ["authors", "publish_date", "publisher", "isbn", "general_subject", "specific_subject",
-             "url", "publication", "doi", "citekey", "keywords", "channel", "watched", "released",
+             "url", "publication", "doi", "citekey", "keywords", "channel", "channel_url",
+             "thumbnail", "watched", "released",
              "source", "host", "guest", "account", "tweet_text", "context", "led_here",
              "unit", "lecturer", "lecture_num", "date_given"],
     entity: ["role", "organization", "contact", "website", "founded", "sector", "headquarters",
@@ -219,7 +220,7 @@ const CAPTURE = {
     },
     Youtube: {
         promptScript: ["https://youtu.be/broken", "Manual Title", "Manual Channel"],
-        required: ["channel", "url", "watched", "released"],
+        required: ["channel", "channel_url", "url", "thumbnail", "watched", "released"],
     },
     Video: {
         promptScript: ["A Great Talk", "Vimeo", "Some Creator", "https://vimeo.com/123", "2023-05-01"],
@@ -263,6 +264,48 @@ const CAPTURE = {
 // everything else is a source.
 const CAPTURE_TYPE_VALUES = { Thought: "thought", _default: "source" };
 
+// ---------------------------------------------------------------------------
+// Inline-field contract (see docs/adr/0005).
+//
+// A capture module writes to TWO surfaces: the frontmatter it returns as
+// `yamlFields`, and the note `body`. Dataview reads BOTH — a `key:: value` in
+// the body declares a field just as a YAML key does, and merges same-named
+// declarations from the two surfaces into one array. So a module that writes
+// `channel:` in frontmatter and `channel::` in the body makes `p.channel` an
+// array of the same value twice.
+//
+// That is exactly what happened, and it survived this suite for a release
+// because the suite only ever looked at surface one. Two clauses close it:
+//
+//   1. NO ECHO. A module's inline field names must be disjoint from its own
+//      frontmatter field names, compared case-insensitively — Dataview
+//      canonicalises inline keys, so `Course::` collides with `course:`.
+//
+//   2. NO CAPTURED VALUE. If a module writes a NON-EMPTY value into a `::`
+//      field, that value belongs in frontmatter. Inline fields are emitted
+//      empty, as placeholders for prose the reader writes later.
+//
+// Clause 2 expresses the intent; clause 1 holds the line. Neither subsumes the
+// other: YouTube used to emit `released:` AND an empty `> released::`, which
+// clause 2 alone would wave through — until the day someone filled one in and
+// which one they picked decided whether the dashboards saw it.
+//
+// The allowlist below is HAND-TRANSCRIBED and descriptive, exactly like the
+// `required` lists (rule 1 of ADR 0003): it records the placeholders each
+// module emits TODAY. A module emitting an inline field not listed here fails,
+// so a new `key::` cannot appear without a human writing it down.
+const CAPTURE_INLINE_PLACEHOLDERS = {
+    Book: ["citation"],
+    Paper: ["hypothesis", "methodology", "results", "summary", "context", "significance"],
+    Article: [],
+    Youtube: [],
+    Video: [],
+    Podcast: [],
+    Tweet: [],
+    Thought: [],
+    Lecture: [],
+};
+
 module.exports = {
     ENUMS,
     VOCABULARY,
@@ -272,5 +315,6 @@ module.exports = {
     BASE_CAPTURE_DATE_FORMATS,
     CAPTURE,
     CAPTURE_TYPE_VALUES,
+    CAPTURE_INLINE_PLACEHOLDERS,
     allKnownFields: () => new Set(Object.values(VOCABULARY).flat()),
 };

@@ -19,7 +19,7 @@ test("Article: Microlink metadata fetch succeeds", async () => {
     assert.match(result.yamlFields, /url: "https:\/\/example\.com\/smart-notes"\n/);
     assert.match(result.yamlFields, /publication: "CreateSpace"\n/);
     assert.match(result.yamlFields, /publish_date: "2017-01-01"\n/);
-    assert.match(result.body, /source:: \[How To Take Smart Notes\]\(https:\/\/example\.com\/smart-notes\)/);
+    assert.match(result.body, /\*\*Source:\*\* \[How To Take Smart Notes\]\(https:\/\/example\.com\/smart-notes\)/);
 });
 
 test("Article: fetch fails -> manual fallback", async () => {

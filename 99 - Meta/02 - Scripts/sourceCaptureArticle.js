@@ -38,11 +38,12 @@ module.exports = async function sourceCaptureArticle(tp, helpers) {
     yamlFields += yamlField("publication", data.publication);
     yamlFields += yamlField("publish_date", data.publish_date);
 
+    // Plain markdown, not `key::` inline fields — see docs/adr/0005.
     let body = "> [!meta]- Metadata\n";
-    body += "> source:: [" + data.title + "](" + data.url + ")\n";
-    if (data.authors) body += "> authors:: " + data.authors + "\n";
-    if (data.publication) body += "> publication:: " + data.publication + "\n";
-    if (data.publish_date) body += "> published:: " + data.publish_date + "\n";
+    body += "> **Source:** [" + data.title + "](" + data.url + ")\n";
+    if (data.authors) body += "> **Authors:** " + data.authors + "\n";
+    if (data.publication) body += "> **Publication:** " + data.publication + "\n";
+    if (data.publish_date) body += "> **Published:** " + data.publish_date + "\n";
     body += "\n---\n\n- \n";
 
     return { noteTitle, yamlFields, body };

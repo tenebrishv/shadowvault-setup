@@ -19,7 +19,13 @@ test("YouTube: oEmbed fetch succeeds -> embeds iframe using the extracted video 
     assert.equal(result.noteTitle, "A Great Talk");
     assert.match(result.yamlFields, /channel: "Some Channel"\n/);
     assert.match(result.body, /embed\/dQw4w9WgXcQ/);
-    assert.match(result.body, /thumbnail:: !\[\]\(https:\/\/img\.youtube\.com\/thumb\.jpg\)/);
+    // The fetched channel URL and thumbnail are frontmatter fields (queryable),
+    // and the body renders them as plain markdown — no `::`, which would declare
+    // a duplicate of the frontmatter copy. See docs/adr/0005.
+    assert.match(result.yamlFields, /channel_url: "https:\/\/youtube\.com\/@somechannel"\n/);
+    assert.match(result.yamlFields, /thumbnail: "https:\/\/img\.youtube\.com\/thumb\.jpg"\n/);
+    assert.match(result.body, /\*\*Channel:\*\* \[Some Channel\]\(https:\/\/youtube\.com\/@somechannel\)/);
+    assert.match(result.body, /^> !\[\]\(https:\/\/img\.youtube\.com\/thumb\.jpg\)$/m);
 });
 
 test("YouTube: oEmbed fetch fails -> manual fallback, no iframe embedded", async () => {

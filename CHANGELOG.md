@@ -5,6 +5,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+## [2.8.0] – 2026-07-20
+
+### Added
+- **`channel_url` and `thumbnail` frontmatter fields** on YouTube captures. Both values were already fetched from oEmbed but were reachable only inside the body callout — the channel URL buried in a markdown link, the thumbnail behind `thumbnail::`. As frontmatter they are queryable through `file.frontmatter.*` like every other field, so a dashboard can render video cards or group by channel. Net capability is higher than before the fix, not lower.
+- **Inline-field conformance check** — `frontmatterSchema.test.js` now reads each capture module's `body` as well as its frontmatter, and enforces two clauses: a module's inline field names must be disjoint from its own frontmatter field names (case-insensitively — Dataview canonicalises inline keys, so `Course::` *is* `course:`), and any `::` field a module writes must be emitted **empty**. The allowlist of legitimate placeholders is hand-transcribed in `CAPTURE_INLINE_PLACEHOLDERS`, so a new `key::` cannot appear without a human writing it down. Both clauses are mutation-tested. Rationale in `docs/adr/0005` (issue #21).
+
+### Fixed
+- **Capture modules no longer declare the same field twice** — Article, YouTube, Video, Podcast and Lecture wrote the same key to both frontmatter and an inline `key::` in the body callout. Dataview merges same-named declarations from the two surfaces into one array, so `p.channel` on a YouTube note was `["Some Channel", <link to Some Channel>]` — the same value twice, and a `TABLE channel` rendered it twice. The callouts now use plain markdown (`**Channel:** [Name](url)`), which renders **identically** — the `[text](url)` always made the link; the `::` only ever made the duplicate. This replaces 2.7.0's display-layer workaround at the source; the dashboards' `file.frontmatter.*` accessor stays correct and is now merely belt-and-braces.
+  - Issue #21 filed this as 4 keys in 4 modules; it was **18 collisions in 5**. `sourceCaptureLecture.js` was listed as unaffected but collided on `course`/`unit`/`lecturer` through case-insensitive canonicalisation, hidden because its own generated query uses `contains()`, which stays true on a duplicated array. A second category was missing entirely — the same value under two *different* names (`publish_date:`/`published::`, `source:`/`platform::`, `date_given:`/`Date::`), which no name-collision check would ever catch.
+  - `sourceCaptureYoutube.js` also emitted `released:` **and** an empty `> released::`. Harmless until someone filled one in, at which point which one they picked decided whether the dashboards saw the value. Removed.
+- **No migration needed** — the framework ships with no captured notes, and #21 was found before first use.
+
 ## [2.7.0] – 2026-07-20
 
 > [!warning] Upgrade note — enable Dataview's JavaScript Queries
