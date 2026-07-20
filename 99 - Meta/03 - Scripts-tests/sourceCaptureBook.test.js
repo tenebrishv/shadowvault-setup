@@ -21,8 +21,8 @@ const OPEN_LIBRARY_RESPONSE = {
 test("Book: ISBN lookup succeeds -> only asks for general_subject fallback and specific_subject", async () => {
     installMockNotice();
     const requested = [];
-    installMockFetch(async (url) => {
-        requested.push(url);
+    installMockFetch(async (url, init) => {
+        requested.push({ url, init });
         return jsonResponse(OPEN_LIBRARY_RESPONSE);
     });
     const tp = createMockTp({ prompts: ["9780374275631", "Psychology", "Cognitive biases"] });
@@ -32,8 +32,12 @@ test("Book: ISBN lookup succeeds -> only asks for general_subject fallback and s
     // Pins the endpoint, not just the parsing: /isbn/<isbn>.json answers 302,
     // which fetch surfaces as a non-ok response, so every lookup silently fell
     // through to the manual path.
-    assert.match(requested[0], /\/api\/books\?bibkeys=ISBN:9780374275631&/);
-    assert.match(requested[0], /jscmd=data/);
+    assert.match(requested[0].url, /\/api\/books\?bibkeys=ISBN:9780374275631&/);
+    assert.match(requested[0].url, /jscmd=data/);
+    // A non-Obsidian User-Agent is required: Open Library 429s any UA matching
+    // /obsidian/i (requestUrl's default), so a missing/wrong header here means
+    // every real lookup is refused.
+    assert.doesNotMatch(requested[0].init.headers["User-Agent"], /obsidian/i);
 
     assert.equal(result.noteTitle, "Thinking, Fast and Slow");
     assert.match(result.yamlFields, /authors: "Daniel Kahneman"\n/);
