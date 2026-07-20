@@ -158,6 +158,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ---
 
+[Unreleased]: https://github.com/tenebrishv/shadowvault-setup/compare/v2.8.0...HEAD
+[2.8.0]: https://github.com/tenebrishv/shadowvault-setup/releases/tag/v2.8.0
 [2.7.0]: https://github.com/tenebrishv/shadowvault-setup/releases/tag/v2.7.0
 [2.6.0]: https://github.com/tenebrishv/shadowvault-setup/releases/tag/v2.6.0
 [2.4.0]: https://github.com/tenebrishv/shadowvault-setup/releases/tag/v2.4.0
