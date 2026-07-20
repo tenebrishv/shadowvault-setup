@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+## [2.9.0] – 2026-07-20
+
 > [!warning] Upgrade note — run **Templater: Reload templates**
 > This moves the Source Capture orchestrator into a new user script. Templater caches loaded user scripts, so after pulling, run the **Templater: Reload templates** command (or restart Obsidian) before the next capture — otherwise `tp.user.sourceCaptureOrchestrator` won't resolve and the template will fail.
 
@@ -176,7 +178,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ---
 
-[Unreleased]: https://github.com/tenebrishv/shadowvault-setup/compare/v2.8.0...HEAD
+[Unreleased]: https://github.com/tenebrishv/shadowvault-setup/compare/v2.9.0...HEAD
+[2.9.0]: https://github.com/tenebrishv/shadowvault-setup/compare/v2.8.0...v2.9.0
 [2.8.0]: https://github.com/tenebrishv/shadowvault-setup/releases/tag/v2.8.0
 [2.7.0]: https://github.com/tenebrishv/shadowvault-setup/releases/tag/v2.7.0
 [2.6.0]: https://github.com/tenebrishv/shadowvault-setup/releases/tag/v2.6.0
