@@ -10,8 +10,7 @@ module.exports = async function sourceCaptureTweet(tp, helpers) {
     const data = await fetchWithFallback(tp, {
         label: "tweet metadata",
         fetch: async () => {
-            const res = await fetch(`https://publish.twitter.com/oembed?url=${encodeURIComponent(url)}`);
-            const tw = await res.json();
+            const tw = await helpers.httpGetJson(`https://publish.twitter.com/oembed?url=${encodeURIComponent(url)}`);
             return {
                 account: tw.author_name.replace(/^@/, ""),
                 tweet_text: tw.title, // plain-text tweet content

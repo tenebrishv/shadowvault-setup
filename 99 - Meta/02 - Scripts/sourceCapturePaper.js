@@ -10,8 +10,7 @@ module.exports = async function sourceCapturePaper(tp, helpers) {
         label: "paper metadata from DOI",
         skip: !doi,
         fetch: async () => {
-            const res = await fetch(`https://api.crossref.org/works/${encodeURIComponent(doi)}`);
-            const json = await res.json();
+            const json = await helpers.httpGetJson(`https://api.crossref.org/works/${encodeURIComponent(doi)}`);
             const msg = json.message;
             if (!msg.title || !msg.title[0]) throw new Error("No title in response");
             return {

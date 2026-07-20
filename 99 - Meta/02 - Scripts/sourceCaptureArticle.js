@@ -10,8 +10,7 @@ module.exports = async function sourceCaptureArticle(tp, helpers) {
     const data = await fetchWithFallback(tp, {
         label: "article metadata",
         fetch: async () => {
-            const res = await fetch(`https://api.microlink.io/?url=${encodeURIComponent(url)}`);
-            const meta = await res.json();
+            const meta = await helpers.httpGetJson(`https://api.microlink.io/?url=${encodeURIComponent(url)}`);
             if (meta.status !== "success") throw new Error("No data");
             return {
                 title: meta.data.title || "",

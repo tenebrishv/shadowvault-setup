@@ -10,8 +10,12 @@ module.exports = async function sourceCaptureYoutube(tp, helpers) {
     const data = await fetchWithFallback(tp, {
         label: "YouTube data",
         fetch: async () => {
-            const res = await fetch("https://youtube.com/oembed?url=" + url + "&format=json");
-            const yt = await res.json();
+            // oEmbed answers 401 for videos whose uploader disabled embedding
+            // (common for broadcaster/news clips) — httpGetJson turns that into
+            // a throw, so capture falls back to manual entry as it should.
+            const yt = await helpers.httpGetJson(
+                `https://youtube.com/oembed?url=${encodeURIComponent(url)}&format=json`,
+            );
             const idMatch = /(?:v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/.exec(url);
             return {
                 yt_title: yt.title,

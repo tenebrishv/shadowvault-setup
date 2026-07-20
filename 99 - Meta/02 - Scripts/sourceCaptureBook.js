@@ -14,11 +14,9 @@ module.exports = async function sourceCaptureBook(tp, helpers) {
             // the edition record, and its author entries are bare {key} refs
             // with no name, needing a second request per author to resolve.
             // This endpoint answers 200 and inlines author names.
-            const res = await fetch(
+            const payload = await helpers.httpGetJson(
                 `https://openlibrary.org/api/books?bibkeys=ISBN:${encodeURIComponent(isbn)}&format=json&jscmd=data`,
             );
-            if (!res.ok) throw new Error("Not found");
-            const payload = await res.json();
             // Keyed by the bibkey echoed back; an unknown ISBN yields {}.
             const info = payload[`ISBN:${isbn}`];
             if (!info || !info.title) throw new Error("No title in response");
