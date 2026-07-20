@@ -52,3 +52,144 @@ test("optionalPrompt trims whitespace and passes through null on cancel", async 
     assert.equal(await helpers.optionalPrompt(tp, "A"), "Hello");
     assert.equal(await helpers.optionalPrompt(tp, "B"), null);
 });
+
+// --- sanitizeTitle ---
+// Canonical filename cleaner. Before this consolidated, the regex existed in
+// five places in two variants: the majority form (orchestrator/Lecture/Tweet)
+// and a narrower YouTube form that kept * ? < >. The table below covers the
+// characters the two variants disagreed on, so a future drift fails here.
+
+test("sanitizeTitle strips every filename-illegal character", () => {
+    const cases = [
+        // [input, expected, what it covers]
+        ["Plain Title", "Plain Title", "leaves clean titles alone"],
+        ["A/B\C", "ABC", "slashes (both variants stripped these)"],
+        ['He said: "hi"', "He said hi", "colon and quotes"],
+        ["Tag #1 ^ref [x] |y|", "Tag 1 ref x y", "obsidian-hostile chars"],
+        // The four the old YouTube variant let through:
+        ["What?! Really*", "What! Really", "question mark and asterisk"],
+        ["<script>", "script", "angle brackets"],
+        ["  padded  ", "padded", "trims surrounding whitespace"],
+    ];
+    for (const [input, expected, what] of cases) {
+        assert.equal(helpers.sanitizeTitle(input), expected, what);
+    }
+});
+
+test("sanitizeTitle collapses newlines to spaces", () => {
+    // Tweet titles could carry newlines from oEmbed text.
+    assert.equal(helpers.sanitizeTitle("line one\nline two"), "line one line two");
+});
+
+test("sanitizeTitle tolerates empty and missing input", () => {
+    assert.equal(helpers.sanitizeTitle(""), "");
+    assert.equal(helpers.sanitizeTitle(undefined), "");
+    assert.equal(helpers.sanitizeTitle(null), "");
+});
+
+// --- fetchWithFallback ---
+// The try-fetch -> success Notice / catch -> failure Notice -> manual-prompts
+// skeleton that Book, Article, Paper, YouTube and Tweet each hand-rolled.
+
+test("fetchWithFallback returns fetched data and announces success", async () => {
+    const notices = installMockNotice();
+    const tp = createMockTp();
+
+    const data = await helpers.fetchWithFallback(tp, {
+        label: "book data from ISBN",
+        fetch: async () => ({ title: "Atomic Habits" }),
+        manual: async () => { throw new Error("manual path must not run"); },
+    });
+
+    assert.deepEqual(data, { title: "Atomic Habits" });
+    assert.ok(notices.some(m => m === "Fetched book data from ISBN"));
+});
+
+test("fetchWithFallback falls back to manual prompts when the fetch throws", async () => {
+    const notices = installMockNotice();
+    const tp = createMockTp();
+
+    const data = await helpers.fetchWithFallback(tp, {
+        label: "article metadata",
+        fetch: async () => { throw new Error("network error (mocked)"); },
+        manual: async () => ({ title: "Typed By Hand" }),
+    });
+
+    assert.deepEqual(data, { title: "Typed By Hand" });
+    assert.ok(
+        notices.some(m => /could not fetch article metadata/i.test(m)),
+        "failure Notice names the same label as the success one",
+    );
+});
+
+test("fetchWithFallback skips the fetch entirely when skip is set", async () => {
+    const notices = installMockNotice();
+    const tp = createMockTp();
+    let fetched = false;
+
+    const data = await helpers.fetchWithFallback(tp, {
+        label: "paper metadata from DOI",
+        skip: true, // e.g. the user gave no DOI
+        fetch: async () => { fetched = true; return {}; },
+        manual: async () => ({ title: "Manual Paper" }),
+    });
+
+    assert.equal(fetched, false, "no network call without an identifier");
+    assert.deepEqual(data, { title: "Manual Paper" });
+    assert.deepEqual(notices, [], "no success or failure Notice — nothing was attempted");
+});
+
+test("fetchWithFallback runs fillGaps after a successful fetch", async () => {
+    installMockNotice();
+    const tp = createMockTp();
+
+    const data = await helpers.fetchWithFallback(tp, {
+        label: "book data from ISBN",
+        fetch: async () => ({ title: "Atomic Habits", general_subject: "" }),
+        fillGaps: async (d) => ({ ...d, general_subject: "Habits" }),
+        manual: async () => { throw new Error("manual path must not run"); },
+    });
+
+    assert.deepEqual(data, { title: "Atomic Habits", general_subject: "Habits" });
+});
+
+test("fetchWithFallback does not run fillGaps on the manual path", async () => {
+    installMockNotice();
+    const tp = createMockTp();
+
+    const data = await helpers.fetchWithFallback(tp, {
+        label: "book data from ISBN",
+        fetch: async () => { throw new Error("nope"); },
+        fillGaps: async () => { throw new Error("fillGaps must not run after a failed fetch"); },
+        manual: async () => ({ title: "Manual Book" }),
+    });
+
+    assert.deepEqual(data, { title: "Manual Book" });
+});
+
+test("fetchWithFallback propagates a cancelled manual path as null", async () => {
+    installMockNotice();
+    const tp = createMockTp();
+
+    const data = await helpers.fetchWithFallback(tp, {
+        label: "tweet metadata",
+        fetch: async () => { throw new Error("nope"); },
+        manual: async () => null, // user hit Escape on a required prompt
+    });
+
+    assert.equal(data, null);
+});
+
+test("fetchWithFallback propagates a cancelled fillGaps as null", async () => {
+    installMockNotice();
+    const tp = createMockTp();
+
+    const data = await helpers.fetchWithFallback(tp, {
+        label: "book data from ISBN",
+        fetch: async () => ({ title: "Atomic Habits" }),
+        fillGaps: async () => null,
+        manual: async () => { throw new Error("manual path must not run"); },
+    });
+
+    assert.equal(data, null);
+});

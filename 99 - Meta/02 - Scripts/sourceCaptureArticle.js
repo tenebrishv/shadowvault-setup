@@ -3,33 +3,37 @@
  * Returns { noteTitle, yamlFields, body }, or null if cancelled.
  */
 module.exports = async function sourceCaptureArticle(tp, helpers) {
-    const { requiredPrompt, optionalPrompt, datePrompt, yamlField } = helpers;
-    const data = {};
-    let noteTitle = "";
+    const { requiredPrompt, optionalPrompt, datePrompt, yamlField, fetchWithFallback } = helpers;
+    const url = await requiredPrompt(tp, "Article URL");
+    if (!url) return null;
 
-    data.url = await requiredPrompt(tp, "Article URL");
-    if (!data.url) return null;
+    const data = await fetchWithFallback(tp, {
+        label: "article metadata",
+        fetch: async () => {
+            const res = await fetch(`https://api.microlink.io/?url=${encodeURIComponent(url)}`);
+            const meta = await res.json();
+            if (meta.status !== "success") throw new Error("No data");
+            return {
+                title: meta.data.title || "",
+                authors: meta.data.author || "",
+                publication: meta.data.publisher || "",
+            };
+        },
+        manual: async () => {
+            const title = await requiredPrompt(tp, "Article Title (auto-fetch failed)");
+            if (!title) return null;
+            return {
+                title,
+                authors: await optionalPrompt(tp, "Author(s)"),
+                publication: await optionalPrompt(tp, "Publication / Site name"),
+            };
+        },
+    });
+    if (!data) return null;
 
-    try {
-        const res = await fetch(`https://api.microlink.io/?url=${encodeURIComponent(data.url)}`);
-        const meta = await res.json();
-        if (meta.status === "success") {
-            data.title = meta.data.title || "";
-            data.authors = meta.data.author || "";
-            data.publication = meta.data.publisher || "";
-            // note: date may not be reliable; still ask if needed
-            noteTitle = data.title;
-            new Notice("Fetched article metadata", 2000);
-        } else throw new Error("No data");
-    } catch (e) {
-        // fallback to manual
-        data.title = await requiredPrompt(tp, "Article Title (auto-fetch failed)");
-        if (!data.title) return null;
-        data.authors = await optionalPrompt(tp, "Author(s)");
-        data.publication = await optionalPrompt(tp, "Publication / Site name");
-        noteTitle = data.title;
-    }
-    // date is tricky to auto-parse, so keep the manual date prompt after the block
+    data.url = url;
+    const noteTitle = data.title;
+    // Date is tricky to auto-parse, so it's always a manual prompt, on both paths.
     data.publish_date = await datePrompt(tp, "Date Published");
 
     let yamlFields = "";
