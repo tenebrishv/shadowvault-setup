@@ -74,11 +74,14 @@ Course
 
 ## Source Capture Architecture
 
-`(TEMPLATE) Source Capture.md` itself is a thin orchestrator: it shows the type picker, dispatches to the matching script, then assembles the frontmatter/body it returns and renames the file. All type-specific logic (prompts, auto-fetch, YAML fields, note body) lives in `99 - Meta/02 - Scripts/`:
+`(TEMPLATE) Source Capture.md` is a **one-line adapter** — it awaits `tp.user.sourceCaptureOrchestrator(tp)` and assigns the result to `tR`, and that is all it does. The orchestration itself (type picker, type registry, dispatch, frontmatter/body assembly, file rename) lives in `sourceCaptureOrchestrator.js`, so the most integration-prone logic in the vault is reachable by the mocked-`tp` test suite instead of only being exercisable by hand in Obsidian. Keep the template to that one line — anything added there is untestable by definition.
+
+All type-specific logic (prompts, auto-fetch, YAML fields, note body) lives in `99 - Meta/02 - Scripts/`:
 
 | File | Responsibility |
 |------|-----------------|
-| `sourceCaptureHelpers.js` | Shared prompt helpers (`requiredPrompt`, `optionalPrompt`, `datePrompt`), the `yamlField` formatter, and `buildBaseYaml` (the frontmatter fields common to every capture type) |
+| `sourceCaptureOrchestrator.js` | The type registry, the type picker, dispatch to the per-type module, note assembly, and the rename to `<prefix> <clean title>.md` |
+| `sourceCaptureHelpers.js` | Shared prompt helpers (`requiredPrompt`, `optionalPrompt`, `datePrompt`), `fetchWithFallback` (the try-fetch → manual-fallback skeleton every auto-fetching type uses), `sanitizeTitle` (the single filename cleaner), the `yamlField` formatter, and `buildBaseYaml` (the frontmatter fields common to every capture type) |
 | `sourceCaptureBook.js` | Book — Open Library ISBN lookup + manual fallback |
 | `sourceCaptureArticle.js` | Article — Microlink URL metadata + manual fallback |
 | `sourceCapturePaper.js` | Paper — CrossRef DOI lookup + manual fallback |
@@ -93,7 +96,20 @@ Each per-type module is a Templater User Script: `module.exports` is an `async f
 
 A sibling folder, `99 - Meta/03 - Scripts-tests/`, holds a Node-based unit test suite (mocked `tp`/`app`/`fetch`) for these modules — see its `README.md` for how to run it. It's a sibling of, not nested inside, `02 - Scripts/`, so Templater never tries to load the test files as `tp.user.*` functions.
 
-To add a new source type: create `sourceCapture<Type>.js` following the existing pattern, then register it in the `TYPE_LABELS`/`TYPE_ICONS`/`TYPE_TAGS`/`TYPE_PREFIX`/`TYPE_CAPTURERS` tables at the top of `(TEMPLATE) Source Capture.md`.
+### Adding a new source type
+
+Two steps, no more:
+
+1. Create `99 - Meta/02 - Scripts/sourceCapture<Type>.js` following the existing pattern (`async function(tp, helpers)` returning `{ noteTitle, yamlFields, body }` or `null`). If it auto-fetches, build it on `helpers.fetchWithFallback` rather than hand-rolling the try/catch — that is what keeps the Notice wording and the fallback behaviour identical across types.
+2. Add **one row** to `TYPE_REGISTRY` in `sourceCaptureOrchestrator.js`:
+
+```js
+{ name: "Podcast", icon: "🎧 Podcast", tag: "source/podcast", prefix: "%", capturer: "sourceCapturePodcast" },
+```
+
+`capturer` is the user-script name as a string; the orchestrator resolves it through `tp.user` at call time. `prefix` need not be unique — Video and YouTube deliberately share `+`.
+
+This replaced the five parallel `TYPE_LABELS`/`TYPE_ICONS`/`TYPE_TAGS`/`TYPE_PREFIX`/`TYPE_CAPTURERS` tables that used to sit at the top of the template, where forgetting one of the five shipped a half-registered type. `sourceCaptureOrchestrator.test.js` now fails on a malformed or incomplete row.
 
 ---
 

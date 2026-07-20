@@ -5,6 +5,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+> [!warning] Upgrade note — run **Templater: Reload templates**
+> This moves the Source Capture orchestrator into a new user script. Templater caches loaded user scripts, so after pulling, run the **Templater: Reload templates** command (or restart Obsidian) before the next capture — otherwise `tp.user.sourceCaptureOrchestrator` won't resolve and the template will fail.
+
+### Changed
+- **The Source Capture orchestrator moved out of the template and behind the user-script seam** (issue #13). `(TEMPLATE) Source Capture.md` is now a one-line adapter — `tR = await tp.user.sourceCaptureOrchestrator(tp)` — and everything it used to do (type picker, dispatch, frontmatter/body assembly, file rename) lives in `02 - Scripts/sourceCaptureOrchestrator.js`. The vault's most integration-prone logic was previously the only logic with **zero** automated coverage, because the mocked-`tp` suite cannot reach code embedded in a markdown template; it now has end-to-end tests through the same doubles every per-type module already uses. The untestable surface of the vault is one line.
+- **The five parallel type tables became one registry.** `TYPE_LABELS`/`TYPE_ICONS`/`TYPE_TAGS`/`TYPE_PREFIX`/`TYPE_CAPTURERS` are now a single `TYPE_REGISTRY`, one row per source type carrying all five values. Adding a source type is one registry row plus one capture module, instead of five edits where forgetting any one shipped a half-registered type. A completeness test covers the nine rows. Note that prefixes are deliberately **not** unique — Video and YouTube both use `+`, as the filename-prefix convention has always specified.
+- **One `sanitizeTitle` helper replaces five copies of the filename-cleaning regex.** The regex existed in `(TEMPLATE) Source Capture.md`, `sourceCaptureLecture.js`, `sourceCaptureTweet.js`, and *twice* in `sourceCaptureYoutube.js` — in two incompatible variants. A future rule change now lands once.
+- **The repeated fetch-with-fallback skeleton is now `helpers.fetchWithFallback`.** Book, Article, Paper, YouTube and Tweet each hand-rolled the identical try-fetch → success Notice / catch → failure Notice → manual-prompt flow; each now supplies only its genuinely per-type parts (which API, which fields, which prompts). The manual-only types (Video, Podcast, Thought) are untouched. Success and failure Notice wording and timing are defined once and can no longer drift per type.
+
+### Fixed
+- **YouTube titles are now cleaned by the same rules as every other source type.** The YouTube-only regex variant kept `*`, `?`, `<` and `>` — all illegal in Windows filenames — so a video titled `What?! <Part 1>` produced a filename the vault's own conventions reject. It now strips them like every other type. This is the one user-visible behaviour change in this entry; capture output is otherwise byte-identical.
+- **A failed article fetch now tells you so.** Article capture was the only auto-fetching type with no failure Notice — it silently fell through to prompts labelled "(auto-fetch failed)". It now announces the failure like Book, Paper, YouTube and Tweet always did.
+
 ## [2.8.0] – 2026-07-20
 
 ### Added

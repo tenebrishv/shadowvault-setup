@@ -3,45 +3,50 @@
  * Returns { noteTitle, yamlFields, body }, or null if cancelled.
  */
 module.exports = async function sourceCapturePaper(tp, helpers) {
-    const { requiredPrompt, optionalPrompt, datePrompt, yamlField } = helpers;
-    const data = {};
-    let noteTitle = "";
+    const { requiredPrompt, optionalPrompt, datePrompt, yamlField, fetchWithFallback } = helpers;
+    const doi = await optionalPrompt(tp, "DOI (e.g. 10.1000/xyz123)");
 
-    data.doi = await optionalPrompt(tp, "DOI (e.g. 10.1000/xyz123)");
-    if (data.doi) {
-        try {
-            const res = await fetch(`https://api.crossref.org/works/${encodeURIComponent(data.doi)}`);
+    const data = await fetchWithFallback(tp, {
+        label: "paper metadata from DOI",
+        skip: !doi,
+        fetch: async () => {
+            const res = await fetch(`https://api.crossref.org/works/${encodeURIComponent(doi)}`);
             const json = await res.json();
             const msg = json.message;
-            data.title = msg.title ? msg.title[0] : "";
-            data.authors = msg.author ? msg.author.map(a => a.given + " " + a.family).join(", ") : "";
-            data.publish_date = msg.created ? msg.created["date-parts"][0][0].toString() : "";
-            data.publisher = msg.publisher || "";
-            data.keywords = msg.subject ? msg.subject.join(", ") : "";
-            data.abstract = msg.abstract || "";
-            noteTitle = data.title;
-            new Notice("Fetched paper metadata from DOI", 2000);
-        } catch (e) {
-            new Notice("DOI lookup failed. Enter details manually.", 3000);
-        }
-    }
+            if (!msg.title || !msg.title[0]) throw new Error("No title in response");
+            return {
+                doi,
+                title: msg.title[0],
+                authors: msg.author ? msg.author.map(a => a.given + " " + a.family).join(", ") : "",
+                publish_date: msg.created ? msg.created["date-parts"][0][0].toString() : "",
+                publisher: msg.publisher || "",
+                keywords: msg.subject ? msg.subject.join(", ") : "",
+                abstract: msg.abstract || "",
+            };
+        },
+        fillGaps: async (d) => ({
+            ...d,
+            keywords: d.keywords || await optionalPrompt(tp, "Keywords (comma-separated)"),
+            abstract: d.abstract || await optionalPrompt(tp, "Abstract (brief)"),
+        }),
+        manual: async () => {
+            const title = await requiredPrompt(tp, "Paper Title");
+            if (!title) return null;
+            const authors = await requiredPrompt(tp, "Author(s)");
+            if (!authors) return null;
+            return {
+                title,
+                authors,
+                doi: doi || await optionalPrompt(tp, "DOI"),
+                publish_date: await datePrompt(tp, "Year Published"),
+                keywords: await optionalPrompt(tp, "Keywords"),
+                abstract: await optionalPrompt(tp, "Abstract"),
+            };
+        },
+    });
+    if (!data) return null;
 
-    // If no title, fallback to manual
-    if (!data.title) {
-        data.title = await requiredPrompt(tp, "Paper Title");
-        if (!data.title) return null;
-        data.authors = await requiredPrompt(tp, "Author(s)");
-        if (!data.authors) return null;
-        data.doi = data.doi || await optionalPrompt(tp, "DOI");
-        data.publish_date = await datePrompt(tp, "Year Published");
-        data.keywords = await optionalPrompt(tp, "Keywords");
-        data.abstract = await optionalPrompt(tp, "Abstract");
-        noteTitle = data.title;
-    } else {
-        // fill optional fields if not from DOI
-        data.keywords = data.keywords || await optionalPrompt(tp, "Keywords (comma-separated)");
-        data.abstract = data.abstract || await optionalPrompt(tp, "Abstract (brief)");
-    }
+    const noteTitle = data.title;
 
     let yamlFields = "";
     yamlFields += yamlField("authors", data.authors);

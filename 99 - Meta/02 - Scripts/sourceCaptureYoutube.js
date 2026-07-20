@@ -3,34 +3,40 @@
  * Returns { noteTitle, yamlFields, body }, or null if cancelled.
  */
 module.exports = async function sourceCaptureYoutube(tp, helpers) {
-    const { requiredPrompt, optionalPrompt, yamlField } = helpers;
-    const data = {};
-    let noteTitle = "";
+    const { requiredPrompt, optionalPrompt, yamlField, sanitizeTitle, fetchWithFallback } = helpers;
+    const url = await requiredPrompt(tp, "YouTube URL");
+    if (!url) return null;
 
-    data.url = await requiredPrompt(tp, "YouTube URL");
-    if (!data.url) return null;
+    const data = await fetchWithFallback(tp, {
+        label: "YouTube data",
+        fetch: async () => {
+            const res = await fetch("https://youtube.com/oembed?url=" + url + "&format=json");
+            const yt = await res.json();
+            const idMatch = /(?:v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/.exec(url);
+            return {
+                yt_title: yt.title,
+                yt_channel: yt.author_name,
+                yt_chanurl: yt.author_url,
+                yt_thumb: yt.thumbnail_url,
+                yt_id: idMatch ? idMatch[1] : "",
+            };
+        },
+        manual: async () => {
+            const yt_title = await requiredPrompt(tp, "Video Title (auto-fetch failed)");
+            if (!yt_title) return null;
+            return {
+                yt_title,
+                yt_channel: await optionalPrompt(tp, "Channel Name"),
+                yt_chanurl: "",
+                yt_thumb: "",
+                yt_id: "",
+            };
+        },
+    });
+    if (!data) return null;
 
-    try {
-        const res = await fetch("https://youtube.com/oembed?url=" + data.url + "&format=json");
-        const yt = await res.json();
-        data.yt_title = yt.title;
-        data.yt_channel = yt.author_name;
-        data.yt_chanurl = yt.author_url;
-        data.yt_thumb = yt.thumbnail_url;
-        const idMatch = /(?:v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/.exec(data.url);
-        data.yt_id = idMatch ? idMatch[1] : "";
-        noteTitle = yt.title.replace(/[:"#^|[\]\\\/]/g, "").trim();
-        new Notice("Fetched: " + yt.title, 2000);
-    } catch (e) {
-        new Notice("Could not auto-fetch YouTube data. Fill manually.", 3000);
-        data.yt_title = await requiredPrompt(tp, "Video Title (auto-fetch failed)");
-        if (!data.yt_title) return null;
-        data.yt_channel = await optionalPrompt(tp, "Channel Name");
-        data.yt_chanurl = "";
-        data.yt_thumb = "";
-        data.yt_id = "";
-        noteTitle = data.yt_title.replace(/[:"#^|[\]\\\/]/g, "").trim();
-    }
+    data.url = url;
+    const noteTitle = sanitizeTitle(data.yt_title);
 
     let yamlFields = "";
     yamlFields += yamlField("channel", data.yt_channel);

@@ -20,12 +20,16 @@
 // `vaultState`: the `state` handle returned by installMockApp — when given,
 // tp.file.create_new registers the new note there so later
 // app.vault.getAbstractFileByPath / processFrontMatter calls can find it.
-function createMockTp({ prompts = [], suggestions = [], fileTitle, templates = [], vaultState = null } = {}) {
+// `user`: the tp.user.* surface — shared helpers plus per-type capture modules.
+// The orchestrator resolves its capturer through this, so tests can hand it a
+// stub capturer instead of driving a real module's prompts.
+function createMockTp({ prompts = [], suggestions = [], fileTitle, templates = [], vaultState = null, user = null } = {}) {
     const promptQueue = [...prompts];
     const suggestionQueue = [...suggestions];
     const calls = { prompts: [], suggestions: [], renames: [], createNew: [] };
 
     return {
+        ...(user ? { user } : {}),
         system: {
             async prompt(message) {
                 calls.prompts.push(message);
@@ -124,16 +128,31 @@ function failingFetch() {
 // Fake app.vault / app.metadataCache / app.fileManager for the Lecture module.
 // folders: { "04 - MOCS/Courses": ["Existing Course"] } - basenames present in that folder
 // files:   { "04 - MOCS/Courses/Existing Course.md": { frontmatter: {...} } } - existence + frontmatter
-// Returns { created, frontmatterEdits, state }:
+// Returns { created, frontmatterEdits, renames, state, activeFile }:
 //   created         — direct app.vault.create calls (should stay empty now that
 //                     stubs are born from template files)
 //   frontmatterEdits — every processFrontMatter application, as { path, frontmatter }
+//   renames         — every fileManager.renameFile call, as { from, to }
 //   state           — live { folders, files }; pass as createMockTp's vaultState
-function installMockApp({ folders = {}, files = {} } = {}) {
+//   activeFile      — the file getActiveFile() returns
+// `activeFile`: what app.workspace.getActiveFile() returns — the note the
+// orchestrator renames once capture succeeds. Defaults to a note sitting in
+// 00 - Inbox, which is where Source Capture is normally run.
+function installMockApp({ folders = {}, files = {}, activeFile } = {}) {
     const created = [];
     const frontmatterEdits = [];
+    const renames = [];
     const state = { folders, files };
+    const active = activeFile ?? {
+        path: "00 - Inbox/Untitled.md",
+        basename: "Untitled",
+        extension: "md",
+        parent: { path: "00 - Inbox" },
+    };
     globalThis.app = {
+        workspace: {
+            getActiveFile() { return active; },
+        },
         vault: {
             getAbstractFileByPath(path) {
                 if (folders[path] !== undefined) {
@@ -159,6 +178,9 @@ function installMockApp({ folders = {}, files = {} } = {}) {
             },
         },
         fileManager: {
+            async renameFile(file, newPath) {
+                renames.push({ from: file.path, to: newPath });
+            },
             async processFrontMatter(file, fn) {
                 const entry = (files[file.path] ??= { frontmatter: {} });
                 entry.frontmatter ??= {};
@@ -173,7 +195,7 @@ function installMockApp({ folders = {}, files = {} } = {}) {
             },
         },
     };
-    return { created, frontmatterEdits, state };
+    return { created, frontmatterEdits, renames, state, activeFile: active };
 }
 
 module.exports = {
