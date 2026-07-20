@@ -1,6 +1,5 @@
 ---
 id: 000
-title: Home
 type: moc
 status: active
 cssclasses:

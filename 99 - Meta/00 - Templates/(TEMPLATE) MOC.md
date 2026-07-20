@@ -1,7 +1,7 @@
 ---
 id: <% tp.date.now("YYYYMMDDHHmm") %>
-title: <% tp.file.title %>
 type: moc
+growth: seedling
 status: active
 created: <% tp.date.now("YYYY-MM-DD") %>
 modified: <% tp.date.now("YYYY-MM-DD") %>

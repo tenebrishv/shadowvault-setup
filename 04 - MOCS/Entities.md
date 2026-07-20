@@ -1,6 +1,5 @@
 ---
 id: 001
-title: Entities
 type: moc
 status: active
 tags:
