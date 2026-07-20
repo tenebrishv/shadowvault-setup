@@ -164,9 +164,12 @@ module.exports = async function sourceCaptureLecture(tp, helpers) {
     const noteTitle = helpers.sanitizeTitle(`${datePart} – ${data.course} – ${data.title}`);
 
     let yamlFields = "";
-    yamlFields += `course: "[[${data.course}]]"\n`;
-    yamlFields += `unit: "[[${data.unit}]]"\n`;
-    yamlFields += `lecturer: "[[${data.lecturer}]]"\n`;
+    // Built by hand rather than through yamlField because the value is a
+    // wikilink, not a plain scalar — but the quoting hazard is the same, so the
+    // link target goes through yamlQuote just like every other quoted field.
+    yamlFields += `course: "[[${helpers.yamlQuote(data.course)}]]"\n`;
+    yamlFields += `unit: "[[${helpers.yamlQuote(data.unit)}]]"\n`;
+    yamlFields += `lecturer: "[[${helpers.yamlQuote(data.lecturer)}]]"\n`;
     yamlFields += yamlField("lecture_num", data.lecture_num);
     yamlFields += yamlField("date_given", data.date_given);
     yamlFields += yamlField("url", data.url);
