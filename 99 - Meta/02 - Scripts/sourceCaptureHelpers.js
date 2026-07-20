@@ -82,9 +82,27 @@ function sanitizeTitle(title) {
         .trim();
 }
 
+// Escapes a value for use inside a double-quoted YAML scalar.
+//
+// Every quoted field in a captured note is built by string concatenation, so a
+// value containing a `"` used to close the scalar early and leave the rest as
+// stray YAML — `- ""SHOUTED" rest"` — which makes Obsidian fail to parse the
+// entire frontmatter block, not just that one field. Fetched titles are the
+// common source: quoted headlines are ordinary in news and sports video titles.
+//
+// Backslash must be escaped first, or it would double-escape the backslashes
+// this function itself introduces. Newlines are folded to spaces rather than
+// escaped, matching sanitizeTitle's treatment of the same input.
+function yamlQuote(val) {
+    return String(val)
+        .replace(/\\/g, "\\\\")
+        .replace(/"/g, '\\"')
+        .replace(/\s*\n\s*/g, " ");
+}
+
 // Renders a single optional YAML scalar field ("key: \"value\"\n" or "key:\n" when empty).
 function yamlField(key, val) {
-    if (val) return key + ": \"" + val + "\"\n";
+    if (val) return key + ": \"" + yamlQuote(val) + "\"\n";
     return key + ":\n";
 }
 
@@ -100,7 +118,7 @@ function buildBaseYaml(tp, { tag, typeName, noteTitle }) {
     let yaml = "---\n";
     yaml += "tags: " + tag + "\n";
     yaml += "publish: true\n";
-    yaml += "aliases:\n  - \"" + (noteTitle || "") + "\"\n";
+    yaml += "aliases:\n  - \"" + yamlQuote(noteTitle || "") + "\"\n";
     yaml += "created: " + today + "\n";
     yaml += "id: " + id + "\n";
     yaml += "type: " + typeField + "\n";
@@ -116,6 +134,7 @@ module.exports = {
     datePrompt,
     fetchWithFallback,
     sanitizeTitle,
+    yamlQuote,
     yamlField,
     buildBaseYaml,
 };

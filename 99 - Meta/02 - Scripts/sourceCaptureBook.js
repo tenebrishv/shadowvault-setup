@@ -10,14 +10,22 @@ module.exports = async function sourceCaptureBook(tp, helpers) {
         label: "book data from ISBN",
         skip: !isbn,
         fetch: async () => {
-            const res = await fetch(`https://openlibrary.org/isbn/${encodeURIComponent(isbn)}.json`);
+            // Use /api/books, not /isbn/<isbn>.json: the latter answers 302 to
+            // the edition record, and its author entries are bare {key} refs
+            // with no name, needing a second request per author to resolve.
+            // This endpoint answers 200 and inlines author names.
+            const res = await fetch(
+                `https://openlibrary.org/api/books?bibkeys=ISBN:${encodeURIComponent(isbn)}&format=json&jscmd=data`,
+            );
             if (!res.ok) throw new Error("Not found");
-            const info = await res.json();
-            if (!info.title) throw new Error("No title in response");
+            const payload = await res.json();
+            // Keyed by the bibkey echoed back; an unknown ISBN yields {}.
+            const info = payload[`ISBN:${isbn}`];
+            if (!info || !info.title) throw new Error("No title in response");
             return {
                 title: info.title,
                 authors: info.authors ? info.authors.map(a => a.name).join(", ") : "",
-                publisher: info.publishers ? info.publishers[0] : "",
+                publisher: info.publishers ? info.publishers[0].name : "",
                 publish_date: info.publish_date || "",
                 // Open Library doesn't give a general subject, so keep it empty for now
                 general_subject: "",

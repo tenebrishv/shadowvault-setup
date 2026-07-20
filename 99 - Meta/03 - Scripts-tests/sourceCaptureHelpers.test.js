@@ -12,6 +12,36 @@ test("yamlField renders an empty key when falsy", () => {
     assert.equal(helpers.yamlField("authors", undefined), "authors:\n");
 });
 
+// Regression: a fetched title carrying a double quote used to be interpolated
+// raw into a double-quoted YAML scalar, producing `- ""SHOUTED" rest"` —
+// invalid YAML, so Obsidian failed to parse the whole frontmatter block.
+// Found capturing a real YouTube video with a quoted headline for a title.
+test("yamlField escapes quotes and backslashes in the value", () => {
+    assert.equal(
+        helpers.yamlField("channel", '"HASTA DICIEMBRE" 🗣️ SCALONI'),
+        'channel: "\\"HASTA DICIEMBRE\\" 🗣️ SCALONI"\n',
+    );
+    assert.equal(
+        helpers.yamlField("title", "C:\\path\\to"),
+        'title: "C:\\\\path\\\\to"\n',
+    );
+});
+
+test("yamlField folds newlines so a value cannot break out of its scalar", () => {
+    assert.equal(helpers.yamlField("title", "line one\nline two"), 'title: "line one line two"\n');
+});
+
+test("buildBaseYaml escapes quotes in the alias", () => {
+    const tp = createMockTp();
+    const yaml = helpers.buildBaseYaml(tp, {
+        tag: "source/youtube",
+        typeName: "YouTube",
+        noteTitle: '"HASTA DICIEMBRE VOY A ESTAR" 🗣️ SCALONI',
+    });
+
+    assert.match(yaml, /aliases:\n {2}- "\\"HASTA DICIEMBRE VOY A ESTAR\\" 🗣️ SCALONI"\n/);
+});
+
 test("buildBaseYaml sets type: thought only for Thought, source otherwise", () => {
     const tp = createMockTp();
     const thoughtYaml = helpers.buildBaseYaml(tp, { tag: "note/thought", typeName: "Thought", noteTitle: "A claim" });
