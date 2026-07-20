@@ -49,7 +49,7 @@ const ENUMS = {
 // ---------------------------------------------------------------------------
 
 const VOCABULARY = {
-    core: ["id", "title", "type", "growth", "status", "created", "modified", "review",
+    core: ["id", "type", "growth", "status", "created", "modified", "review",
            "tags", "aliases", "cssclasses", "publish"],
     periodic: ["date", "period", "week", "month", "year"],
     curriculum: ["institution", "default_lecturer", "course", "semester"],
@@ -57,7 +57,7 @@ const VOCABULARY = {
     source: ["authors", "publish_date", "publisher", "isbn", "general_subject", "specific_subject",
              "url", "publication", "doi", "citekey", "keywords", "channel", "channel_url",
              "thumbnail", "watched", "released",
-             "source", "host", "guest", "account", "tweet_text", "context", "led_here",
+             "platform", "host", "guest", "account", "tweet_text", "context", "led_here",
              "unit", "lecturer", "lecture_num", "date_given"],
     entity: ["role", "organization", "contact", "website", "founded", "sector", "headquarters",
              "key_people", "government_type", "established", "capital", "leader", "creator",
@@ -80,23 +80,22 @@ const TEMPLATES = {
     // --- Notes moving through the pipeline -------------------------------
     "(TEMPLATE) Permanent Note": {
         typeValue: "permanent",
-        required: ["id", "title", "type", "growth", "status", "created", "modified", "review",
+        required: ["id", "type", "growth", "status", "created", "modified", "review",
                    "tags", "aliases", "cssclasses"],
     },
     "(TEMPLATE) Literature Note": {
         typeValue: "literature",
-        required: ["id", "title", "type", "growth", "status", "source-title", "source-author",
+        required: ["id", "type", "growth", "status", "source-title", "source-author",
                    "source-type", "source-url", "created", "modified", "tags", "aliases", "cssclasses"],
     },
     "(TEMPLATE) MOC": {
         typeValue: "moc",
-        // NOTE: no `growth`. Descriptive, not endorsed — see the follow-up issue.
-        required: ["id", "title", "type", "status", "created", "modified", "tags", "aliases", "cssclasses"],
+        required: ["id", "type", "growth", "status", "created", "modified", "tags", "aliases", "cssclasses"],
     },
     "(TEMPLATE) Fleeting Note": {
         typeValue: "fleeting",
         // Deliberately minimal per ADR 0001: no aliases, no review, no modified.
-        required: ["id", "title", "type", "growth", "status", "created", "tags", "cssclasses"],
+        required: ["id", "type", "growth", "status", "created", "tags", "cssclasses"],
     },
 
     // --- Curriculum MOCs (structural, not processed toward evergreen) -----
@@ -206,8 +205,10 @@ const BASE_CAPTURE_DATE_FORMATS = {
 // asking "what field names come out?".
 const CAPTURE = {
     Book: {
-        promptScript: ["", "Atomic Habits", "James Clear", "2018", "Avery", "Self-help", "Habit formation"],
-        required: ["authors", "publish_date", "publisher", "isbn", "general_subject", "specific_subject"],
+        // ISBN(skip), Title, Author(s), URL, Year, Publisher, General, Specific
+        promptScript: ["", "Atomic Habits", "James Clear", "https://openlibrary.org/works/OL1W",
+                       "2018", "Avery", "Self-help", "Habit formation"],
+        required: ["authors", "url", "publish_date", "publisher", "isbn", "general_subject", "specific_subject"],
     },
     Article: {
         promptScript: ["https://example.com/x", "Fallback Title", "Some Author", "Some Site", "2020"],
@@ -224,7 +225,7 @@ const CAPTURE = {
     },
     Video: {
         promptScript: ["A Great Talk", "Vimeo", "Some Creator", "https://vimeo.com/123", "2023-05-01"],
-        required: ["source", "channel", "url", "released", "watched"],
+        required: ["platform", "channel", "url", "released", "watched"],
     },
     Podcast: {
         promptScript: ["Episode 42", "Host Name", "Guest Name", "https://podcast.example/42", "2022-11-11", "Philosophy"],
@@ -306,11 +307,61 @@ const CAPTURE_INLINE_PLACEHOLDERS = {
     Lecture: [],
 };
 
+// ---------------------------------------------------------------------------
+// METADATA.md section binding (issue #19; see docs/adr/0003).
+//
+// The flat two-way doc check (documentedFields) unions EVERY yaml block in
+// METADATA.md into one set, so it catches invented or undocumented field NAMES
+// but not a field documented under the WRONG heading — `isbn` under Podcast, or
+// the Book block silently losing `publisher` while some other block still
+// mentions it, both stay green. This map binds each per-type heading to the
+// exact field set its yaml block must document, keyed on the type's contract, so
+// a field in the wrong section fails.
+//
+// Heading TEXT lives HERE, in the fixture — never in the test's parser — so
+// renaming a heading in METADATA.md is a one-line fixture edit, not a mysterious
+// red run (ADR 0003: don't couple the conformance parser to doc prose). The
+// label is the heading up to the first " (", so the `(`agent/person`)` tag on an
+// entity heading can change freely.
+//
+// Only per-TYPE blocks are bound. The shared blocks (Core, Entity base,
+// Literature, Periodic, Curriculum MOC) document fields common to many producers
+// and stay covered by the flat check alone.
+const distinctiveEntityFields = (name) =>
+    TEMPLATES[name].required.filter((f) => !ENTITY_BASE.includes(f));
+
+const DOC_SECTIONS = {
+    // Source Capture per-type blocks → the module's type-specific fields.
+    "Book": [...CAPTURE.Book.required],
+    "Article": [...CAPTURE.Article.required],
+    "Paper": [...CAPTURE.Paper.required],
+    // One block documents both YouTube and non-YouTube video.
+    "YouTube / Video": [...new Set([...CAPTURE.Youtube.required, ...CAPTURE.Video.required])],
+    "Podcast": [...CAPTURE.Podcast.required],
+    "Tweet": [...CAPTURE.Tweet.required, ...(CAPTURE.Tweet.optional || [])],
+    "Lecture": [...CAPTURE.Lecture.required],
+    "Thought": [...CAPTURE.Thought.required],
+
+    // Entity subtype blocks → the subtype's distinctive fields (the shared
+    // type/tags/aliases/created live in the Entity base block, not bound here).
+    "Person": distinctiveEntityFields("(TEMPLATE) Person"),
+    "Organization": distinctiveEntityFields("(TEMPLATE) Organization"),
+    "Country": distinctiveEntityFields("(TEMPLATE) Country"),
+    "Synthetic Agent — AI/algorithms": distinctiveEntityFields("(TEMPLATE) Synthetic Agent"),
+    "Place": distinctiveEntityFields("(TEMPLATE) Place"),
+    "Artifact": distinctiveEntityFields("(TEMPLATE) Artifact"),
+    "Tool": distinctiveEntityFields("(TEMPLATE) Tool"),
+    "System": distinctiveEntityFields("(TEMPLATE) System"),
+    "Natural Entity": distinctiveEntityFields("(TEMPLATE) Natural Entity"),
+    "Event": distinctiveEntityFields("(TEMPLATE) Event"),
+};
+
 module.exports = {
     ENUMS,
     VOCABULARY,
     TEMPLATES,
     EXEMPT_TEMPLATES,
+    DOC_SECTIONS,
     BASE_CAPTURE_FIELDS,
     BASE_CAPTURE_DATE_FORMATS,
     CAPTURE,

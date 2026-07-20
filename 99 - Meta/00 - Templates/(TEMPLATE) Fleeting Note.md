@@ -1,6 +1,5 @@
 ---
 id: <% tp.date.now("YYYYMMDDHHmm") %>
-title: <% tp.file.title %>
 type: fleeting
 growth: seedling
 status: active

@@ -5,6 +5,60 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+> A batch of schema-shape cleanups taken while the framework still ships with
+> **no captured notes** — every field rename/removal/addition below is free now
+> and would be a silent-data-loss migration once adopters have real notes. No
+> migration is needed for the same reason.
+
+### Added
+- **Book captures now write a `url`** (issue #23) — Book was the only source type
+  with no link back to anything. The auto-fetch path derives the canonical Open
+  Library page URL from the `jscmd=data` response for free; the manual path adds a
+  skippable URL prompt, exactly like every other type's manual flow. Reuses the
+  existing `url` field, so no vocabulary change — a Nexus "open the source"
+  affordance now works for all nine types instead of eight.
+- **MOC notes now carry `growth`** (issue #18) — a MOC genuinely ripens from a
+  bare stub link-list (`seedling`) to a curated, annotated map (`evergreen`), and
+  `WHERE growth` Dataview queries previously excluded every MOC in silence.
+  `status` tracks whether a MOC is live; `growth` how developed it is. Curriculum
+  MOCs (Course/Unit) remain structural and carry no `growth`.
+- **The `METADATA.md` conformance test now binds each per-type field block to its
+  heading** (issue #19) — the flat check pooled every yaml block into one set, so
+  a field documented under the wrong heading (`isbn` under Podcast) or dropped
+  from its own block (Book losing `publisher` while some other block still named
+  it) stayed green. `DOC_SECTIONS` in `_frontmatterSchema.js` now maps each source
+  and entity heading to the field set it must document, keyed on the type's
+  contract. Heading text lives in the fixture, not the parser, so renaming a
+  heading is a one-line fixture edit (ADR 0003). Both drift directions are
+  mutation-proven.
+
+### Changed
+- **Video's `source` frontmatter field is now `platform`** (issue #22) — one word
+  meant two unrelated things three lines apart (`type: source` the note-type vs.
+  `source: Vimeo` the hosting platform), the same confusion that produced #21. The
+  note body already called it "Platform"; the frontmatter now agrees. Video is the
+  only module that wrote `source`, and no dashboard ever read it, so the rename is
+  query-safe.
+
+### Fixed
+- **Fetched Book `publish_date` is floored to a 4-digit year** (issue #25) — Open
+  Library returns free text ("Sep 08, 2015", bare "2018", "October 16 2017"), so
+  auto-fetched books carried `publish_date` in whatever shape the record happened
+  to hold, none of them matching the `YYYY` the manual `datePrompt` enforces. Any
+  Dataview sort/filter on `publish_date` saw inconsistent values. It is now
+  extracted to the first `\d{4}`. Audited while here: Paper's CrossRef path already
+  returns a clean year, and every other type routes its date through the validated
+  `datePrompt`, so Book was the sole offender.
+
+### Removed
+- **The `title` frontmatter field** (issue #17) — it copied the filename at
+  creation time via `title: <% tp.file.title %>` and never updated, so any rename
+  left the two silently disagreeing. Dataview already exposes the filename as
+  `file.name`, nothing read the copy, and it was the only core field whose sole
+  behaviour was to go stale. Removed from the Permanent/Literature/MOC/Fleeting
+  templates, the two shipped MOC notes (`Home`, `Entities`), the schema fixture,
+  and `METADATA.md`.
+
 ## [2.9.0] – 2026-07-20
 
 > [!warning] Upgrade note — run **Templater: Reload templates**

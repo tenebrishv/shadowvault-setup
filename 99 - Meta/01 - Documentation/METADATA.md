@@ -16,7 +16,6 @@ documented further down.
 ```yaml
 ---
 id:           # YYYYMMDDHHmm – unique timestamp ID
-title:        # Human‑readable title (usually same as file name without prefix)
 type:         # source | permanent | literature | fleeting | moc | thought | entity | periodic
 growth:       # seedling | fern | incubator | evergreen
 status:       # inbox | processing | active | completed | archived
@@ -36,9 +35,8 @@ the conformance test in `99 - Meta/03 - Scripts-tests/frontmatterSchema.test.js`
 | Field | Permanent | Literature | MOC | Fleeting | Source Capture |
 |---|---|---|---|---|---|
 | `id` | ✓ | ✓ | ✓ | ✓ | ✓ |
-| `title` | ✓ | ✓ | ✓ | ✓ | — |
 | `type` | ✓ | ✓ | ✓ | ✓ | ✓ |
-| `growth` | ✓ | ✓ | — | ✓ | ✓ |
+| `growth` | ✓ | ✓ | ✓ | ✓ | ✓ |
 | `status` | ✓ | ✓ | ✓ | ✓ | ✓ |
 | `created` | ✓ | ✓ | ✓ | ✓ | ✓ |
 | `modified` | ✓ | ✓ | ✓ | — | — |
@@ -50,13 +48,18 @@ the conformance test in `99 - Meta/03 - Scripts-tests/frontmatterSchema.test.js`
 
 Notes on the asymmetries, all of them deliberate as of this writing:
 
-- **`title` is written by the hand-authored templates, never by Source Capture** —
-  captured notes carry the title in the filename (with its type prefix) instead.
+- **No `title` field.** The human-readable title lives in the filename (captured
+  notes carry it with a type prefix; other notes carry it plainly), and Dataview
+  exposes it as `file.name`. A `title:` frontmatter copy only ever went stale on
+  rename, so no producer emits one.
 - **`publish` is written only by Source Capture.**
 - **`cssclasses` is written only by the hand-authored templates.**
 - **Fleeting Note omits `aliases`, `review`, and `modified`** — it is the deliberate
   minimal template (ADR 0001); speed of capture wins over structure.
-- **MOC omits `growth`** — MOCs are navigation, not ideas ripening toward evergreen.
+- **MOC carries `growth`** — a MOC ripens from a bare stub link-list (`seedling`)
+  to a curated, annotated map (`evergreen`); `status` tracks whether it is live,
+  `growth` how developed it is. Curriculum MOCs (Course/Unit) are the exception —
+  they are structural scaffolding and carry no `growth`, documented further down.
 
 - id
 	- Permanent reference
@@ -124,6 +127,7 @@ If this mapping changes, update it here first, then propagate to the templates' 
 
 ```yaml
 authors:
+url:              # Open Library page (auto-fetch) or a manually entered link
 publish_date:
 publisher:
 isbn:
@@ -163,7 +167,7 @@ url:
 thumbnail:    # YouTube only — auto-fetched from oEmbed
 watched: YYYY-MM-DD
 released:     # optional
-source:       # for non‑YouTube videos (Vimeo, Nebula)
+platform:     # for non‑YouTube videos (Vimeo, Nebula)
 ```
 
 `channel_url` and `thumbnail` are frontmatter fields, not inline ones, so they

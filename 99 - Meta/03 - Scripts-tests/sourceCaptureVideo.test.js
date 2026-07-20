@@ -13,7 +13,7 @@ test("Video: fully manual capture", async () => {
     const result = await sourceCaptureVideo(tp, helpers);
 
     assert.equal(result.noteTitle, "A Great Talk");
-    assert.match(result.yamlFields, /source: "Vimeo"\n/);
+    assert.match(result.yamlFields, /platform: "Vimeo"\n/);
     assert.match(result.yamlFields, /channel: "Some Creator"\n/);
     assert.match(result.yamlFields, /url: "https:\/\/vimeo\.com\/123"\n/);
     assert.match(result.yamlFields, /released: "2023-05-01"\n/);

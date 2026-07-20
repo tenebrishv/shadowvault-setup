@@ -471,6 +471,59 @@ test("Schema: every fixture field is documented in METADATA.md", () => {
     );
 });
 
+// ---------------------------------------------------------------------------
+// METADATA.md section binding (issue #19)
+//
+// documentedFields() above pools every yaml block into one flat set, so a field
+// documented under the wrong heading (isbn under Podcast) or dropped from its own
+// block (Book losing publisher) stays green as long as SOME block still names it.
+// This binds each per-type heading to the field set its block must document.
+// ---------------------------------------------------------------------------
+
+// Parse the doc into `section label -> Set<field name>`. A section runs from its
+// heading to the next heading of any level; the label is the heading text up to
+// the first " (" so entity headings' `(`agent/person`)` tags don't leak into the
+// key — the same normalization DOC_SECTIONS is keyed on. Only ```yaml blocks
+// contribute fields; heading lines are ignored while inside a block.
+function documentedSections(doc) {
+    const sections = new Map();
+    let label = null;
+    let inYaml = false;
+    for (const line of doc.split(/\r?\n/)) {
+        if (inYaml) {
+            if (/^```\s*$/.test(line)) { inYaml = false; continue; }
+            const m = KEY_LINE.exec(line);
+            if (m && label) sections.get(label).add(m[1]);
+            continue;
+        }
+        if (/^```yaml\s*$/.test(line)) { inYaml = true; continue; }
+        const heading = /^#{1,6}\s+(.*)$/.exec(line);
+        if (heading) {
+            label = heading[1].split(" (")[0].trim();
+            if (!sections.has(label)) sections.set(label, new Set());
+        }
+    }
+    return sections;
+}
+
+const docSections = documentedSections(metadataDoc);
+
+for (const [label, expected] of Object.entries(schema.DOC_SECTIONS)) {
+    test(`Doc section: "${label}" documents exactly its bound fields`, () => {
+        const documented = docSections.get(label);
+        assert.ok(documented, `METADATA.md has no "${label}" heading with a yaml block`);
+        const expectedSet = new Set(expected);
+        const missing = expected.filter(f => !documented.has(f));
+        const extra = [...documented].filter(f => !expectedSet.has(f));
+        assert.deepEqual(
+            { missing, extra }, { missing: [], extra: [] },
+            `METADATA.md "${label}" block is out of sync with its contract in ` +
+            `_frontmatterSchema.js. "missing" = bound to this heading but documented ` +
+            `nowhere under it; "extra" = documented here but not owned by this type.`,
+        );
+    });
+}
+
 for (const field of ["type", "growth", "status", "period"]) {
     test(`Schema: METADATA.md and the fixture agree on the ${field} enum`, () => {
         const documented = documentedEnum(metadataDoc, field);
