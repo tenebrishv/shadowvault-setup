@@ -47,12 +47,21 @@ async function datePrompt(tp, label) {
 // that null propagates out, and callers treat it as "abort the capture".
 async function fetchWithFallback(tp, { label, skip = false, fetch: doFetch, fillGaps, manual }) {
     if (!skip) {
+        // Only the fetch itself is guarded. fillGaps runs *outside* the try:
+        // it prompts the user, and a throw from a prompt must not be mistaken
+        // for a failed fetch — that would announce "could not fetch", then
+        // rerun the whole manual path and re-ask questions already answered.
+        let data;
+        let fetched = false;
         try {
-            const data = await doFetch();
-            new Notice("Fetched " + label, 2000);
-            return fillGaps ? await fillGaps(data) : data;
+            data = await doFetch();
+            fetched = true;
         } catch (e) {
             new Notice("Could not fetch " + label + ". Enter details manually.", 3000);
+        }
+        if (fetched) {
+            new Notice("Fetched " + label, 2000);
+            return fillGaps ? await fillGaps(data) : data;
         }
     }
     return await manual();

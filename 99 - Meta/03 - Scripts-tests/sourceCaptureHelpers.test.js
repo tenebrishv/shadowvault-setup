@@ -193,3 +193,22 @@ test("fetchWithFallback propagates a cancelled fillGaps as null", async () => {
 
     assert.equal(data, null);
 });
+
+test("fetchWithFallback does not treat a throw inside fillGaps as a failed fetch", async () => {
+    // fillGaps prompts the user. If its throw were caught as a fetch failure,
+    // the user would see "could not fetch" and be re-asked everything they
+    // had already answered.
+    const notices = installMockNotice();
+    const tp = createMockTp();
+
+    await assert.rejects(
+        helpers.fetchWithFallback(tp, {
+            label: "book data from ISBN",
+            fetch: async () => ({ title: "Atomic Habits" }),
+            fillGaps: async () => { throw new Error("prompt blew up"); },
+            manual: async () => { throw new Error("manual path must not run"); },
+        }),
+        /prompt blew up/,
+    );
+    assert.ok(!notices.some(m => /could not fetch/i.test(m)), "no spurious failure Notice");
+});
