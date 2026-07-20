@@ -2,6 +2,13 @@
  * Book capture: ISBN auto-fetch (Open Library) with manual fallback.
  * Returns { noteTitle, yamlFields, body }, or null if cancelled.
  */
+
+// Open Library's API returns 429 to any User-Agent matching /obsidian/i,
+// regardless of request rate — so requestUrl's default UA (which contains
+// "obsidian") is refused every time. This descriptive UA identifies the app
+// per Open Library's stated policy while staying clear of that filter.
+const OPEN_LIBRARY_UA = "ShadowVault/2.9 (+https://github.com/tenebrishv/shadowvault-setup)";
+
 module.exports = async function sourceCaptureBook(tp, helpers) {
     const { requiredPrompt, optionalPrompt, datePrompt, yamlField, fetchWithFallback } = helpers;
     const isbn = await optionalPrompt(tp, "ISBN (if you have it)");
@@ -16,6 +23,7 @@ module.exports = async function sourceCaptureBook(tp, helpers) {
             // This endpoint answers 200 and inlines author names.
             const payload = await helpers.httpGetJson(
                 `https://openlibrary.org/api/books?bibkeys=ISBN:${encodeURIComponent(isbn)}&format=json&jscmd=data`,
+                { headers: { "User-Agent": OPEN_LIBRARY_UA } },
             );
             // Keyed by the bibkey echoed back; an unknown ISBN yields {}.
             const info = payload[`ISBN:${isbn}`];

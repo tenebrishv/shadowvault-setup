@@ -42,17 +42,23 @@ async function datePrompt(tp, label) {
 //
 // Falls back to fetch when requestUrl is undefined — that is the unit test
 // environment (plain node), which has no Obsidian API to call.
-async function httpGetJson(url) {
+//
+// `headers` sets request headers. requestUrl's default User-Agent contains the
+// word "obsidian", which Open Library's API blocks outright with a 429 (any UA
+// matching /obsidian/i, regardless of request rate — verified). Callers hitting
+// such an API pass a descriptive non-Obsidian UA to identify the app honestly
+// without tripping the filter.
+async function httpGetJson(url, { headers = {} } = {}) {
     if (typeof requestUrl === "function") {
         // throw: false so a 4xx/5xx returns normally and we raise our own error
         // with the status in it, rather than Obsidian's opaque one.
-        const res = await requestUrl({ url, throw: false });
+        const res = await requestUrl({ url, headers, throw: false });
         if (res.status < 200 || res.status >= 300) {
             throw new Error(`HTTP ${res.status}`);
         }
         return res.json;
     }
-    const res = await fetch(url);
+    const res = await fetch(url, { headers });
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     return await res.json();
 }
