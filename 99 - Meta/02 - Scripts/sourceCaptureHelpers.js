@@ -29,6 +29,34 @@ async function datePrompt(tp, label) {
     return val;
 }
 
+// GETs a URL and returns parsed JSON, throwing on any non-2xx status.
+//
+// Uses Obsidian's requestUrl rather than the browser fetch. Templater user
+// scripts run in the renderer at origin app://obsidian.md, so fetch enforces
+// CORS — and an API that sets Access-Control-Allow-Origin on its success
+// responses may omit it on its *error* pages (Open Library's 429 does). The
+// browser then blocks the response before our code can read the status, so a
+// rate-limit is indistinguishable from being offline and the real cause never
+// reaches the console. requestUrl issues the request from Obsidian's main
+// process, where CORS does not apply, and hands back the status either way.
+//
+// Falls back to fetch when requestUrl is undefined — that is the unit test
+// environment (plain node), which has no Obsidian API to call.
+async function httpGetJson(url) {
+    if (typeof requestUrl === "function") {
+        // throw: false so a 4xx/5xx returns normally and we raise our own error
+        // with the status in it, rather than Obsidian's opaque one.
+        const res = await requestUrl({ url, throw: false });
+        if (res.status < 200 || res.status >= 300) {
+            throw new Error(`HTTP ${res.status}`);
+        }
+        return res.json;
+    }
+    const res = await fetch(url);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    return await res.json();
+}
+
 // The try-fetch -> manual-fallback skeleton shared by every auto-fetching
 // capture module (Book, Article, Paper, YouTube, Tweet), so the Notice wording
 // and timing are defined once and cannot drift apart per type.
@@ -132,6 +160,7 @@ module.exports = {
     requiredPrompt,
     optionalPrompt,
     datePrompt,
+    httpGetJson,
     fetchWithFallback,
     sanitizeTitle,
     yamlQuote,

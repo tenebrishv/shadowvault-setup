@@ -12,6 +12,40 @@ test("yamlField renders an empty key when falsy", () => {
     assert.equal(helpers.yamlField("authors", undefined), "authors:\n");
 });
 
+// Regression: every capture module used the browser `fetch`, which in Obsidian
+// runs from origin app://obsidian.md and is therefore subject to CORS. An API
+// whose *error* pages omit Access-Control-Allow-Origin (Open Library's 429 is
+// one) gets blocked before the response reaches our code, so a rate-limit looks
+// identical to being offline. requestUrl goes through Obsidian's main process
+// and is not subject to CORS.
+test("httpGetJson prefers Obsidian's requestUrl when it is available", async () => {
+    const seen = [];
+    globalThis.requestUrl = async ({ url }) => {
+        seen.push(url);
+        return { status: 200, json: { ok: true } };
+    };
+    globalThis.fetch = async () => { throw new Error("fetch must not be used when requestUrl exists"); };
+
+    const data = await helpers.httpGetJson("https://example.test/thing");
+
+    assert.deepEqual(data, { ok: true });
+    assert.deepEqual(seen, ["https://example.test/thing"]);
+    delete globalThis.requestUrl;
+});
+
+test("httpGetJson throws on a non-2xx status so fetchWithFallback goes manual", async () => {
+    globalThis.requestUrl = async () => ({ status: 429, json: null });
+    await assert.rejects(() => helpers.httpGetJson("https://example.test/rate-limited"), /429/);
+    delete globalThis.requestUrl;
+});
+
+test("httpGetJson falls back to fetch when requestUrl is absent", async () => {
+    delete globalThis.requestUrl;
+    globalThis.fetch = async () => ({ ok: true, status: 200, json: async () => ({ via: "fetch" }) });
+
+    assert.deepEqual(await helpers.httpGetJson("https://example.test/x"), { via: "fetch" });
+});
+
 // Regression: a fetched title carrying a double quote used to be interpolated
 // raw into a double-quoted YAML scalar, producing `- ""SHOUTED" rest"` —
 // invalid YAML, so Obsidian failed to parse the whole frontmatter block.
