@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+## [2.10.0] – 2026-07-20
+
 > A batch of schema-shape cleanups taken while the framework still ships with
 > **no captured notes** — every field rename/removal/addition below is free now
 > and would be a silent-data-loss migration once adopters have real notes. No
@@ -244,7 +246,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ---
 
-[Unreleased]: https://github.com/tenebrishv/shadowvault-setup/compare/v2.9.0...HEAD
+[Unreleased]: https://github.com/tenebrishv/shadowvault-setup/compare/v2.10.0...HEAD
+[2.10.0]: https://github.com/tenebrishv/shadowvault-setup/compare/v2.9.0...v2.10.0
 [2.9.0]: https://github.com/tenebrishv/shadowvault-setup/compare/v2.8.0...v2.9.0
 [2.8.0]: https://github.com/tenebrishv/shadowvault-setup/releases/tag/v2.8.0
 [2.7.0]: https://github.com/tenebrishv/shadowvault-setup/releases/tag/v2.7.0
