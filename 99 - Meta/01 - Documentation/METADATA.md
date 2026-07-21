@@ -79,6 +79,8 @@ Notes on the asymmetries, all of them deliberate as of this writing:
 	- completed: completed
 	- archived: this no longer serves a purpose
 
+These four fields — `growth`, `status`, `type`, and `period` — are the vault's closed vocabularies. Beyond driving the badges and dashboards, they are offered as **validated dropdowns** when you hand-edit frontmatter, via the recommended Metadata Menu plugin (right-click a property → *Update…*; free typing bypasses the list). The dropdown options are held identical to the values above by `99 - Meta/03 - Scripts-tests/metadataMenuEnums.test.js`, which reads them straight from the same `ENUMS` these tables mirror — so a value added here must be added to the plugin config too, or the test reds. See [PLUGINS.md](PLUGINS.md) and [ADR 0007](../../docs/adr/0007-metadata-menu-validated-options.md).
+
 ---
 
 ## Visual Badges
