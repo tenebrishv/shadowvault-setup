@@ -6,6 +6,30 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ## [Unreleased]
 
 ### Added
+- **Per-field emoji icons in the Properties panel, plus a collapse/hide control**
+  (`.obsidian/snippets/frontmatter-display.css`, new, shipped enabled). Each of
+  the 11 core frontmatter fields shows an emoji in its row's icon slot marking
+  *which* field it is (🌱 `growth`, ⚙️ `status`, 📅 `created`, …; full table in
+  `METADATA.md#property-icons`) — a per-field marker, not per-value, since the
+  Properties panel exposes the field key to CSS but not the value. A *Properties
+  panel visibility* control switches the block between Always visible / Collapsed
+  (reveals on hover/focus) / Hidden. The collapse is hover-reveal rather than
+  click-and-stay because pure CSS can't hold a persistent click-toggle on markup
+  it doesn't own — a deliberate ceiling taken to avoid vendoring a collapse
+  plugin. Closes #6.
+- **Style Settings toggles for the internal-link badges** (`growth-badges.css`).
+  The existing type / growth+status / underline-tint badges on `[[links]]` gained
+  hide switches, so they're adjustable from the UI instead of by editing the
+  snippet. growth and status share one `::after` element and so toggle together.
+  Closes #7.
+- **Style Settings** joins the recommended plugin set (vendored like Metadata
+  Menu) as the UI layer for both of the above. Both snippets are written
+  base-visible and only ever *add* a hide/collapse class, so a vault without
+  Style Settings behaves exactly as before — the plugin is pure enhancement.
+- **[ADR 0008](docs/adr/0008-style-settings-frontmatter-display.md)** records the
+  design: Style Settings as the shared toggle layer, the base-visible /
+  additive-hide invariant that prevents a no-plugin regression, and the
+  hover-vs-click collapse ceiling.
 - **Validated dropdowns for the four closed-vocabulary frontmatter fields**
   (`growth`, `status`, `type`, `period`), via the newly recommended **Metadata
   Menu** plugin. Until now nothing constrained a hand-typed value — a mistyped

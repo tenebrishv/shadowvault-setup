@@ -12,6 +12,14 @@
  *
  * Toggle this snippet: Settings → Appearance → CSS snippets → growth-badges
  *
+ * Per-badge switches live in the Style Settings plugin (Settings → Style
+ * Settings → "ShadowVault — Link badges"). They are HIDE toggles, default off,
+ * so with Style Settings absent or at default every badge shows exactly as it
+ * did before — the toggles only add a `sv-hide-*` class to <body> that
+ * overrides the display rules below. growth and status share ONE ::after
+ * pseudo-element (a single `content` string can't be split), so they are one
+ * combined slicer, not two; the growth underline is independent.
+ *
  * --- Why the selectors look like this ---
  * Reading mode and Live Preview render links through different DOM shapes:
  * Reading mode decorates the actual <a class="internal-link"> element, which
@@ -29,6 +37,39 @@
  * type+growth+status all render (clustered before the link text, since the
  * unreliable after-widget position isn't usable).
  */
+
+/* @settings
+
+name: ShadowVault — Link badges
+id: sv-link-badges
+settings:
+    -
+        id: sv-link-badges-heading
+        title: Badges on internal links
+        description: Emoji shown on [[links]], backlinks, and outgoing-link panes, read from the target note's frontmatter.
+        type: heading
+        level: 3
+        collapsed: false
+    -
+        id: sv-hide-link-type
+        title: Hide type badge
+        description: The 💡/📝/📚/… icon before a link, from the note's type.
+        type: class-toggle
+        default: false
+    -
+        id: sv-hide-link-growthstatus
+        title: Hide growth + status badge
+        description: The 🌱🟢 pair after a link. Growth and status share one element, so they toggle together.
+        type: class-toggle
+        default: false
+    -
+        id: sv-hide-link-underline
+        title: Hide growth underline tint
+        description: The coloured underline under an in-text link, keyed to growth stage.
+        type: class-toggle
+        default: false
+
+*/
 
 /* ---------- size & weight: read as a quiet tag, not competing with text ---------- */
 .data-link-icon::before,
@@ -109,3 +150,18 @@
 .data-link-text[data-link-growth="fern"]      { border-bottom: 1px solid #4caf5055; }
 .data-link-text[data-link-growth="incubator"] { border-bottom: 1px solid #ffb30055; }
 .data-link-text[data-link-growth="evergreen"] { border-bottom: 1px solid #2e7d3255; }
+
+/* ---------- Style Settings slicers (additive; default off = everything shows) ----------
+ * Each rule is gated on a body class the Style Settings plugin adds only when
+ * its toggle is on. The `!important` + body-class prefix outranks every display
+ * rule above, so a single suppression here overrides the whole per-value cascade
+ * without editing it. */
+body.sv-hide-link-type .data-link-icon[data-link-type]::before {
+	content: none !important;
+}
+body.sv-hide-link-growthstatus .data-link-icon[data-link-growth]::after {
+	content: none !important;
+}
+body.sv-hide-link-underline .data-link-text[data-link-growth] {
+	border-bottom: none !important;
+}

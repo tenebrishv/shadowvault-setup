@@ -1,6 +1,7 @@
 {
   "cssTheme": "",
   "enabledCssSnippets": [
-    "growth-badges"
+    "growth-badges",
+    "frontmatter-display"
   ]
 }

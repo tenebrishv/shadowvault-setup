@@ -123,6 +123,33 @@ If this mapping changes, update it here first, then propagate to the templates' 
 
 ---
 
+## Property Icons
+
+A different mapping from the value badges above: these are **per-field** icons
+shown in the Properties panel (the in-note YAML editor), marking *which* field a
+row is — a fixed emoji per field, independent of its value. They come from the
+`.obsidian/snippets/frontmatter-display.css` snippet (toggle in Settings → Style
+Settings → "ShadowVault — Frontmatter"), which replaces Obsidian's native icon
+in the row's icon slot. Per-value state is not shown here — that lives in the
+value badges above and the note-body badge line. Icons cover the core schema
+fields only; this is a decorative layer with no test behind it, so keep the
+snippet and this table in sync by hand.
+
+| Field | Icon | Field | Icon |
+|---|---|---|---|
+| `id` | 🆔 | `publish` | 🌐 |
+| `type` | 🧩 | `tags` | 🏷️ |
+| `growth` | 🌱 | `aliases` | 🎭 |
+| `status` | ⚙️ | `cssclasses` | 🎨 |
+| `created` | 📅 | `review` | 🔁 |
+| `modified` | ✏️ | | |
+
+See [ADR 0008](../../docs/adr/0008-style-settings-frontmatter-display.md) for why
+the panel gets per-field (not per-value) icons and why the collapse mode reveals
+on hover rather than click.
+
+---
+
 ## Source‑Specific Fields (added by Source Capture)
 
 ### Book
