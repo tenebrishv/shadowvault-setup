@@ -5,6 +5,35 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+### Added
+- **Validated dropdowns for the four closed-vocabulary frontmatter fields**
+  (`growth`, `status`, `type`, `period`), via the newly recommended **Metadata
+  Menu** plugin. Until now nothing constrained a hand-typed value — a mistyped
+  `growth: seedlings` or a stale `status: reading` doesn't error, it silently
+  drops the note out of every badge render and dashboard query that filters on
+  the canonical value (the same read-side drift `dashboardEnums.test.js` was
+  written for, but on the *human-editing* side the producer tests never covered).
+  The plugin ships preconfigured — `.obsidian/plugins/metadata-menu/data.json`
+  defines the four as **global "Select" preset fields**, so there is no `fileClass`
+  key on any note and the frontmatter schema is untouched. The dropdown is
+  opt-in (right-click a property → *Update…*, or the command palette); the native
+  Properties panel and source-mode YAML always accept free typing, which is the
+  "easy bypass" the request asked for. Metadata Menu is **recommended, not
+  required** — the vault works fully without it, since capture already writes
+  valid values and the conformance tests hold the line regardless.
+- **`metadataMenuEnums.test.js`** — a drift guard that reads the plugin's stored
+  option lists and asserts they equal `_frontmatterSchema.js`'s `ENUMS` for all
+  four fields, in order, in both directions. The option lists are a third
+  transcription of these vocabularies (after the badge view and the dashboards);
+  this test makes them impossible to drift silently, exactly as the badge and
+  dashboard guards do. Changing an enum value now reds this test until
+  `data.json` is reconciled.
+- **[ADR 0007](docs/adr/0007-metadata-menu-validated-options.md)** records the
+  design: global preset fields over fileClasses (to avoid a per-note `fileClass:`
+  key the schema test would reject), opt-in dropdown with free-typing bypass, and
+  test-guarded options. Documented in `METADATA.md` and `PLUGINS.md`; closes
+  issue #5.
+
 ## [2.12.0] – 2026-07-21
 
 ### Changed

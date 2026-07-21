@@ -1,0 +1,88 @@
+{
+  "presetFields": [
+    {
+      "type": "Select",
+      "tagName": "select",
+      "icon": "right-triangle",
+      "tooltip": "Accepts a single value from a list",
+      "colorClass": "select",
+      "options": {
+        "sourceType": "ValuesList",
+        "valuesList": {
+          "1": "seedling",
+          "2": "fern",
+          "3": "incubator",
+          "4": "evergreen"
+        }
+      },
+      "name": "growth",
+      "id": "growth",
+      "path": ""
+    },
+    {
+      "type": "Select",
+      "tagName": "select",
+      "icon": "right-triangle",
+      "tooltip": "Accepts a single value from a list",
+      "colorClass": "select",
+      "options": {
+        "sourceType": "ValuesList",
+        "valuesList": {
+          "1": "inbox",
+          "2": "processing",
+          "3": "active",
+          "4": "completed",
+          "5": "archived"
+        }
+      },
+      "name": "status",
+      "id": "status",
+      "path": ""
+    },
+    {
+      "type": "Select",
+      "tagName": "select",
+      "icon": "right-triangle",
+      "tooltip": "Accepts a single value from a list",
+      "colorClass": "select",
+      "options": {
+        "sourceType": "ValuesList",
+        "valuesList": {
+          "1": "source",
+          "2": "permanent",
+          "3": "literature",
+          "4": "fleeting",
+          "5": "moc",
+          "6": "thought",
+          "7": "entity",
+          "8": "periodic"
+        }
+      },
+      "name": "type",
+      "id": "type",
+      "path": ""
+    },
+    {
+      "type": "Select",
+      "tagName": "select",
+      "icon": "right-triangle",
+      "tooltip": "Accepts a single value from a list",
+      "colorClass": "select",
+      "options": {
+        "sourceType": "ValuesList",
+        "valuesList": {
+          "1": "daily",
+          "2": "weekly",
+          "3": "monthly",
+          "4": "quarterly",
+          "5": "half-yearly",
+          "6": "yearly"
+        }
+      },
+      "name": "period",
+      "id": "period",
+      "path": ""
+    }
+  ],
+  "settingsVersion": "5.0"
+}
