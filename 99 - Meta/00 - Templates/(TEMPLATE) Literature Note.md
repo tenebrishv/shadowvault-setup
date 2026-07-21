@@ -3,10 +3,7 @@ id: <% tp.date.now("YYYYMMDDHHmm") %>
 type: literature
 growth: seedling
 status: active
-source-title:
-source-author:
-source-type: book
-source-url:
+source:             # "[[link to the Source note]]"
 created: <% tp.date.now("YYYY-MM-DD") %>
 modified: <% tp.date.now("YYYY-MM-DD") %>
 tags:
@@ -46,9 +43,9 @@ cssclasses:
 
 ## Source Reference
 
-- **Title:**
-- **Author:**
-- **Location:** (page, timestamp, URL)
+*Title, author, and URL live on the linked `source` note — don't copy them here. Record only what's specific to **this** reading:*
+
+- **Location:** (page, timestamp, or the passage you're responding to)
 
 ---
 *Created: <% tp.date.now("YYYY-MM-DD") %> | Type: literature*

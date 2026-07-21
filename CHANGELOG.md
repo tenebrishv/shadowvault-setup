@@ -33,6 +33,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
   mutation-proven.
 
 ### Changed
+- **Literature Notes now link to their source instead of copying it** (issue #20)
+  — the four hand-typed `source-title` / `source-author` / `source-type` /
+  `source-url` fields (the only hyphenated names in the schema, and a duplicate of
+  the Source Capture vocabulary) collapse to a single `source` wikilink to the
+  captured Source note. Author, URL, and medium are read by Dataview traversal
+  (`source.authors`, `source.url`, `source.file.tags`), so they live in one place
+  and can't drift. The link may dangle — write it before the source note exists
+  and traversal lights up once it does — and medium filtering becomes
+  `WHERE contains(source.file.tags, "source/paper")`. The body `## Source
+  Reference` section keeps only its `Location` anchor; Title/Author are dropped as
+  the same copy one surface down. Rationale and the reference-not-value pattern are
+  recorded in [ADR 0006](docs/adr/0006-literature-notes-link-to-source.md).
 - **Video's `source` frontmatter field is now `platform`** (issue #22) — one word
   meant two unrelated things three lines apart (`type: source` the note-type vs.
   `source: Vimeo` the hosting platform), the same confusion that produced #21. The
