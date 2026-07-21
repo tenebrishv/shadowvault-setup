@@ -105,3 +105,5 @@ If you installed by cloning the repo and are comfortable resolving conflicts you
 ---
 
 *Dev note: releases are cut with `99 - Meta/04 - Tooling/generate-manifest.ps1`, which regenerates `framework-manifest.json` before packaging a zip. End users don't need to run this.*
+
+*Dev note: the updater is implemented twice by hand — `update-vault.ps1` (PowerShell) and `update-vault.sh` (bash) — and the two must stay behaviorally identical. [ADR 0002](../../docs/adr/0002-two-updater-implementations.md) records why both exist (a distributed framework can't assume pwsh on adopters' macOS/Linux machines); read it before proposing to collapse them. The parity harness (`updaterParity.test.mjs`, run via the `updater-test` skill) proves they agree across the full scenario matrix, so any behavioral drift between the two fails a test rather than shipping silently.*

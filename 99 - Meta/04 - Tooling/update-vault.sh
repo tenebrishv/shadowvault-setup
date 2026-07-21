@@ -436,4 +436,10 @@ main() {
   fi
 }
 
-main "$@"
+# Run only when executed directly. When sourced (the parity harness's
+# manifest-format contract test sources this file to exercise the REAL
+# manifest_lines parser instead of a copy), just define the functions and
+# return. BASH_SOURCE exists in bash 3.2, so this stays macOS-default safe.
+if [ "${BASH_SOURCE[0]}" = "${0}" ]; then
+  main "$@"
+fi

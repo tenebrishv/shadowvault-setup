@@ -1,0 +1,12 @@
+# Shell scripts must stay LF on every platform. The bash updater
+# (99 - Meta/04 - Tooling/update-vault.sh) ships to macOS/Linux adopters, where a
+# CRLF checkout turns its shebang into "#!/usr/bin/env bash\r" -> "bad
+# interpreter". Without this pin a Windows contributor with core.autocrlf=true
+# could commit CRLF and silently break the bash updater on exactly the platforms
+# it exists for. ADR 0002 keeps that bash updater a first-class implementation,
+# so its line endings are a correctness contract, not a preference.
+*.sh text eol=lf
+
+# The manifest is generated LF by generate-manifest.ps1 and parsed line-by-line
+# by the bash updater's sed; keep it LF for the same reason.
+framework-manifest.json text eol=lf

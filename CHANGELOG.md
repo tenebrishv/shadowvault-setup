@@ -5,6 +5,32 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+### Added
+- **Updater parity harness** (issue #14, [ADR 0002](docs/adr/0002-two-updater-implementations.md))
+  — the PowerShell and bash updaters are maintained by hand as two copies that
+  must stay behaviorally identical, and nothing enforced that: every behavior
+  change was a two-file edit where a missed second edit shipped silently.
+  `99 - Meta/04 - Tooling/updaterParity.test.mjs` (+ `updaterParityHarness.mjs`)
+  now drives BOTH updaters against identical local zip fixtures and asserts they
+  produce the same outcome — vault tree, backups, `_new-config` stash, normalized
+  update report, and written manifest — across the full scenario matrix
+  (bootstrap, clean update, user-modified core, user-modified config,
+  older-version skip, forced downgrade, dry run, idempotent re-run, plus a literal
+  `diff -r` of the two bootstrap trees). On Windows every scenario additionally
+  runs under Windows PowerShell 5.1, proving the `.ps1`'s 5.1 compatibility.
+  Offline and Obsidian-free; run it with
+  `node --test "99 - Meta/04 - Tooling/updaterParity.test.mjs"`.
+- **Manifest-format contract test** — the real `generate-manifest.ps1` output is
+  fed to the real `update-vault.sh` manifest parser (`manifest_lines`) and every
+  entry must round-trip (path, sha256, class), so a reformat of the generator can
+  no longer silently break bash-side parsing. To exercise the real parser rather
+  than a copy, `update-vault.sh`'s `main` call is now guarded by a
+  sourced-vs-executed check (bash 3.2-safe; no behavior change).
+- **`.gitattributes` pinning `*.sh` and `framework-manifest.json` to LF** — a CRLF
+  checkout of `update-vault.sh` breaks its shebang on macOS/Linux (the platforms
+  the bash updater exists for); the pin stops a Windows contributor's
+  `core.autocrlf` from silently committing CRLF.
+
 ## [2.10.0] – 2026-07-20
 
 > A batch of schema-shape cleanups taken while the framework still ships with
@@ -75,7 +101,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [2.9.0] – 2026-07-20
 
-> [!warning] Upgrade note — run **Templater: Reload templates**
+> [!warning] 
+> Upgrade note — run **Templater: Reload templates**
 > This moves the Source Capture orchestrator into a new user script. Templater caches loaded user scripts, so after pulling, run the **Templater: Reload templates** command (or restart Obsidian) before the next capture — otherwise `tp.user.sourceCaptureOrchestrator` won't resolve and the template will fail.
 
 ### Changed
