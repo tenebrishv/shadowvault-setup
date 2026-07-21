@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+## [2.13.0] – 2026-07-21
+
 ### Added
 - **Per-value emoji in the Properties panel** for `growth`, `status`, and `type`
   — the row now shows 🌱 seedling vs 🌲 evergreen (etc.) on its value side, not
@@ -390,7 +392,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ---
 
-[Unreleased]: https://github.com/tenebrishv/shadowvault-setup/compare/v2.11.1...HEAD
+[Unreleased]: https://github.com/tenebrishv/shadowvault-setup/compare/v2.13.0...HEAD
+[2.13.0]: https://github.com/tenebrishv/shadowvault-setup/compare/v2.12.0...v2.13.0
+[2.12.0]: https://github.com/tenebrishv/shadowvault-setup/compare/v2.11.1...v2.12.0
 [2.11.1]: https://github.com/tenebrishv/shadowvault-setup/compare/v2.11.0...v2.11.1
 [2.11.0]: https://github.com/tenebrishv/shadowvault-setup/compare/v2.10.0...v2.11.0
 [2.10.0]: https://github.com/tenebrishv/shadowvault-setup/compare/v2.9.0...v2.10.0

@@ -1,8 +1,8 @@
 {
   "name": "shadowvault",
   "repo": "tenebrishv/shadowvault-setup",
-  "version": "2.12.0",
-  "generated": "2026-07-21T23:07:34Z",
+  "version": "2.13.0",
+  "generated": "2026-07-21T23:20:35Z",
   "files": [
     { "path": ".obsidian/app.json", "sha256": "baac3c47062134887a96386e38df528eaf3e7a2a11b17c7525bfa1fe902a6e67", "class": "config" },
     { "path": ".obsidian/appearance.json", "sha256": "3fe51fa1780761a78d86836c6947d7723bb3cb694720e2c3bc8ea78ed8ceb9a6", "class": "config" },
@@ -114,8 +114,8 @@
     { "path": "99 - Meta/01 - Documentation/DESIGN-PHILOSOPHY.md", "sha256": "c6180accfe6e7d7d1773e15c30888e7bc1645cf66790de8d7db4a007f4ebab39", "class": "core" },
     { "path": "99 - Meta/01 - Documentation/EXTERNAL-INTEGRATIONS.md", "sha256": "953dce17581814a8b16ef3ff2e70e8d94d272033f521747dacf4ad74f45f4aa4", "class": "core" },
     { "path": "99 - Meta/01 - Documentation/INSPIRATION.md", "sha256": "e135970cf0afc583e8c29242a2e0f08b068df6a08d5232f1c8dbb5e3dd2ba7a9", "class": "core" },
-    { "path": "99 - Meta/01 - Documentation/METADATA.md", "sha256": "18135b0ce890f4478baf0ffc4308156f27f320e720c3ad39bacabd7e0e1c9d0c", "class": "core" },
-    { "path": "99 - Meta/01 - Documentation/PLUGINS.md", "sha256": "a40126f816c14f154b0dc591720e41daba9c66ae58ff18f5abaec55e5ec62d4f", "class": "core" },
+    { "path": "99 - Meta/01 - Documentation/METADATA.md", "sha256": "3c18059c777815ded2b28fc1a2656ac881ce6534e608a35a7c2885e06ceb1efc", "class": "core" },
+    { "path": "99 - Meta/01 - Documentation/PLUGINS.md", "sha256": "c3c0c1d7331d9a8df351e2621c107fd4af2166bfaaffa9314fd70479b78a9236", "class": "core" },
     { "path": "99 - Meta/01 - Documentation/REVIEW-SYSTEM.md", "sha256": "83cc4b558f9b5356dc6d400774a4eca76533fe4a3018c597986321977a9a7d25", "class": "core" },
     { "path": "99 - Meta/01 - Documentation/ROADMAP.md", "sha256": "6fd6d0fc5688b36e07bb52d9826b955bc24eb7dd849955b38ee1b19829daa828", "class": "core" },
     { "path": "99 - Meta/01 - Documentation/SETUP.md", "sha256": "02491b2814e247eb59ed9cbf6b95f5378fd83889b5c590b46fcecf23b5f921d4", "class": "core" },
@@ -161,8 +161,8 @@
     { "path": "99 - Meta/04 - Tooling/updaterParity.test.mjs", "sha256": "f23cae2ce5b329f664df18a9341ee97d63d2c69a8c512146774329a253f899ac", "class": "core" },
     { "path": "99 - Meta/04 - Tooling/updaterParityHarness.mjs", "sha256": "de499d63c40e54dcd2569d7912ec7834eafe4c86322da679ff0d762e71707cd4", "class": "core" },
     { "path": "99 - Meta/05 - Views/badge-table/view.js", "sha256": "62ca8c412ceddbf083bb28f7e90161699bacbc033cf4a52bfb71f25ff27fe208", "class": "core" },
-    { "path": "CHANGELOG.md", "sha256": "e4fe2ba21ca0fbe505a64086a61e63071f3f661119a618cdc206a98f0e34b1fd", "class": "core" },
+    { "path": "CHANGELOG.md", "sha256": "f45e5f7f94cbb228ae5b8a9cedf943eebb7364f72541067409d148cda119032b", "class": "core" },
     { "path": "LICENSE", "sha256": "047d2259741a3ebb30d8c8a43d4ba79b5b229a069acd1d2bea49f22b297d8e98", "class": "core" },
-    { "path": "README.md", "sha256": "ede97c07714abb8faf65ae1c0dfe931901c136fbd5aeab69342948b5f7eb8d29", "class": "core" }
+    { "path": "README.md", "sha256": "fe4b475b9c83c4a0e75923a09533b22c61f913193cf64bdb5bf6f0ce3d6c6376", "class": "core" }
   ]
 }
