@@ -1,8 +1,8 @@
 {
   "name": "shadowvault",
   "repo": "tenebrishv/shadowvault-setup",
-  "version": "2.11.0",
-  "generated": "2026-07-21T02:37:02Z",
+  "version": "2.11.1",
+  "generated": "2026-07-21T19:10:31Z",
   "files": [
     { "path": ".obsidian/app.json", "sha256": "baac3c47062134887a96386e38df528eaf3e7a2a11b17c7525bfa1fe902a6e67", "class": "config" },
     { "path": ".obsidian/appearance.json", "sha256": "5049650c43322e897ae482156afa3bd5cdb43d959db902d3bbcc356dad2da6dd", "class": "config" },
@@ -117,7 +117,7 @@
     { "path": "99 - Meta/02 - Scripts/sourceCaptureArticle.js", "sha256": "3b17a7dc44fb217533f35bb430002b092a359f18e8b746582cf7485cadbdcf11", "class": "core" },
     { "path": "99 - Meta/02 - Scripts/sourceCaptureBook.js", "sha256": "c814af6780cbbc1d21b36eaaae974d5ac02e44a5b1301880dc69f05df848636e", "class": "core" },
     { "path": "99 - Meta/02 - Scripts/sourceCaptureHelpers.js", "sha256": "c0ecb113e98bc3d9c17a3f0724e0d44721d7ac78a152d951d878cfe062ea7d7e", "class": "core" },
-    { "path": "99 - Meta/02 - Scripts/sourceCaptureLecture.js", "sha256": "3a20f07191f8a16e708905326ad5bafca4699584c3aec44e3b9d7831fd1797d6", "class": "core" },
+    { "path": "99 - Meta/02 - Scripts/sourceCaptureLecture.js", "sha256": "8598a32946230daa52f9ee972f75dc55f6b009bbb29f0b5136e150a0ca9d01f0", "class": "core" },
     { "path": "99 - Meta/02 - Scripts/sourceCaptureOrchestrator.js", "sha256": "6827526f6e1bc1d62bf5df7adeeff5ac3da574bb2b2fa7ffe13a5d826fd0f205", "class": "core" },
     { "path": "99 - Meta/02 - Scripts/sourceCapturePaper.js", "sha256": "ad4d08448226e40f26709df3aec6ed1efadb2174b89f42fb380ae74b4bc999fc", "class": "core" },
     { "path": "99 - Meta/02 - Scripts/sourceCapturePodcast.js", "sha256": "244e92a66119d3583b4a1e00b9908eb0fa338b7e3c07b8780d8ada01fd76b7a8", "class": "core" },
@@ -142,13 +142,13 @@
     { "path": "99 - Meta/03 - Scripts-tests/sourceCaptureTweet.test.js", "sha256": "077a59c88749afcf798783a7230f2f408c132af3a4f68e312b6e3a45fd01e671", "class": "core" },
     { "path": "99 - Meta/03 - Scripts-tests/sourceCaptureVideo.test.js", "sha256": "0793b4c96ddddf1e5167218425fec0e1bc583196c8d71262284da8d143bdf2b5", "class": "core" },
     { "path": "99 - Meta/03 - Scripts-tests/sourceCaptureYoutube.test.js", "sha256": "b245346520edb36565ac6d94682d81680bba89f856e426a8753bfdfcd85a86e7", "class": "core" },
-    { "path": "99 - Meta/04 - Tooling/generate-manifest.ps1", "sha256": "e1d334c6f301ac6884c3bc37e84ba65a9d14429cf2d8f2e7f32a55099e37385d", "class": "core" },
+    { "path": "99 - Meta/04 - Tooling/generate-manifest.ps1", "sha256": "7c8e7f8eb22169cf75ba1d7dd35fbec94ed7f15ee16be384c2c87adf7fd4c1cb", "class": "core" },
     { "path": "99 - Meta/04 - Tooling/update-vault.ps1", "sha256": "83fe2e1cb6553260d1f5b0605249fd6a28121888e5776fc2d158c2b51b5e9bb2", "class": "core" },
     { "path": "99 - Meta/04 - Tooling/update-vault.sh", "sha256": "d282180353d409b6e7f800feea4fae895fc7d26ccbcdf7bfe74717e107819202", "class": "core" },
     { "path": "99 - Meta/04 - Tooling/updaterParity.test.mjs", "sha256": "f23cae2ce5b329f664df18a9341ee97d63d2c69a8c512146774329a253f899ac", "class": "core" },
     { "path": "99 - Meta/04 - Tooling/updaterParityHarness.mjs", "sha256": "de499d63c40e54dcd2569d7912ec7834eafe4c86322da679ff0d762e71707cd4", "class": "core" },
     { "path": "99 - Meta/05 - Views/badge-table/view.js", "sha256": "62ca8c412ceddbf083bb28f7e90161699bacbc033cf4a52bfb71f25ff27fe208", "class": "core" },
-    { "path": "CHANGELOG.md", "sha256": "234b9c9c59ee94648fcadb37fffd44885d107728ac9b9a275d64a91d18ee2ff7", "class": "core" },
+    { "path": "CHANGELOG.md", "sha256": "398cc8e429c0ef970c320c5c6e5f0ca241e86dc83b022d094fb2be628e6f2d6f", "class": "core" },
     { "path": "LICENSE", "sha256": "047d2259741a3ebb30d8c8a43d4ba79b5b229a069acd1d2bea49f22b297d8e98", "class": "core" },
     { "path": "README.md", "sha256": "ede97c07714abb8faf65ae1c0dfe931901c136fbd5aeab69342948b5f7eb8d29", "class": "core" }
   ]

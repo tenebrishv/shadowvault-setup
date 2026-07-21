@@ -189,24 +189,24 @@ module.exports = async function sourceCaptureLecture(tp, helpers) {
     if (data.url) body += `> **Recording:** ${data.url}\n`;
     body += `\n---\n\n`;
 
-    body += `# Learning Objectives\n\n- \n\n`;
-    body += `# Pre-Lecture Notes\n\n- \n\n`;
-    body += `# In-Lecture Notes\n\n- \n\n`;
+    body += `## Learning Objectives\n\n- \n\n`;
+    body += `## Pre-Lecture Notes\n\n- \n\n`;
+    body += `## In-Lecture Notes\n\n- \n\n`;
 
-    body += `# Key Concepts\n\n`;
+    body += `## Key Concepts\n\n`;
     body += `| Concept | Explanation |\n`;
     body += `|----------|-------------|\n`;
     body += `| | |\n\n`;
 
-    body += `# Questions Raised\n\n- \n\n`;
+    body += `## Questions Raised\n\n- \n\n`;
 
-    body += `# Follow-Up Tasks\n\n`;
+    body += `## Follow-Up Tasks\n\n`;
     body += `- [ ] Review lecture\n`;
     body += `- [ ] Extract permanent notes\n`;
     body += `- [ ] Update MOCs\n\n`;
 
     body += `---\n\n`;
-    body += `# Extracted Permanent Notes\n\n`;
+    body += `## Extracted Permanent Notes\n\n`;
     body += "```dataview\n";
     body += "LIST\n";
     body += "FROM [[]] AND !#source\n";
@@ -214,7 +214,7 @@ module.exports = async function sourceCaptureLecture(tp, helpers) {
     body += "```\n\n";
 
     body += `---\n\n`;
-    body += `# Related Lectures\n\n`;
+    body += `## Related Lectures\n\n`;
     body += "```dataview\n";
     body += "LIST\n";
     body += `FROM #source/lecture\n`;

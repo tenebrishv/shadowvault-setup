@@ -94,9 +94,11 @@ Add-Entry 'README.md' 'core'
 Add-Entry 'CHANGELOG.md' 'core'
 Add-Entry 'LICENSE' 'core'
 
-# Folder scaffolding: every .gitkeep in the vault (content folders ship empty)
+# Folder scaffolding: every .gitkeep in the vault (content folders ship empty).
+# Skip .git (repo internals) and .claude (gitignored agent tooling, whose
+# worktrees hold full vault copies that would double every .gitkeep otherwise).
 Get-ChildItem -LiteralPath $VaultPath -Recurse -File -Force -Filter '.gitkeep' |
-    Where-Object { $_.FullName -notmatch '\\\.git\\' } |
+    Where-Object { $_.FullName -notmatch '\\\.(git|claude)\\' } |
     ForEach-Object { $entries[(Get-RelPath $_.FullName)] = 'core' }
 
 # .obsidian: explicit whitelist. Plugin code is core; settings are config.

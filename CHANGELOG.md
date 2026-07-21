@@ -5,6 +5,26 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+## [2.11.1] – 2026-07-21
+
+### Fixed
+- **Lecture capture now uses `##` for its section headings** — the generated
+  lecture body (`99 - Meta/02 - Scripts/sourceCaptureLecture.js`) flattened every
+  section (Learning Objectives, Pre-Lecture Notes, Key Concepts, …) to `#`, so the
+  note title and all eight sections sat at the same heading level and nothing
+  nested in Obsidian's outline pane. Only the note title stays `#`; the sections
+  drop to `##`, matching the one-H1-title / H2-sections convention every other
+  template already follows. New captures only — existing lecture notes are
+  untouched.
+- **`generate-manifest.ps1` no longer sweeps `.claude/` into the manifest** — the
+  `.gitkeep` scaffolding scan excluded only the `.git` directory, so once a git
+  worktree existed under the gitignored `.claude/worktrees/` (each a full vault
+  copy), every one of its `.gitkeep` files was double-counted as framework content
+  — 28 spurious entries in a freshly generated manifest. The scan now skips
+  `.claude` alongside `.git`. No downstream vault ever received these (the bug only
+  affected manifests generated in a dev repo with live agent worktrees), and the
+  updater parity harness confirms the format and behavior are unchanged.
+
 ## [2.11.0] – 2026-07-20
 
 ### Added
@@ -275,7 +295,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ---
 
-[Unreleased]: https://github.com/tenebrishv/shadowvault-setup/compare/v2.11.0...HEAD
+[Unreleased]: https://github.com/tenebrishv/shadowvault-setup/compare/v2.11.1...HEAD
+[2.11.1]: https://github.com/tenebrishv/shadowvault-setup/compare/v2.11.0...v2.11.1
 [2.11.0]: https://github.com/tenebrishv/shadowvault-setup/compare/v2.10.0...v2.11.0
 [2.10.0]: https://github.com/tenebrishv/shadowvault-setup/compare/v2.9.0...v2.10.0
 [2.9.0]: https://github.com/tenebrishv/shadowvault-setup/compare/v2.8.0...v2.9.0
