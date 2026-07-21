@@ -1,0 +1,141 @@
+/*
+ * Frontmatter (Properties panel) display: per-field emoji icons and a
+ * collapse/hide mode for the in-note Properties block.
+ *
+ * Two independent features, both switchable in the UI via the Style Settings
+ * plugin (Settings → Style Settings → "ShadowVault — Frontmatter"). The CSS is
+ * written base-visible: with Style Settings absent or every toggle at default,
+ * the vault behaves exactly as it did before this snippet — icons show, the
+ * panel is fully visible. The toggles only ever ADD a hide/collapse class to
+ * <body>, so nothing here regresses a vault that doesn't run Style Settings.
+ *
+ * FIELD ICONS
+ * Each core frontmatter field gets an emoji in its icon slot, marking WHICH
+ * field the row is (a fixed icon per field, not per value — the Properties
+ * panel exposes data-property-key to CSS but not the value). Per-VALUE state
+ * (seedling vs evergreen) still lives in the note-body badge line the
+ * Permanent/Literature/Fleeting/MOC templates render. The key→emoji mapping is
+ * documented in 99 - Meta/01 - Documentation/METADATA.md#property-icons; keep
+ * the two in sync by hand (there is no test for this decorative layer).
+ *
+ * COLLAPSE
+ * Pure CSS cannot hold a persistent click-toggle on a DOM element it doesn't
+ * own, so the "collapsed" mode reveals on HOVER (and focus-within, so a
+ * revealed field stays open while you edit it), not click-and-stay. That
+ * ceiling is deliberate — see docs/adr/0008. Obsidian's own per-note click-fold
+ * still works in the default "Always visible" mode.
+ *
+ * Toggle this snippet: Settings → Appearance → CSS snippets → frontmatter-display
+ *
+ * DOM assumption (verify in Obsidian after edits — the panel's markup can shift
+ * between Obsidian versions, same caveat growth-badges.css lives with):
+ *   .metadata-container
+ *     .metadata-properties-heading      (the "Properties" label — hover target)
+ *     .metadata-properties              (the rows)
+ *       .metadata-property[data-property-key="<field>"]
+ *         .metadata-property-key .metadata-property-icon > svg   (native icon)
+ *     .metadata-add-button
+ */
+
+/* @settings
+
+name: ShadowVault — Frontmatter
+id: sv-frontmatter
+settings:
+    -
+        id: sv-frontmatter-icons-heading
+        title: Field emoji icons
+        type: heading
+        level: 3
+        collapsed: false
+    -
+        id: sv-hide-field-icons
+        title: Hide field emoji icons
+        description: Turn on to drop the per-field emoji and restore Obsidian's native property icons.
+        type: class-toggle
+        default: false
+    -
+        id: sv-frontmatter-panel-heading
+        title: Properties panel
+        type: heading
+        level: 3
+        collapsed: false
+    -
+        id: sv-props-mode
+        title: Properties panel visibility
+        description: "Collapsed reveals the rows on hover/focus (not click — a CSS limit); Hidden removes the block entirely (properties still live in the right sidebar)."
+        type: class-select
+        allowEmpty: false
+        default: sv-props-visible
+        options:
+            -
+                label: Always visible
+                value: sv-props-visible
+            -
+                label: Collapsed (hover to reveal)
+                value: sv-props-collapsed
+            -
+                label: Hidden
+                value: sv-props-hidden
+
+*/
+
+/* ---------- field emoji icons ----------
+ * Shown unless body.sv-hide-field-icons is present. For each core field we hide
+ * the native SVG icon and drop an emoji into the same slot, so there is no
+ * layout shift and no double icon. */
+
+body:not(.sv-hide-field-icons) .metadata-property[data-property-key="id"]         .metadata-property-icon > svg,
+body:not(.sv-hide-field-icons) .metadata-property[data-property-key="type"]       .metadata-property-icon > svg,
+body:not(.sv-hide-field-icons) .metadata-property[data-property-key="growth"]     .metadata-property-icon > svg,
+body:not(.sv-hide-field-icons) .metadata-property[data-property-key="status"]     .metadata-property-icon > svg,
+body:not(.sv-hide-field-icons) .metadata-property[data-property-key="created"]    .metadata-property-icon > svg,
+body:not(.sv-hide-field-icons) .metadata-property[data-property-key="modified"]   .metadata-property-icon > svg,
+body:not(.sv-hide-field-icons) .metadata-property[data-property-key="review"]     .metadata-property-icon > svg,
+body:not(.sv-hide-field-icons) .metadata-property[data-property-key="publish"]    .metadata-property-icon > svg,
+body:not(.sv-hide-field-icons) .metadata-property[data-property-key="tags"]       .metadata-property-icon > svg,
+body:not(.sv-hide-field-icons) .metadata-property[data-property-key="aliases"]    .metadata-property-icon > svg,
+body:not(.sv-hide-field-icons) .metadata-property[data-property-key="cssclasses"] .metadata-property-icon > svg {
+	display: none;
+}
+
+body:not(.sv-hide-field-icons) .metadata-property[data-property-key="id"]         .metadata-property-icon::after { content: "🆔"; }
+body:not(.sv-hide-field-icons) .metadata-property[data-property-key="type"]       .metadata-property-icon::after { content: "🧩"; }
+body:not(.sv-hide-field-icons) .metadata-property[data-property-key="growth"]     .metadata-property-icon::after { content: "🌱"; }
+body:not(.sv-hide-field-icons) .metadata-property[data-property-key="status"]     .metadata-property-icon::after { content: "⚙️"; }
+body:not(.sv-hide-field-icons) .metadata-property[data-property-key="created"]    .metadata-property-icon::after { content: "📅"; }
+body:not(.sv-hide-field-icons) .metadata-property[data-property-key="modified"]   .metadata-property-icon::after { content: "✏️"; }
+body:not(.sv-hide-field-icons) .metadata-property[data-property-key="review"]     .metadata-property-icon::after { content: "🔁"; }
+body:not(.sv-hide-field-icons) .metadata-property[data-property-key="publish"]    .metadata-property-icon::after { content: "🌐"; }
+body:not(.sv-hide-field-icons) .metadata-property[data-property-key="tags"]       .metadata-property-icon::after { content: "🏷️"; }
+body:not(.sv-hide-field-icons) .metadata-property[data-property-key="aliases"]    .metadata-property-icon::after { content: "🎭"; }
+body:not(.sv-hide-field-icons) .metadata-property[data-property-key="cssclasses"] .metadata-property-icon::after { content: "🎨"; }
+
+/* Size the injected emoji to sit like the icon it replaces. */
+body:not(.sv-hide-field-icons) .metadata-property .metadata-property-icon::after {
+	font-size: 0.9em;
+	line-height: 1;
+}
+
+/* ---------- collapsed (hover to reveal) ---------- */
+body.sv-props-collapsed .metadata-properties,
+body.sv-props-collapsed .metadata-add-button {
+	display: none;
+}
+body.sv-props-collapsed .metadata-container:hover .metadata-properties,
+body.sv-props-collapsed .metadata-container:focus-within .metadata-properties {
+	display: block;
+}
+/* Keep the "Properties" heading as the always-there hover target, and hint it. */
+body.sv-props-collapsed .metadata-properties-heading {
+	cursor: pointer;
+	opacity: 0.6;
+}
+body.sv-props-collapsed .metadata-container:hover .metadata-properties-heading {
+	opacity: 1;
+}
+
+/* ---------- hidden ---------- */
+body.sv-props-hidden .metadata-container {
+	display: none;
+}
