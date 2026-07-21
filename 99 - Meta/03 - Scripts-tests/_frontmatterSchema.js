@@ -53,7 +53,7 @@ const VOCABULARY = {
            "tags", "aliases", "cssclasses", "publish"],
     periodic: ["date", "period", "week", "month", "year"],
     curriculum: ["institution", "default_lecturer", "course", "semester"],
-    literature: ["source-title", "source-author", "source-type", "source-url"],
+    literature: ["source"],
     source: ["authors", "publish_date", "publisher", "isbn", "general_subject", "specific_subject",
              "url", "publication", "doi", "citekey", "keywords", "channel", "channel_url",
              "thumbnail", "watched", "released",
@@ -85,8 +85,8 @@ const TEMPLATES = {
     },
     "(TEMPLATE) Literature Note": {
         typeValue: "literature",
-        required: ["id", "type", "growth", "status", "source-title", "source-author",
-                   "source-type", "source-url", "created", "modified", "tags", "aliases", "cssclasses"],
+        required: ["id", "type", "growth", "status", "source",
+                   "created", "modified", "tags", "aliases", "cssclasses"],
     },
     "(TEMPLATE) MOC": {
         typeValue: "moc",

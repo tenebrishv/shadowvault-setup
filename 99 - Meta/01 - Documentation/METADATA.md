@@ -259,17 +259,21 @@ See `docs/adr/0005-inline-field-contract.md`.
 
 ## Literature Note Fields (`02 - Literature Notes/`)
 
-A Literature Note records **your** reading of a source, so it carries a pointer
-back to that source alongside the core fields. These are distinct from the
-Source Capture fields above: those describe the source note itself, these
-describe the link from your summary to it.
+A Literature Note records **your** reading of a source, so it carries a single
+pointer back to that source: a `source` wikilink to the captured Source note.
+Everything else about the source — author, URL, medium — is read by Dataview
+traversal (`source.authors`, `source.url`, `source.file.tags`), never copied
+onto the literature note, so it can never drift from the source note it links.
+See [ADR 0006](../../docs/adr/0006-literature-notes-link-to-source.md).
 
 ```yaml
-source-title:
-source-author:
-source-type:     # book | article | paper | video | podcast | lecture …
-source-url:
+source:          # "[[link to the Source note]]"
 ```
+
+The link may dangle: write `source: "[[{ Some Book]]"` before you've captured
+that book as a Source note, and the traversal fields light up automatically once
+the note exists. To filter literature notes by medium, traverse the source's own
+tag, e.g. `WHERE contains(source.file.tags, "source/paper")`.
 
 ---
 
