@@ -138,7 +138,7 @@ $gitDir = Join-Path $VaultPath '.git'
 if ((Test-Path -LiteralPath $gitDir) -and (Get-Command git -ErrorAction SilentlyContinue)) {
     $tracked = @(git -C $VaultPath ls-files)
     # Tracked files intentionally not distributed to vaults:
-    $repoOnly = @('.gitignore', '.github/')
+    $repoOnly = @('.gitignore', '.gitattributes', '.github/')
     foreach ($t in $tracked) {
         if ($entries.ContainsKey($t)) { continue }
         $isRepoOnly = $false

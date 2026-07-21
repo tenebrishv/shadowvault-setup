@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+## [2.11.0] – 2026-07-20
+
 ### Added
 - **Updater parity harness** (issue #14, [ADR 0002](docs/adr/0002-two-updater-implementations.md))
   — the PowerShell and bash updaters are maintained by hand as two copies that
@@ -273,7 +275,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ---
 
-[Unreleased]: https://github.com/tenebrishv/shadowvault-setup/compare/v2.10.0...HEAD
+[Unreleased]: https://github.com/tenebrishv/shadowvault-setup/compare/v2.11.0...HEAD
+[2.11.0]: https://github.com/tenebrishv/shadowvault-setup/compare/v2.10.0...v2.11.0
 [2.10.0]: https://github.com/tenebrishv/shadowvault-setup/compare/v2.9.0...v2.10.0
 [2.9.0]: https://github.com/tenebrishv/shadowvault-setup/compare/v2.8.0...v2.9.0
 [2.8.0]: https://github.com/tenebrishv/shadowvault-setup/releases/tag/v2.8.0
