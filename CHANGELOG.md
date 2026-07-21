@@ -267,11 +267,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 **Breaking:** any existing vault content in `09 - Agents/People/` tagged `#person` must be moved to `09 - Entities/Agents/` and retagged `agent/person` to keep working with the Lecture picker and Entities MOC — hence the major version bump.
 
-### [1.0.1] – 2026-06-02
-
-### Fixed
-- Clarified CSS snippets: Not yet implemented but planned in short term.
-
 ## [1.0.0] – 2026-06-02
 
 ### Added
@@ -289,6 +284,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ### Fixed
 - Preserved folder structure with `.gitkeep` files.
 - Merged and cleaned up repository history.
+- Clarified CSS snippets: Not yet implemented but planned in short term.
 
 ### Removed
 - None.
