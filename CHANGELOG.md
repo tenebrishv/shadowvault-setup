@@ -5,6 +5,22 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+## [2.12.0] – 2026-07-21
+
+### Changed
+- **Permanent Note template — the One-liner, Core Idea, and Why It Matters
+  sections no longer collect duplicate content** (`99 - Meta/00 - Templates/(TEMPLATE) Permanent Note.md`).
+  The three prompts overlapped by construction: the One-liner and the opening of
+  Core Idea both asked for "the core claim," and Why It Matters asked "what does
+  it connect to?" — the job of the Related Notes section below it. The sections
+  are now cut along distinct axes: the **One-liner** is the compressed *claim*
+  (written last, doubling as the atomicity test — if you can't state it in one
+  sentence, split the note); **Core Idea** is the *argument* that justifies the
+  claim, explicitly not a restatement; and **Why It Matters** is the *stakes*
+  alone, demoted to an optional collapsible `> [!note]-` callout with permission
+  to delete it when the significance is self-evident. Template copy only — no
+  frontmatter or schema change, and existing notes are untouched.
+
 ## [2.11.1] – 2026-07-21
 
 ### Fixed
