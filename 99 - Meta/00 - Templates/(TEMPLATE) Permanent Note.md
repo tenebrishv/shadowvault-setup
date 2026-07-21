@@ -13,9 +13,6 @@ cssclasses:
 
 # <% tp.file.title %>
 
-> [!abstract]- Badges
-> `= choice(this.growth="seedling","🌱 Seedling", choice(this.growth="fern","🌿 Fern", choice(this.growth="incubator","🔆 Incubator", choice(this.growth="evergreen","🌲 Evergreen", this.growth))))` · `= choice(this.status="inbox","📥 Inbox", choice(this.status="processing","⚙️ Processing", choice(this.status="active","🟢 Active", choice(this.status="completed","✅ Completed", choice(this.status="archived","🗄️ Archived", this.status)))))`
-
 > [!tip] One-liner
 > *In one sentence, the claim this note reduces to. Write this last — if you can't state it in a sentence, the note isn't atomic yet: split it.*
 

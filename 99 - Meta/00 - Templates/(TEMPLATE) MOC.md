@@ -12,10 +12,6 @@ cssclasses:
 
 # <% tp.file.title %>
 
-> [!abstract]- Badges
-> `= choice(this.status="inbox","📥 Inbox", choice(this.status="processing","⚙️ Processing", choice(this.status="active","🟢 Active", choice(this.status="completed","✅ Completed", choice(this.status="archived","🗄️ Archived", this.status)))))`
-> (MOCs don't use `growth`, since they're curated navigation rather than an idea maturing toward evergreen.)
-
 > *What is this MOC about? One sentence orientation.*
 
 ---

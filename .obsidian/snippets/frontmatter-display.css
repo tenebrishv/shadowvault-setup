@@ -9,14 +9,23 @@
  * panel is fully visible. The toggles only ever ADD a hide/collapse class to
  * <body>, so nothing here regresses a vault that doesn't run Style Settings.
  *
- * FIELD ICONS
+ * FIELD ICONS (left slot, per-FIELD)
  * Each core frontmatter field gets an emoji in its icon slot, marking WHICH
- * field the row is (a fixed icon per field, not per value — the Properties
- * panel exposes data-property-key to CSS but not the value). Per-VALUE state
- * (seedling vs evergreen) still lives in the note-body badge line the
- * Permanent/Literature/Fleeting/MOC templates render. The key→emoji mapping is
- * documented in 99 - Meta/01 - Documentation/METADATA.md#property-icons; keep
- * the two in sync by hand (there is no test for this decorative layer).
+ * field the row is (a fixed icon per field — the Properties panel exposes
+ * data-property-key to CSS). The key→emoji mapping is documented in
+ * 99 - Meta/01 - Documentation/METADATA.md#property-icons; keep the two in sync
+ * by hand (there is no test for this free-choice decorative layer). NOTE the
+ * growth/type/status field glyphs (🪴/🗂️/🚦) are deliberately chosen to differ
+ * from every per-VALUE emoji below, so a vocab row never shows the same glyph
+ * on both sides.
+ *
+ * VALUE EMOJI (right slot, per-VALUE — growth/status/type)
+ * The value is the text content of a contenteditable div, which CSS cannot
+ * select on. The first-party shadowvault-property-icons plugin reads it and
+ * stamps data-sv-value on the row; the rules further down paint the emoji from
+ * that attribute. Unlike the field icons, this map has a CONTRACT: it must equal
+ * the badge SSOT in 05 - Views/badge-table/view.js, and propertyIconsEnums.test.js
+ * fails if they drift. Degrades to raw text if the plugin is off. See ADR 0009.
  *
  * COLLAPSE
  * Pure CSS cannot hold a persistent click-toggle on a DOM element it doesn't
@@ -100,9 +109,9 @@ body:not(.sv-hide-field-icons) .metadata-property[data-property-key="cssclasses"
 }
 
 body:not(.sv-hide-field-icons) .metadata-property[data-property-key="id"]         .metadata-property-icon::after { content: "🆔"; }
-body:not(.sv-hide-field-icons) .metadata-property[data-property-key="type"]       .metadata-property-icon::after { content: "🧩"; }
-body:not(.sv-hide-field-icons) .metadata-property[data-property-key="growth"]     .metadata-property-icon::after { content: "🌱"; }
-body:not(.sv-hide-field-icons) .metadata-property[data-property-key="status"]     .metadata-property-icon::after { content: "⚙️"; }
+body:not(.sv-hide-field-icons) .metadata-property[data-property-key="type"]       .metadata-property-icon::after { content: "🗂️"; }
+body:not(.sv-hide-field-icons) .metadata-property[data-property-key="growth"]     .metadata-property-icon::after { content: "🪴"; }
+body:not(.sv-hide-field-icons) .metadata-property[data-property-key="status"]     .metadata-property-icon::after { content: "🚦"; }
 body:not(.sv-hide-field-icons) .metadata-property[data-property-key="created"]    .metadata-property-icon::after { content: "📅"; }
 body:not(.sv-hide-field-icons) .metadata-property[data-property-key="modified"]   .metadata-property-icon::after { content: "✏️"; }
 body:not(.sv-hide-field-icons) .metadata-property[data-property-key="review"]     .metadata-property-icon::after { content: "🔁"; }
@@ -116,6 +125,34 @@ body:not(.sv-hide-field-icons) .metadata-property .metadata-property-icon::after
 	font-size: 0.9em;
 	line-height: 1;
 }
+
+/* ---------- per-value emoji (growth / status / type) ----------
+ * Painted on the value side (::before) from data-sv-value, which the
+ * shadowvault-property-icons plugin stamps on each vocab row. This map is a
+ * re-encoding of the badge SSOT (05 - Views/badge-table/view.js) and is guarded
+ * by propertyIconsEnums.test.js — if you change an emoji here it must match the
+ * badge, in both directions, or the test reds. A value with no rule below
+ * (typo, or half-typed) simply shows as raw text. */
+
+.metadata-property[data-property-key="growth"][data-sv-value="seedling"]   .metadata-property-value::before { content: "🌱 "; }
+.metadata-property[data-property-key="growth"][data-sv-value="fern"]        .metadata-property-value::before { content: "🌿 "; }
+.metadata-property[data-property-key="growth"][data-sv-value="incubator"]   .metadata-property-value::before { content: "🔆 "; }
+.metadata-property[data-property-key="growth"][data-sv-value="evergreen"]   .metadata-property-value::before { content: "🌲 "; }
+
+.metadata-property[data-property-key="status"][data-sv-value="inbox"]       .metadata-property-value::before { content: "📥 "; }
+.metadata-property[data-property-key="status"][data-sv-value="processing"]  .metadata-property-value::before { content: "⚙️ "; }
+.metadata-property[data-property-key="status"][data-sv-value="active"]      .metadata-property-value::before { content: "🟢 "; }
+.metadata-property[data-property-key="status"][data-sv-value="completed"]   .metadata-property-value::before { content: "✅ "; }
+.metadata-property[data-property-key="status"][data-sv-value="archived"]    .metadata-property-value::before { content: "🗄️ "; }
+
+.metadata-property[data-property-key="type"][data-sv-value="permanent"]     .metadata-property-value::before { content: "💡 "; }
+.metadata-property[data-property-key="type"][data-sv-value="literature"]    .metadata-property-value::before { content: "📝 "; }
+.metadata-property[data-property-key="type"][data-sv-value="source"]        .metadata-property-value::before { content: "📚 "; }
+.metadata-property[data-property-key="type"][data-sv-value="fleeting"]      .metadata-property-value::before { content: "🌫️ "; }
+.metadata-property[data-property-key="type"][data-sv-value="moc"]           .metadata-property-value::before { content: "🗺️ "; }
+.metadata-property[data-property-key="type"][data-sv-value="thought"]       .metadata-property-value::before { content: "💭 "; }
+.metadata-property[data-property-key="type"][data-sv-value="periodic"]      .metadata-property-value::before { content: "📆 "; }
+.metadata-property[data-property-key="type"][data-sv-value="entity"]        .metadata-property-value::before { content: "🧩 "; }
 
 /* ---------- collapsed (hover to reveal) ---------- */
 body.sv-props-collapsed .metadata-properties,

@@ -32,19 +32,19 @@ cssclasses:   # for CSS snippets (e.g., page-white, pen-blue)
 Not every core note emits every field. The split below is real and enforced by
 the conformance test in `99 - Meta/03 - Scripts-tests/frontmatterSchema.test.js`:
 
-| Field | Permanent | Literature | MOC | Fleeting | Source Capture |
-|---|---|---|---|---|---|
-| `id` | ✓ | ✓ | ✓ | ✓ | ✓ |
-| `type` | ✓ | ✓ | ✓ | ✓ | ✓ |
-| `growth` | ✓ | ✓ | ✓ | ✓ | ✓ |
-| `status` | ✓ | ✓ | ✓ | ✓ | ✓ |
-| `created` | ✓ | ✓ | ✓ | ✓ | ✓ |
-| `modified` | ✓ | ✓ | ✓ | — | — |
-| `review` | ✓ | — | — | — | ✓ |
-| `publish` | — | — | — | — | ✓ |
-| `tags` | ✓ | ✓ | ✓ | ✓ | ✓ |
-| `aliases` | ✓ | ✓ | ✓ | — | ✓ |
-| `cssclasses` | ✓ | ✓ | ✓ | ✓ | — |
+| Field        | Permanent | Literature | MOC | Fleeting | Source Capture |
+| ------------ | --------- | ---------- | --- | -------- | -------------- |
+| `id`         | ✓         | ✓          | ✓   | ✓        | ✓              |
+| `type`       | ✓         | ✓          | ✓   | ✓        | ✓              |
+| `growth`     | ✓         | ✓          | ✓   | ✓        | ✓              |
+| `status`     | ✓         | ✓          | ✓   | ✓        | ✓              |
+| `created`    | ✓         | ✓          | ✓   | ✓        | ✓              |
+| `modified`   | ✓         | ✓          | ✓   | —        | —              |
+| `review`     | ✓         | —          | —   | —        | ✓              |
+| `publish`    | —         | —          | —   | —        | ✓              |
+| `tags`       | ✓         | ✓          | ✓   | ✓        | ✓              |
+| `aliases`    | ✓         | ✓          | ✓   | —        | ✓              |
+| `cssclasses` | ✓         | ✓          | ✓   | ✓        | —              |
 
 Notes on the asymmetries, all of them deliberate as of this writing:
 
@@ -85,7 +85,7 @@ These four fields — `growth`, `status`, `type`, and `period` — are the vault
 
 ## Visual Badges
 
-`growth`, `status`, and `type` are rendered as emoji badges wherever a note or a link to it appears — an in-note badge line (Permanent/Literature/Fleeting/MOC templates), the Nexus dashboards, and decorated `[[links]]`/backlinks via the Supercharged Links plugin. This is the **single source of truth** for the emoji mapping; every surface below must match it.
+`growth`, `status`, and `type` are rendered as emoji badges wherever a note or a link to it appears — the **Properties panel** per-value emoji (`frontmatter-display.css` + the `shadowvault-property-icons` plugin), the Nexus dashboards, and decorated `[[links]]`/backlinks via the Supercharged Links plugin. This is the **single source of truth** for the emoji mapping; every surface below must match it. (Notes no longer carry an in-note `choice()` badge line — the panel shows per-value state directly; see [ADR 0009](../../docs/adr/0009-property-panel-per-value-icons.md).)
 
 **growth**
 
@@ -119,7 +119,7 @@ These four fields — `growth`, `status`, `type`, and `period` — are the vault
 | periodic | 📆 Periodic |
 | entity | 🧩 Entity |
 
-If this mapping changes, update it here first, then propagate to the templates' in-note badge callouts, `99 - Meta/05 - Views/badge-table/view.js`, and `.obsidian/snippets/growth-badges.css`. The `08 - Nexus/` dashboards no longer hold their own copy — they render badges through the shared view, and `dashboardEnums.test.js` fails if the view and the tables above disagree, in either direction.
+If this mapping changes, update it here first, then propagate to `99 - Meta/05 - Views/badge-table/view.js`, the per-value rules in `.obsidian/snippets/frontmatter-display.css`, and `.obsidian/snippets/growth-badges.css`. Two guards keep the copies honest, in both directions: `dashboardEnums.test.js` (the view vs the tables above) and `propertyIconsEnums.test.js` (the panel per-value CSS vs the view). The `08 - Nexus/` dashboards hold no copy of their own — they render through the shared view.
 
 ---
 
@@ -127,26 +127,33 @@ If this mapping changes, update it here first, then propagate to the templates' 
 
 A different mapping from the value badges above: these are **per-field** icons
 shown in the Properties panel (the in-note YAML editor), marking *which* field a
-row is — a fixed emoji per field, independent of its value. They come from the
-`.obsidian/snippets/frontmatter-display.css` snippet (toggle in Settings → Style
-Settings → "ShadowVault — Frontmatter"), which replaces Obsidian's native icon
-in the row's icon slot. Per-value state is not shown here — that lives in the
-value badges above and the note-body badge line. Icons cover the core schema
-fields only; this is a decorative layer with no test behind it, so keep the
-snippet and this table in sync by hand.
+row is — a fixed emoji per field, independent of its value, in the row's **left**
+icon slot. They come from the `.obsidian/snippets/frontmatter-display.css` snippet
+(toggle in Settings → Style Settings → "ShadowVault — Frontmatter"), which
+replaces Obsidian's native icon. This is a free-choice **decorative** layer with
+no test behind it (the glyphs are arbitrary), so keep the snippet and this table
+in sync by hand — unlike the per-value emoji, which have a tested contract.
 
 | Field | Icon | Field | Icon |
 |---|---|---|---|
 | `id` | 🆔 | `publish` | 🌐 |
-| `type` | 🧩 | `tags` | 🏷️ |
-| `growth` | 🌱 | `aliases` | 🎭 |
-| `status` | ⚙️ | `cssclasses` | 🎨 |
+| `type` | 🗂️ | `tags` | 🏷️ |
+| `growth` | 🪴 | `aliases` | 🎭 |
+| `status` | 🚦 | `cssclasses` | 🎨 |
 | `created` | 📅 | `review` | 🔁 |
 | `modified` | ✏️ | | |
 
-See [ADR 0008](../../docs/adr/0008-style-settings-frontmatter-display.md) for why
-the panel gets per-field (not per-value) icons and why the collapse mode reveals
-on hover rather than click.
+`growth`, `status`, and `type` **also** show a per-**value** emoji on the row's
+**right** (value) side — 🌱 seedling vs 🌲 evergreen — from the [Visual
+Badges](#visual-badges) map above. Their field glyphs (🪴/🗂️/🚦) are chosen to
+differ from every value emoji so a row never shows the same glyph twice. Because
+CSS can't read the panel's contenteditable value, the first-party
+`shadowvault-property-icons` plugin stamps it as `data-sv-value` for the CSS to
+paint; `propertyIconsEnums.test.js` guards that CSS map against the badge SSOT.
+See [ADR 0009](../../docs/adr/0009-property-panel-per-value-icons.md) for the
+plugin/CSS split and why it replaced the in-note badge line; [ADR
+0008](../../docs/adr/0008-style-settings-frontmatter-display.md) covers the
+collapse mode's hover-not-click ceiling.
 
 ---
 

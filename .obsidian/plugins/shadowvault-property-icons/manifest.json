@@ -1,0 +1,9 @@
+{
+	"id": "shadowvault-property-icons",
+	"name": "ShadowVault Property Icons",
+	"version": "1.0.0",
+	"minAppVersion": "1.4.0",
+	"description": "Stamps a data-sv-value attribute on growth/status/type rows in the Properties panel so frontmatter-display.css can paint per-value emoji. First-party to this vault; degrades to plain text if disabled.",
+	"author": "ShadowVault",
+	"isDesktopOnly": false
+}
