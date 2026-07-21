@@ -6,6 +6,21 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ## [Unreleased]
 
 ### Added
+- **Per-value emoji in the Properties panel** for `growth`, `status`, and `type`
+  — the row now shows 🌱 seedling vs 🌲 evergreen (etc.) on its value side, not
+  just a fixed per-field icon. Because CSS can't read the panel's contenteditable
+  value, a small **first-party plugin** (`.obsidian/plugins/shadowvault-property-icons/`,
+  vendored + manifest-shipped) stamps the value as `data-sv-value` and
+  `frontmatter-display.css` paints the emoji from it. The plugin holds no
+  vocabulary — it stamps raw text and the CSS is the sole value→emoji filter, so
+  a typo just shows as plain text. It's event-driven (no MutationObserver) and
+  degrades to plain text if disabled. The CSS map is guarded against the badge
+  SSOT (`badge-table/view.js`) in both directions by the new
+  `propertyIconsEnums.test.js`, which also pins that the plugin, CSS, and badge
+  view agree on the field set. Closes #35.
+- **[ADR 0009](docs/adr/0009-property-panel-per-value-icons.md)** records the
+  design: the plugin/CSS split (mechanism vs guarded policy), event-driven over
+  MutationObserver, and deleting the in-note badge line in favour of the panel.
 - **Per-field emoji icons in the Properties panel, plus a collapse/hide control**
   (`.obsidian/snippets/frontmatter-display.css`, new, shipped enabled). Each of
   the 11 core frontmatter fields shows an emoji in its row's icon slot marking
@@ -57,6 +72,21 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
   key the schema test would reject), opt-in dropdown with free-typing bypass, and
   test-guarded options. Documented in `METADATA.md` and `PLUGINS.md`; closes
   issue #5.
+
+### Changed
+- **The `growth`/`type`/`status` per-field panel icons were retuned** (🌱→🪴,
+  🧩→🗂️, ⚙️→🚦) so they no longer collide with the per-value emoji now shown on
+  the same rows — a vocab row would otherwise render the same glyph on both
+  sides (🌱 growth / 🌱 seedling). The other eight field icons are unchanged.
+
+### Removed
+- **The in-note `> [!abstract]- Badges` callout** is gone from the Permanent and
+  Literature Note templates (and MOC's, whose text wrongly claimed "MOCs don't
+  use `growth`"). It was a hand-encoded `choice()` cascade — a fourth, unguarded
+  copy of the badge map, the exact drift pattern ADR 0004 was written to kill —
+  and the Properties panel now shows the same per-value state directly, with a
+  test guarding it. Existing notes keep their rendered line; only new notes from
+  these templates omit it.
 
 ## [2.12.0] – 2026-07-21
 
