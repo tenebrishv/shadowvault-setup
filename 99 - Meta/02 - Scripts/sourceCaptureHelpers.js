@@ -140,6 +140,36 @@ function yamlField(key, val) {
     return key + ":\n";
 }
 
+// Mints an id for Media Extended's `mx-uid` property.
+//
+// MX identifies its media-notes by `mx-uid` ALONE — its metadata parser reads
+// the frontmatter key and returns null before it ever looks at `media:`, so a
+// note without one is invisible to MX's library index and MX creates its own
+// duplicate note under `media-lib/` instead of adopting ours. MX offers no
+// "adopt this note" command (`add-to-media-library` is gated on the note NOT
+// being found, and creates a new one), so minting the id at capture time is the
+// only way the source note can be the media-note. Verified in Obsidian
+// 2026-07-23: with `mx-uid` + `media:` present, MX's "Open or create media
+// note" opens the source note instead of spawning a duplicate.
+//
+// This is a deliberate write into another plugin's private namespace. The shape
+// mirrors cuid2 at MX's default length — 24 lowercase alphanumerics, leading
+// letter — because that is what MX generates for itself. The parser only
+// requires a non-empty string, so shape-compatibility is belt-and-braces
+// against MX tightening validation later. MX ships a `migrate-media-uid`
+// command, which is evidence this scheme has changed at least once before: if
+// captures stop being adopted after an MX upgrade, look here first.
+function mxUid() {
+    const ALNUM = "abcdefghijklmnopqrstuvwxyz0123456789";
+    const rand = (n) => Array.from({ length: n },
+        () => ALNUM[Math.floor(Math.random() * ALNUM.length)]).join("");
+    // Time prefix makes two captures in the same session collision-proof
+    // without depending on the randomness source; the leading "m" keeps the
+    // first character a letter, which base36 timestamps do not guarantee.
+    const stamp = Date.now().toString(36);
+    return ("m" + stamp + rand(Math.max(1, 23 - stamp.length))).slice(0, 24);
+}
+
 // Builds the frontmatter fields common to every Source Capture note
 // (opening "---" through "growth:"). Callers append their own type-specific
 // fields, then the closing "---\n\n".
@@ -171,5 +201,6 @@ module.exports = {
     sanitizeTitle,
     yamlQuote,
     yamlField,
+    mxUid,
     buildBaseYaml,
 };

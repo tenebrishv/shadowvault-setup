@@ -200,6 +200,8 @@ writes it into the note body as an `> [!abstract]` callout.
 channel:
 channel_url:  # YouTube only — auto-fetched from oEmbed
 url:
+media:        # YouTube only — same URL as `url`; Media Extended's property key
+mx-uid:       # YouTube only — minted at capture; Media Extended's identity key
 thumbnail:    # YouTube only — auto-fetched from oEmbed
 watched: YYYY-MM-DD
 released:     # optional
@@ -210,6 +212,24 @@ platform:     # for non‑YouTube videos (Vimeo, Nebula)
 are queryable — a dashboard can render video cards from `thumbnail` or group by
 `channel_url`. The note body renders both as plain markdown (a linked channel
 name, an embedded image); see the inline-field rule below.
+
+**`media` deliberately repeats `url`.** They have different consumers: `url` is
+the canonical pointer every source type carries and the dashboards read, while
+`media` is Media Extended's own property key (it recognises `media`, `video` and
+`audio`), which is what makes the embed and its seek-links resolve.
+
+**`mx-uid` is what actually does the identifying, and we mint it.** Verified in
+Obsidian 2026-07-23: MX keys its media-notes on `mx-uid`, *not* on `media` — its
+parser reads `mx-uid` and gives up before it ever looks at `media`. A note
+carrying only `media` is invisible to MX's library index, so MX creates its own
+duplicate under `media-lib/`. MX offers no command to adopt an existing note,
+so the capture module generates the id itself (`helpers.mxUid`), and with both
+fields present MX treats the source note as the media-note.
+
+This is a deliberate write into another plugin's private namespace, accepted to
+keep **one note per source**. If an MX upgrade stops adopting captured notes,
+`helpers.mxUid` is the first place to look — MX ships a `migrate-media-uid`
+command, so the scheme has changed before.
 
 ### Podcast
 ```yaml

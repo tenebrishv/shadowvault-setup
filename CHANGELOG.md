@@ -5,6 +5,40 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+### Added
+- **Coursera-style YouTube capture through Media Extended** (v4.2.7, vendored at
+  `.obsidian/plugins/media-extended/`) — a captured YouTube note now renders a
+  real MX player, and timestamps and screenshots drop straight into the note as
+  you watch. Screenshots land in `07 - Attachments/Screenshots` as WEBP. Capture
+  is **view-gated**: it fires only from an open side-pane player view, never
+  from the inline embed, so the note's guiding prompt tells you to open the
+  player in a side pane rather than right-click the embed. Hotkeys for the
+  timestamp and screenshot commands ship in `.obsidian/hotkeys.json`.
+  Part of #26, closes #45.
+
+### Changed
+- **The YouTube note body is rebuilt around the MX player.** The fixed 569×317
+  `<iframe>` becomes a bare responsive `![](url)` embed that MX can seek and
+  capture from; the in-body thumbnail is dropped (the player shows the poster
+  frame itself, and `thumbnail:` stays queryable in frontmatter); and the
+  hand-written `%%` seek-link stub is gone — MX writes correctly-formed
+  `[mm:ss](url#t=SECONDS)` links itself, where the stub's `?t=` was simply wrong.
+- **YouTube captures now carry `media:` and a minted `mx-uid:`.** Media Extended
+  identifies its media-notes by `mx-uid` *alone* — its parser gives up before it
+  ever reads `media:` — and offers no way to adopt an existing note, so the
+  capture module mints the id itself. Without it, MX silently creates a duplicate
+  note under `media-lib/` for every video. Both fields sit in the schema
+  conformance contract precisely because this integration fails quietly rather
+  than loudly. Notes captured before this change carry no id and will still
+  spawn duplicates; there is no backfill.
+
+### Fixed
+- **`STRUCTURE.md` no longer contradicts the vault it documents.** It stated the
+  flat-attachments rule absolutely while `07 - Attachments/Screenshots/` was
+  already shipping. The exception is now carved explicitly, with its reasoning
+  (plugin-generated dumps are not hand-curated attachments) and an explicit
+  boundary against reading it as licence to sort attachments generally.
+
 ## [2.13.0] – 2026-07-21
 
 ### Added

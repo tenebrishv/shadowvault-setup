@@ -3,7 +3,7 @@
  * Returns { noteTitle, yamlFields, body }, or null if cancelled.
  */
 module.exports = async function sourceCaptureYoutube(tp, helpers) {
-    const { requiredPrompt, optionalPrompt, yamlField, sanitizeTitle, fetchWithFallback } = helpers;
+    const { requiredPrompt, optionalPrompt, yamlField, sanitizeTitle, fetchWithFallback, mxUid } = helpers;
     const url = await requiredPrompt(tp, "YouTube URL");
     if (!url) return null;
 
@@ -16,13 +16,13 @@ module.exports = async function sourceCaptureYoutube(tp, helpers) {
             const yt = await helpers.httpGetJson(
                 `https://youtube.com/oembed?url=${encodeURIComponent(url)}&format=json`,
             );
-            const idMatch = /(?:v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/.exec(url);
+            // The video id used to be parsed out to build an <iframe> src.
+            // The MX embed takes the watch URL as-is, so nothing needs it now.
             return {
                 yt_title: yt.title,
                 yt_channel: yt.author_name,
                 yt_chanurl: yt.author_url,
                 yt_thumb: yt.thumbnail_url,
-                yt_id: idMatch ? idMatch[1] : "",
             };
         },
         manual: async () => {
@@ -33,7 +33,6 @@ module.exports = async function sourceCaptureYoutube(tp, helpers) {
                 yt_channel: await optionalPrompt(tp, "Channel Name"),
                 yt_chanurl: "",
                 yt_thumb: "",
-                yt_id: "",
             };
         },
     });
@@ -46,6 +45,17 @@ module.exports = async function sourceCaptureYoutube(tp, helpers) {
     yamlFields += yamlField("channel", data.yt_channel);
     yamlFields += yamlField("channel_url", data.yt_chanurl);
     yamlFields += yamlField("url", data.url);
+    // `media` + `mx-uid` together make THIS note Media Extended's media-note
+    // for the video, so MX stops spawning a duplicate under `media-lib/`.
+    // BOTH are required and the uid does the identifying: MX's parser reads
+    // `mx-uid` first and gives up before it ever looks at `media` (see
+    // helpers.mxUid for the full reasoning and the falsified assumption).
+    //
+    // `media` holds the same value as `url:` on purpose — `url` is the vault's
+    // canonical pointer that every source type carries and the dashboards read;
+    // `media` is a plugin integration key with a different consumer.
+    yamlFields += yamlField("media", data.url);
+    yamlFields += yamlField("mx-uid", mxUid());
     yamlFields += yamlField("thumbnail", data.yt_thumb);
     yamlFields += "watched: \"" + tp.date.now("YYYY-MM-DD") + "\"\n";
     yamlFields += "released:\n";
@@ -59,13 +69,31 @@ module.exports = async function sourceCaptureYoutube(tp, helpers) {
         ? "> **Channel:** [" + data.yt_channel + "](" + data.yt_chanurl + ")\n"
         : "> **Channel:** " + (data.yt_channel || "") + "\n";
     body += "> **Watched:** " + tp.date.now("YYYY-MM-DD") + "\n";
-    if (data.yt_thumb) body += "> ![](" + data.yt_thumb + ")\n";
-    body += "\n---\n\n";
-    if (data.yt_id) {
-        body += "<iframe src=\"https://www.youtube-nocookie.com/embed/" + data.yt_id + "?vq=hd1080&modestbranding=1&rel=0&iv_load_policy=3\" width=\"569\" height=\"317\" frameborder=\"0\" style=\"margin: 0 auto; display: block;\"></iframe>\n\n";
-    }
-    body += "---\n\n## Notes\n\n";
-    body += "%% [mm:ss](" + data.url + "?t=0) - Timestamp note %%\n\n- \n";
+    // The in-body thumbnail is gone: the player below shows the poster frame
+    // itself. `thumbnail:` stays in frontmatter so dashboards can render cards.
+    body += "\n";
+    // Bare, responsive Media Extended embed — no WxH, so MX applies its own
+    // sizing. Replaces the old fixed 569x317 <iframe>, which rendered a plain
+    // YouTube player that MX could neither seek nor capture from.
+    body += "![](" + data.url + ")\n\n";
+    body += "## Notes\n";
+    // No `%%`-commented seek-link stub: MX writes its own correctly-formed
+    // `[mm:ss](url#t=SECONDS)` links, so a hand-rolled `?t=` example was both
+    // redundant and wrong (see issue #29).
+    //
+    // Capture is VIEW-GATED (issue #33): the commands check for an active
+    // media VIEW, so the inline embed above can never capture — it is a
+    // markdown widget, not a view. The prompt has to say so, or the reader
+    // right-clicks the embed and concludes the workflow is broken.
+    // The prompt names the ACTION, not a command title. Media Extended ships
+    // several timestamp/screenshot variants (`-plain` among them) and which one
+    // is bound is a per-vault choice, so quoting one title here would make the
+    // note lie for anyone who bound a different one.
+    body += "*Watch in a **side-pane player**: right-click the embed above → open it in Media Extended";
+    body += " (or use **Open media switcher**). Keep the cursor in this note, then use your bound";
+    body += " Media Extended **timestamp** / **screenshot** hotkeys.";
+    body += " The inline embed plays and seeks but **cannot capture**.";
+    body += " Quick jots go inline; save real synthesis for the Literature note.*\n\n- \n";
 
     return { noteTitle, yamlFields, body };
 };

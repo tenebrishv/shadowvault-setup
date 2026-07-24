@@ -1,0 +1,10 @@
+{
+  "__VERSION__": 2,
+  "release.previous-version": "4.2.7",
+  "playback.screenshot.format": "image/webp",
+  "playback.screenshot.folder-path": "07 - Attachments/Screenshots",
+  "note.embed.handle-hosted": true,
+  "link.handle-hosted": true,
+  "link.hosted-prefer": "iframe",
+  "webviewer.enabled": true
+}
