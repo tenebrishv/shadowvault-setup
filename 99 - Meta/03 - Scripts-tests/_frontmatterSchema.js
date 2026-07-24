@@ -56,7 +56,7 @@ const VOCABULARY = {
     literature: ["source"],
     source: ["authors", "publish_date", "publisher", "isbn", "general_subject", "specific_subject",
              "url", "publication", "doi", "citekey", "keywords", "channel", "channel_url",
-             "thumbnail", "watched", "released",
+             "thumbnail", "watched", "released", "media", "mx-uid",
              "platform", "host", "guest", "account", "tweet_text", "context", "led_here",
              "unit", "lecturer", "lecture_num", "date_given"],
     entity: ["role", "organization", "contact", "website", "founded", "sector", "headquarters",
@@ -221,7 +221,12 @@ const CAPTURE = {
     },
     Youtube: {
         promptScript: ["https://youtu.be/broken", "Manual Title", "Manual Channel"],
-        required: ["channel", "channel_url", "url", "thumbnail", "watched", "released"],
+        // `media` mirrors `url`, and `mx-uid` is minted by helpers.mxUid — the
+        // pair is what makes Media Extended adopt this note as its media-note
+        // rather than spawning a duplicate under `media-lib/`. `mx-uid` is a
+        // deliberate write into MX's namespace; it is in this contract because
+        // we emit it, so dropping it can never pass silently.
+        required: ["channel", "channel_url", "url", "media", "mx-uid", "thumbnail", "watched", "released"],
     },
     Video: {
         promptScript: ["A Great Talk", "Vimeo", "Some Creator", "https://vimeo.com/123", "2023-05-01"],

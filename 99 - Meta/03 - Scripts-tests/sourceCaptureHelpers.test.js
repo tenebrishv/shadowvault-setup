@@ -276,3 +276,27 @@ test("fetchWithFallback does not treat a throw inside fillGaps as a failed fetch
     );
     assert.ok(!notices.some(m => /could not fetch/i.test(m)), "no spurious failure Notice");
 });
+
+// ---------------------------------------------------------------------------
+// mxUid — Media Extended's identity key (see helpers.mxUid).
+//
+// MX will not adopt a note as its media-note without one, so these assertions
+// guard an integration that fails SILENTLY: a malformed or duplicated uid does
+// not throw, it just makes MX quietly spawn a duplicate note under `media-lib/`
+// again, which is exactly the pollution this field exists to prevent.
+
+test("mxUid mints a cuid2-shaped id: 24 chars, leading letter, lowercase alnum", () => {
+    for (let i = 0; i < 100; i++) {
+        const uid = helpers.mxUid();
+        assert.equal(uid.length, 24, `wrong length: ${uid}`);
+        assert.match(uid, /^[a-z][a-z0-9]{23}$/, `wrong shape: ${uid}`);
+    }
+});
+
+test("mxUid does not collide across rapid successive captures", () => {
+    // Capturing several videos in one sitting must not hand two notes the same
+    // uid — MX indexes by uid, so a collision would silently make one of the
+    // notes unreachable as a media-note.
+    const uids = new Set(Array.from({ length: 1000 }, () => helpers.mxUid()));
+    assert.equal(uids.size, 1000, "mxUid produced a duplicate");
+});
