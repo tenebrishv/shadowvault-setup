@@ -17,8 +17,8 @@ ShadowVault/
 	├── Lectures/  
 	├── Papers/  
 	└── Videos/  
-├── 02 - Literature Notes/ # Your response to a source, in your own words  
-├── 03 - Permanent Notes/ # Atomic, evergreen ideas – the vault's core  
+├── 02 - Literature Notes/ # Atomic ideas that need their source to make sense  
+├── 03 - Permanent Notes/ # Evergreen ideas that stand on their own – the vault's core  
 ├── 04 - MOCS/ # Maps of Content (curated pathways)  
 	├── Courses/ # One MOC per academic course  
 	├── Units/ # One MOC per course unit/module  
@@ -71,8 +71,8 @@ ShadowVault/
 |--------|---------|
 | `00 - Inbox` | Temporary holding area. Everything starts here; nothing stays. |
 | `01 - Sources` | Raw inputs (Articles, Books, Lectures, Papers, Videos). Original material, not interpretation. |
-| `02 - Literature Notes` | Your understanding of a source: summaries, insights, takeaways in your own words. |
-| `03 - Permanent Notes` | Atomic, evergreen, linked ideas. One claim per note. The vault's core. |
+| `02 - Literature Notes` | Atomic ideas that need one or more sources to be intelligible — usually several per source, nesting under Section notes when a source is long. Carry `source:`. |
+| `03 - Permanent Notes` | Atomic ideas that stand alone, needing no source to make sense. May still cite origins in a body `## Sources` list, but carry no `source:` frontmatter. The vault's core. |
 | `04 - MOCS` | Maps of Content. Curated navigation paths that reflect understanding, not classification. |
 | `05 - Projects` | Work with a defined outcome and deadline (courses, research, writing, etc.). |
 | `06 - Daily` | Daily, weekly, monthly, yearly notes. Temporal backbone and primary capture space. |

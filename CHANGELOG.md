@@ -6,6 +6,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ## [Unreleased]
 
 ### Added
+- **A Source Recap on captured YouTube notes.** Below the `## Notes` bucket, a
+  captured video now scaffolds your *holistic* response to the source — restate
+  it in your own words, react, connect — the reflection that used to be the whole
+  point of a literature note. Atomic claims still go to their own literature
+  notes; this is the whole-source take that had nowhere else to live. It ships as
+  a shared `helpers.recapBlock(noun)` so the same block can roll out to the other
+  earning source types (Book, Article, Paper, Video, Podcast) without re-deriving
+  its shape. Part of #26, closes #44.
+- **`(TEMPLATE) Section Hub.md`** — an *insertable* block (not a note template)
+  that turns a literature note into a **Section note**: a Dataview list of its
+  direct children (`contains(section, [[]])`) plus a one-paragraph through-line.
+  Reach for it only when a source is long enough that its ideas need an
+  intermediate layer between the source and its atomic notes.
 - **Coursera-style YouTube capture through Media Extended** (v4.2.7, vendored at
   `.obsidian/plugins/media-extended/`) — a captured YouTube note now renders a
   real MX player, and timestamps and screenshots drop straight into the note as
@@ -17,6 +30,24 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
   Part of #26, closes #45.
 
 ### Changed
+- **Literature notes are now atomic, and the literature/permanent line is
+  source-dependence, not size.** `(TEMPLATE) Literature Note.md` is reshaped to
+  parallel the Permanent template (`One-liner` → `Core Idea` → a required
+  `From the Source` anchor → `Evidence` → `Related Notes`), so promotion to a
+  permanent note is a near-mechanical transform. A literature note is one that
+  *needs its source to be intelligible* — it may be atomic and still be
+  literature; a permanent note stands alone. The holistic scaffold that used to
+  live here moved to the Source Recap (above). Part of #26, closes #44.
+- **`source:` is a list; `section:` and `review:` join the literature schema.**
+  `source:` opens to one-or-more links, so a single atomic claim can rest on
+  several sources. `section:` carries containment (a note's immediate parent
+  Section note) and stays flat-to-the-source for one-hop metadata traversal;
+  it is omitted when a note sits directly under its source. `review:` puts
+  literature notes into a review queue — a **new** dashboard section,
+  `02 - Literature Notes`-scoped, asking *does this still need its source?* —
+  which is what gives promotion a trigger. The literature review interval is
+  **30 days**, against Permanent's 14, because source-independence changes over
+  months.
 - **The YouTube note body is rebuilt around the MX player.** The fixed 569×317
   `<iframe>` becomes a bare responsive `![](url)` embed that MX can seek and
   capture from; the in-body thumbnail is dropped (the player shows the poster

@@ -83,3 +83,50 @@ test("YouTube: cancelling the URL prompt aborts capture", async () => {
     const result = await sourceCaptureYoutube(tp, helpers);
     assert.equal(result, null);
 });
+
+// ---------------------------------------------------------------------------
+// Source recap (issue #44; ADR 0010).
+//
+// YouTube is the FIRST type to carry a recap, not the only one — issue #41
+// rolls it out to Book, Article, Paper, Video and Podcast. These assertions
+// pin the wiring (that the module calls the shared helper with the right noun
+// and places it correctly), not the block's shape, which sourceCaptureHelpers
+// .test.js owns. Duplicating the shape here would make #41 a two-file edit.
+
+test("YouTube: body carries the Source recap, below the capture bucket", async () => {
+    installMockNotice();
+    installMockFetch(async () => jsonResponse({
+        title: "A Great Talk",
+        author_name: "Some Channel",
+        author_url: "https://youtube.com/@somechannel",
+        thumbnail_url: "https://img.youtube.com/thumb.jpg",
+    }));
+    const tp = createMockTp({ prompts: ["https://youtu.be/dQw4w9WgXcQ"] });
+
+    const result = await sourceCaptureYoutube(tp, helpers);
+
+    // Exactly the shared helper's output, for the video noun — not a local copy.
+    assert.ok(result.body.includes(helpers.recapBlock("video")),
+        "body must embed helpers.recapBlock(\"video\") verbatim");
+    // The recap is written after watching, so it must follow the `## Notes`
+    // bucket AND the empty `- ` bullet the reader jots into while watching.
+    assert.ok(result.body.indexOf("## Source Recap") > result.body.indexOf("## Notes"),
+        "recap must sit below the capture bucket");
+});
+
+// The recap replaces the holistic scaffold that ADR 0010 moved OFF the
+// Literature template. If these headings ever reappear on a literature note,
+// the reflection has two homes again — the drift ADR 0010 exists to stop.
+test("YouTube: the recap carries the holistic scaffold, not atomic prompts", async () => {
+    installMockNotice();
+    installMockFetch(async () => jsonResponse({ title: "A Great Talk", author_name: "Some Channel" }));
+    const tp = createMockTp({ prompts: ["https://youtu.be/dQw4w9WgXcQ"] });
+
+    const result = await sourceCaptureYoutube(tp, helpers);
+
+    assert.match(result.body, /^### In My Own Words$/m);
+    assert.match(result.body, /^### What This Makes Me Think$/m);
+    assert.match(result.body, /^### Connections$/m);
+    // No `::` may enter the body via the recap (ADR 0005).
+    assert.doesNotMatch(result.body, /\w+::/);
+});

@@ -300,3 +300,53 @@ test("mxUid does not collide across rapid successive captures", () => {
     const uids = new Set(Array.from({ length: 1000 }, () => helpers.mxUid()));
     assert.equal(uids.size, 1000, "mxUid produced a duplicate");
 });
+
+// ---------------------------------------------------------------------------
+// recapBlock — the Source recap scaffold (issue #44; ADR 0010).
+//
+// The reader's HOLISTIC response to a source lives on the Source note, once per
+// source; the atomic claims drawn from it live in their own literature notes.
+// That split is ADR 0010's, and this block is the Source-note half of it — the
+// three-part scaffold that used to sit on (TEMPLATE) Literature Note.md.
+//
+// Parameterised by the medium noun so #41 can roll it out to the other five
+// earning types (Book, Article, Paper, Video, Podcast) with a one-line call
+// rather than re-deriving the shape. Lecture and Thought already carry a
+// reflective scaffold, and a Tweet is too small to warrant one.
+
+test("recapBlock emits the Source Recap heading and its three parts", () => {
+    const block = helpers.recapBlock("video");
+    assert.match(block, /^## Source Recap$/m);
+    assert.match(block, /^### In My Own Words$/m);
+    assert.match(block, /^### What This Makes Me Think$/m);
+    assert.match(block, /^### Connections$/m);
+});
+
+test("recapBlock names the medium it was given", () => {
+    assert.match(helpers.recapBlock("video"), /finished the video/);
+    assert.match(helpers.recapBlock("book"), /finished the book/);
+    assert.match(helpers.recapBlock("episode"), /finished the episode/);
+});
+
+// Plain headings, never a callout: headings nested inside a callout do not
+// reach Obsidian's outline pane, and the recap is the section written last and
+// revisited most, so it is exactly the one that must stay navigable.
+test("recapBlock uses plain headings, not a callout", () => {
+    const block = helpers.recapBlock("video");
+    assert.ok(!/^>/m.test(block), "recap must not be wrapped in a callout");
+});
+
+// ADR 0005: a `key::` inline field in the body declares a Dataview field just
+// as a YAML key does. The recap is prose scaffolding and must declare none, or
+// CAPTURE_INLINE_PLACEHOLDERS.Youtube would have to grow an entry.
+test("recapBlock declares no inline Dataview fields", () => {
+    assert.ok(!/\w+::/.test(helpers.recapBlock("video")), "recap must not emit `key::` fields");
+});
+
+// The recap is appended AFTER the capture bucket, so it has to begin with its
+// own separation and end newline-terminated — the module concatenates it raw.
+test("recapBlock is self-delimiting so modules can concatenate it directly", () => {
+    const block = helpers.recapBlock("video");
+    assert.ok(block.startsWith("\n"), "must open with a blank-line separator");
+    assert.ok(block.endsWith("\n"), "must end newline-terminated");
+});

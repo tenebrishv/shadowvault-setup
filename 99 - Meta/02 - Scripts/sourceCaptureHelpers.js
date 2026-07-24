@@ -170,6 +170,41 @@ function mxUid() {
     return ("m" + stamp + rand(Math.max(1, 23 - stamp.length))).slice(0, 24);
 }
 
+// The Source recap scaffold: the reader's HOLISTIC response to a source,
+// written on the Source note itself.
+//
+// ADR 0010 split synthesis in two. The atomic claims drawn from a source go to
+// their own literature notes (each carrying `source:`); the whole-source
+// response — restatement, reaction, connections — has nowhere else to live, so
+// it lives here, once per source. This is literally the three-part scaffold
+// that used to sit on (TEMPLATE) Literature Note.md, arriving at its correct
+// home; the Literature template goes atomic in exchange.
+//
+// `noun` names the medium ("video", "book", "episode"). It is a parameter and
+// has NO default: issue #41 rolls this out to the other five earning types, and
+// a default would let a caller silently ship vague prose instead of failing
+// visibly. Lecture and Thought already carry a reflective scaffold, and a Tweet
+// is too small to earn one — see CONTEXT.md, "Source recap".
+//
+// Plain headings, never a callout: headings inside a callout do not reach
+// Obsidian's outline pane, and this is the section written last and revisited
+// most. Scaffold richness is free here — a script-filled body costs the reader
+// no typing, so ADR 0001's verbosity trade-off does not apply.
+function recapBlock(noun) {
+    let block = "\n## Source Recap\n\n";
+    block += "*Once you've finished the " + noun + ", respond to it as a whole.";
+    block += " Atomic claims belong in their own literature notes — this is the";
+    block += " holistic take that has nowhere else to live.*\n\n";
+    block += "### In My Own Words\n\n";
+    block += "*Restate the argument entirely in your own language. No copy-paste.*\n\n";
+    block += "### What This Makes Me Think\n\n";
+    block += "*Your reaction, extension, or disagreement.*\n\n";
+    block += "### Connections\n\n";
+    block += "*What does this point toward — other sources, notes, or open questions?*\n\n";
+    block += "- \n";
+    return block;
+}
+
 // Builds the frontmatter fields common to every Source Capture note
 // (opening "---" through "growth:"). Callers append their own type-specific
 // fields, then the closing "---\n\n".
@@ -202,5 +237,6 @@ module.exports = {
     yamlQuote,
     yamlField,
     mxUid,
+    recapBlock,
     buildBaseYaml,
 };

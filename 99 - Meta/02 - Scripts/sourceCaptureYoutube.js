@@ -3,7 +3,7 @@
  * Returns { noteTitle, yamlFields, body }, or null if cancelled.
  */
 module.exports = async function sourceCaptureYoutube(tp, helpers) {
-    const { requiredPrompt, optionalPrompt, yamlField, sanitizeTitle, fetchWithFallback, mxUid } = helpers;
+    const { requiredPrompt, optionalPrompt, yamlField, sanitizeTitle, fetchWithFallback, mxUid, recapBlock } = helpers;
     const url = await requiredPrompt(tp, "YouTube URL");
     if (!url) return null;
 
@@ -94,6 +94,12 @@ module.exports = async function sourceCaptureYoutube(tp, helpers) {
     body += " Media Extended **timestamp** / **screenshot** hotkeys.";
     body += " The inline embed plays and seeks but **cannot capture**.";
     body += " Quick jots go inline; save real synthesis for the Literature note.*\n\n- \n";
+    // The holistic response to the video, below the bucket you jot into while
+    // watching — you write it once the video is done. Atomic claims go to their
+    // own literature notes instead (ADR 0010). YouTube is the first type to
+    // carry this; issue #41 rolls the same helper out to the other five that
+    // earn one.
+    body += recapBlock("video");
 
     return { noteTitle, yamlFields, body };
 };

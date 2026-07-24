@@ -3,9 +3,11 @@ id: <% tp.date.now("YYYYMMDDHHmm") %>
 type: literature
 growth: seedling
 status: active
-source:             # "[[link to the Source note]]"
+source: []          # "[[link to a Source note]]" — one or more
+section:            # "[[link to a Section note]]" — only when one sits between this note and its source
 created: <% tp.date.now("YYYY-MM-DD") %>
 modified: <% tp.date.now("YYYY-MM-DD") %>
+review: <% tp.date.now("YYYY-MM-DD", 30) %>
 tags:
 aliases:
 cssclasses:
@@ -13,36 +15,33 @@ cssclasses:
 
 # <% tp.file.title %>
 
+> [!tip] One-liner
+> *In one sentence, the claim this note reduces to. Write this last — if you can't state it in a sentence, the note isn't atomic yet: split it.*
+
+---
+
+## Core Idea
+
+*Develop and justify the claim — the reasoning, mechanism, or evidence-in-brief. Not a restatement of the one-liner. Keep this note atomic — one idea only.*
+
+---
+
 > [!quote] From the Source
-> *Paste the key quote or idea you're responding to here.*
+> *Where this idea lives in the source — **required**: a `[mm:ss](url#t=SECONDS)` seek-link for video or audio, a page for a book, a section for a paper. Optionally paste the passage itself, a screenshot, or a transcript pull-quote.*
+>
+> *Author, URL, and medium live on the linked `source` note — never copy them here.*
 
 ---
 
-## In My Own Words
-
-*Restate the idea entirely in your own language. No copy-paste.*
-
----
-
-## What This Makes Me Think
-
-*Your reaction, extension, or disagreement with the idea.*
-
----
-
-## Connections
-
-*What permanent notes or other ideas does this point toward?*
+## Evidence & Examples
 
 - 
 
 ---
 
-## Source Reference
+## Related Notes
 
-*Title, author, and URL live on the linked `source` note — don't copy them here. Record only what's specific to **this** reading:*
-
-- **Location:** (page, timestamp, or the passage you're responding to)
+- 
 
 ---
 *Created: <% tp.date.now("YYYY-MM-DD") %> | Type: literature*
