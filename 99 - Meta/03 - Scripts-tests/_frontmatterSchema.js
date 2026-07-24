@@ -53,7 +53,11 @@ const VOCABULARY = {
            "tags", "aliases", "cssclasses", "publish"],
     periodic: ["date", "period", "week", "month", "year"],
     curriculum: ["institution", "default_lecturer", "course", "semester"],
-    literature: ["source"],
+    // `section` names a literature note's immediate container, a Section note
+    // (ADR 0011). Optional ON A NOTE — present only where an intermediate
+    // Section note exists — but the template emits the key, so it is `required`
+    // below under rule 1 (descriptive: what the producer emits today).
+    literature: ["source", "section"],
     source: ["authors", "publish_date", "publisher", "isbn", "general_subject", "specific_subject",
              "url", "publication", "doi", "citekey", "keywords", "channel", "channel_url",
              "thumbnail", "watched", "released", "media", "mx-uid",
@@ -85,8 +89,11 @@ const TEMPLATES = {
     },
     "(TEMPLATE) Literature Note": {
         typeValue: "literature",
-        required: ["id", "type", "growth", "status", "source",
-                   "created", "modified", "tags", "aliases", "cssclasses"],
+        // `review` joins here per ADR 0010 decision 4: without it, literature
+        // notes never surface in a review queue and Promotion — the move to
+        // permanent — has no trigger, so it never fires.
+        required: ["id", "type", "growth", "status", "source", "section",
+                   "created", "modified", "review", "tags", "aliases", "cssclasses"],
     },
     "(TEMPLATE) MOC": {
         typeValue: "moc",
@@ -176,6 +183,11 @@ const EXEMPT_TEMPLATES = {
     "(TEMPLATE) Source Capture":
         "Pure <%* … %> orchestrator. Emits no frontmatter of its own; the YAML it " +
         "assembles at runtime is checked via CAPTURE below.",
+    "(TEMPLATE) Section Hub":
+        "A BLOCK, not a note: inserted at the cursor into an existing literature " +
+        "note when it becomes a Section note (a hub with descendants). Emits no " +
+        "frontmatter — the host note already carries the literature schema, and a " +
+        "Section note is not a distinct type (ADR 0011 §5).",
 };
 
 // ---------------------------------------------------------------------------

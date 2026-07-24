@@ -40,7 +40,7 @@ the conformance test in `99 - Meta/03 - Scripts-tests/frontmatterSchema.test.js`
 | `status`     | ✓         | ✓          | ✓   | ✓        | ✓              |
 | `created`    | ✓         | ✓          | ✓   | ✓        | ✓              |
 | `modified`   | ✓         | ✓          | ✓   | —        | —              |
-| `review`     | ✓         | —          | —   | —        | ✓              |
+| `review`     | ✓         | ✓          | —   | —        | ✓              |
 | `publish`    | —         | —          | —   | —        | ✓              |
 | `tags`       | ✓         | ✓          | ✓   | ✓        | ✓              |
 | `aliases`    | ✓         | ✓          | ✓   | —        | ✓              |
@@ -315,21 +315,49 @@ See `docs/adr/0005-inline-field-contract.md`.
 
 ## Literature Note Fields (`02 - Literature Notes/`)
 
-A Literature Note records **your** reading of a source, so it carries a single
-pointer back to that source: a `source` wikilink to the captured Source note.
-Everything else about the source — author, URL, medium — is read by Dataview
-traversal (`source.authors`, `source.url`, `source.file.tags`), never copied
-onto the literature note, so it can never drift from the source note it links.
-See [ADR 0006](../../docs/adr/0006-literature-notes-link-to-source.md).
+A Literature Note records an **atomic** idea that needs its source to be
+intelligible, so it points back at that source: `source` is a **list** of one or
+more wikilinks to captured Source notes. Everything else about the source —
+author, URL, medium — is read by Dataview traversal, never copied onto the
+literature note, so it can never drift from the source note it links. See
+[ADR 0006](../../docs/adr/0006-literature-notes-link-to-source.md) and
+[ADR 0010](../../docs/adr/0010-literature-vs-permanent-source-dependence.md).
 
 ```yaml
-source:          # "[[link to the Source note]]"
+source: []       # "[[link to a Source note]]" — one or more
+section:         # "[[link to a Section note]]" — only when one sits between this note and its source
+review:          # YYYY-MM-DD – next review; defaults to 30 days, unlike Permanent's 14
 ```
 
-The link may dangle: write `source: "[[{ Some Book]]"` before you've captured
-that book as a Source note, and the traversal fields light up automatically once
-the note exists. To filter literature notes by medium, traverse the source's own
-tag, e.g. `WHERE contains(source.file.tags, "source/paper")`.
+**`source` is the discriminator.** Presence of the field *means* the note is
+source-dependent, which is what makes it literature rather than permanent — not
+its size (ADR 0010). It is a list because one atomic claim may rest on more than
+one source, so traversal is now list-aware:
+
+```
+WHERE any(map(source, (s) => contains(s.file.tags, "source/paper")))
+```
+
+rather than the single-page `contains(source.file.tags, "source/paper")`.
+
+**`section` carries containment, not metadata** (ADR 0011). It names the note's
+*immediate* container — a **Section note** — and is **singular**, because
+containment is a tree. **Omit it** when the note sits directly under its source:
+`source:` already carries that relation, and a second field repeating the value
+would be denormalize-by-value inside one note. The two hub levels therefore query
+different fields — a Source note lists everything drawn from it at any depth with
+`WHERE contains(source, [[]])`; a Section note lists its direct children with
+`WHERE contains(section, [[]])`.
+
+**`review` gives Promotion its trigger.** Literature notes carry a review date so
+they surface in the due-review queue, where the prompt is *does this still need
+its source to be intelligible?* — a "no" is the move to `03 - Permanent Notes`.
+It defaults to **30 days** rather than Permanent's 14, because source-independence
+changes over months, not fortnights.
+
+Links may dangle: write `source: ["[[{ Some Book]]"]` before you've captured that
+book as a Source note, and the traversal fields light up automatically once the
+note exists.
 
 ---
 
