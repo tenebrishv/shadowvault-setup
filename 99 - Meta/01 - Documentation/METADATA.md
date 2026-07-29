@@ -40,7 +40,7 @@ the conformance test in `99 - Meta/03 - Scripts-tests/frontmatterSchema.test.js`
 | `status`     | ✓         | ✓          | ✓   | ✓        | ✓              |
 | `created`    | ✓         | ✓          | ✓   | ✓        | ✓              |
 | `modified`   | ✓         | ✓          | ✓   | —        | —              |
-| `review`     | ✓         | —          | —   | —        | ✓              |
+| `review`     | ✓         | ✓          | —   | —        | ✓              |
 | `publish`    | —         | —          | —   | —        | ✓              |
 | `tags`       | ✓         | ✓          | ✓   | ✓        | ✓              |
 | `aliases`    | ✓         | ✓          | ✓   | —        | ✓              |
@@ -200,6 +200,9 @@ writes it into the note body as an `> [!abstract]` callout.
 channel:
 channel_url:  # YouTube only — auto-fetched from oEmbed
 url:
+media:        # YouTube only — same URL as `url`; Media Extended's property key
+mx-uid:       # YouTube only — minted at capture; Media Extended's identity key
+captions:     # YouTube only — WRITTEN BY Media Extended, not by us; do not hand-edit
 thumbnail:    # YouTube only — auto-fetched from oEmbed
 watched: YYYY-MM-DD
 released:     # optional
@@ -210,6 +213,56 @@ platform:     # for non‑YouTube videos (Vimeo, Nebula)
 are queryable — a dashboard can render video cards from `thumbnail` or group by
 `channel_url`. The note body renders both as plain markdown (a linked channel
 name, an embedded image); see the inline-field rule below.
+
+**`media` deliberately repeats `url`.** They have different consumers: `url` is
+the canonical pointer every source type carries and the dashboards read, while
+`media` is Media Extended's own property key (it recognises `media`, `video` and
+`audio`), which is what makes the embed and its seek-links resolve.
+
+Don't expect a seek-link's URL to equal `url` or `media`: MX normalises the host
+when it writes an anchor (a note captured from `youtu.be/<id>` gets anchors on
+`www.youtube.com/watch?v=<id>`). See EXTERNAL-INTEGRATIONS.md → *Media Extended
+seek-links*.
+
+**`mx-uid` is what actually does the identifying, and we mint it.** Verified in
+Obsidian 2026-07-23: MX keys its media-notes on `mx-uid`, *not* on `media` — its
+parser reads `mx-uid` and gives up before it ever looks at `media`. A note
+carrying only `media` is invisible to MX's library index, so MX creates its own
+duplicate under `media-lib/`. MX offers no command to adopt an existing note,
+so the capture module generates the id itself (`helpers.mxUid`), and with both
+fields present MX treats the source note as the media-note.
+
+This is a deliberate write into another plugin's private namespace, accepted to
+keep **one note per source**. If an MX upgrade stops adopting captured notes,
+`helpers.mxUid` is the first place to look — MX ships a `migrate-media-uid`
+command, so the scheme has changed before.
+
+**`captions` is written by Media Extended, not by us — don't hand-edit it.** It
+is the one field in this schema no template or capture module emits: MX appends
+it after you run its caption-fetch on an adopted note (observed live, v4.2.7,
+2026-07-28). The value is a **list** of wikilinks to `.vtt` files in flat
+`07 - Attachments/`, each carrying a query-ish fragment:
+
+<!-- Plain fence, not ```yaml, on purpose: the conformance test reads every
+     yaml-tagged block in this file as a field DECLARATION. This is an example
+     of a value; the declaration is the YouTube / Video block above, and only
+     that one block should have to stay in sync. -->
+
+```
+captions:
+  - "[[mms5g4owpxkvm29rdzhev8c4.7zI4.en.vtt#lang=en&label=English+%28auto-generated%29]]"
+```
+
+The filename is `<mx-uid>.<short>.<lang>.vtt`, so the caption files inherit
+whatever uid MX resolved for the note — change `mx-uid` after a fetch and the
+link still resolves, but the name stops meaning anything. The `label` fragment
+is URL-encoded (`%28auto-generated%29`), so don't pattern-match it raw.
+
+Editing this list by hand does not change what MX loads; re-run the fetch
+instead. It is documented here, and carried in the fixture's `PLUGIN_WRITTEN`,
+purely so the vault knows the field exists — the schema fixture is built from
+what our own producers emit, so a key a plugin invents is otherwise invisible to
+it (#49).
 
 ### Podcast
 ```yaml
@@ -295,21 +348,49 @@ See `docs/adr/0005-inline-field-contract.md`.
 
 ## Literature Note Fields (`02 - Literature Notes/`)
 
-A Literature Note records **your** reading of a source, so it carries a single
-pointer back to that source: a `source` wikilink to the captured Source note.
-Everything else about the source — author, URL, medium — is read by Dataview
-traversal (`source.authors`, `source.url`, `source.file.tags`), never copied
-onto the literature note, so it can never drift from the source note it links.
-See [ADR 0006](../../docs/adr/0006-literature-notes-link-to-source.md).
+A Literature Note records an **atomic** idea that needs its source to be
+intelligible, so it points back at that source: `source` is a **list** of one or
+more wikilinks to captured Source notes. Everything else about the source —
+author, URL, medium — is read by Dataview traversal, never copied onto the
+literature note, so it can never drift from the source note it links. See
+[ADR 0006](../../docs/adr/0006-literature-notes-link-to-source.md) and
+[ADR 0010](../../docs/adr/0010-literature-vs-permanent-source-dependence.md).
 
 ```yaml
-source:          # "[[link to the Source note]]"
+source: []       # "[[link to a Source note]]" — one or more
+section:         # "[[link to a Section note]]" — only when one sits between this note and its source
+review:          # YYYY-MM-DD – next review; defaults to 30 days, unlike Permanent's 14
 ```
 
-The link may dangle: write `source: "[[{ Some Book]]"` before you've captured
-that book as a Source note, and the traversal fields light up automatically once
-the note exists. To filter literature notes by medium, traverse the source's own
-tag, e.g. `WHERE contains(source.file.tags, "source/paper")`.
+**`source` is the discriminator.** Presence of the field *means* the note is
+source-dependent, which is what makes it literature rather than permanent — not
+its size (ADR 0010). It is a list because one atomic claim may rest on more than
+one source, so traversal is now list-aware:
+
+```
+WHERE any(map(source, (s) => contains(s.file.tags, "source/paper")))
+```
+
+rather than the single-page `contains(source.file.tags, "source/paper")`.
+
+**`section` carries containment, not metadata** (ADR 0011). It names the note's
+*immediate* container — a **Section note** — and is **singular**, because
+containment is a tree. **Omit it** when the note sits directly under its source:
+`source:` already carries that relation, and a second field repeating the value
+would be denormalize-by-value inside one note. The two hub levels therefore query
+different fields — a Source note lists everything drawn from it at any depth with
+`WHERE contains(source, [[]])`; a Section note lists its direct children with
+`WHERE contains(section, [[]])`.
+
+**`review` gives Promotion its trigger.** Literature notes carry a review date so
+they surface in the due-review queue, where the prompt is *does this still need
+its source to be intelligible?* — a "no" is the move to `03 - Permanent Notes`.
+It defaults to **30 days** rather than Permanent's 14, because source-independence
+changes over months, not fortnights.
+
+Links may dangle: write `source: ["[[{ Some Book]]"]` before you've captured that
+book as a Source note, and the traversal fields light up automatically once the
+note exists.
 
 ---
 
