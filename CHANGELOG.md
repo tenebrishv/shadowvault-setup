@@ -64,6 +64,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
   spawn duplicates; there is no backfill.
 
 ### Fixed
+- **A captured YouTube note now names a Media Extended command that exists.** The
+  guiding prompt said to "use **Open media switcher**" — a title that matches
+  nothing in the command palette, so a reader following it hit exactly the dead
+  end the prompt was written to prevent and reasonably concluded the workflow was
+  missing. MX registers the command as **Open media quick switcher**, and mirrors
+  it on a play icon in the left ribbon; the prompt now names both, since the
+  ribbon works without the palette open. Closes #51.
 - **`STRUCTURE.md` no longer contradicts the vault it documents.** It stated the
   flat-attachments rule absolutely while `07 - Attachments/Screenshots/` was
   already shipping. The exception is now carved explicitly, with its reasoning

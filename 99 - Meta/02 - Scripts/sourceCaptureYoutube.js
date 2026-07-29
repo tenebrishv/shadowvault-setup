@@ -85,12 +85,19 @@ module.exports = async function sourceCaptureYoutube(tp, helpers) {
     // media VIEW, so the inline embed above can never capture — it is a
     // markdown widget, not a view. The prompt has to say so, or the reader
     // right-clicks the embed and concludes the workflow is broken.
-    // The prompt names the ACTION, not a command title. Media Extended ships
-    // several timestamp/screenshot variants (`-plain` among them) and which one
-    // is bound is a per-vault choice, so quoting one title here would make the
-    // note lie for anyone who bound a different one.
+    // For TIMESTAMP/SCREENSHOT the prompt names the ACTION, not a command
+    // title. Media Extended ships several variants (`-plain` among them) and
+    // which one is bound is a per-vault choice, so quoting one title here would
+    // make the note lie for anyone who bound a different one. The SWITCHER is
+    // the opposite case — MX registers exactly one (`open-media-switcher`,
+    // titled "Open media quick switcher", mirrored by a play ribbon icon under
+    // the same tooltip), so naming it is safe and it is the reader's shortest
+    // path to a capturing surface. Naming it wrong is not: issue #51 came from
+    // a live run where "Open media switcher" returned nothing in the palette
+    // and the reader concluded the workflow was missing.
     body += "*Watch in a **side-pane player**: right-click the embed above → open it in Media Extended";
-    body += " (or use **Open media switcher**). Keep the cursor in this note, then use your bound";
+    body += " (or run **Open media quick switcher** — the play icon in the left ribbon does the same).";
+    body += " Keep the cursor in this note, then use your bound";
     body += " Media Extended **timestamp** / **screenshot** hotkeys.";
     body += " The inline embed plays and seeks but **cannot capture**.";
     body += " Quick jots go inline; save real synthesis for the Literature note.*\n\n- \n";
