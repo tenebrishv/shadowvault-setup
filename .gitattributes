@@ -10,3 +10,10 @@
 # The manifest is generated LF by generate-manifest.ps1 and parsed line-by-line
 # by the bash updater's sed; keep it LF for the same reason.
 framework-manifest.json text eol=lf
+
+# Notes stay LF in the working tree. Obsidian writes LF, but a Windows checkout
+# with core.autocrlf=true converts to CRLF, so every note goes dirty with zero
+# content change after an app session (issue #52). The committed blobs are
+# already LF, so pinning eol=lf here just stops the checkout-side conversion --
+# no renormalisation needed.
+*.md text eol=lf
