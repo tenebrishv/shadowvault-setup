@@ -16,7 +16,8 @@ README:[README](../../README.md)
 - [x] **Split source templates** — done in commit `a5ed1fd`: `Source Capture` is a thin orchestrator dispatching to per-type `sourceCapture<Type>.js` Templater User Scripts in `99 - Meta/02 - Scripts/`.
 - [x] **Unit template with semester tag** – added YAML field `semester:` to `(TEMPLATE) Unit MOC.md` and to the Unit stub created inline by `sourceCaptureLecture.js`.
 - [ ]  **Zotero integration** – set up Better BibTeX + Zotero Integration plugin; define highlight colour convention.
-- [ ] **Media Extended OR Obsidian Web Clipper** –  Capturing web/YouTube content directly in Obsidian.
+- [x] **Media Extended** – chosen as the in-Obsidian video engine; plugin installed. `sourceCaptureYoutube.js` emits the MX player embed plus `media:` and a minted `mx-uid:`, so the source note *is* MX's media-note (no `media-lib/` duplicate), and screenshots route to `07 - Attachments/Screenshots`. Capture is view-gated: watch in a side-pane player view, not the inline embed (issue #26).
+- [ ] **Obsidian Web Clipper** – remaining piece for quick web/article capture into the Inbox (Raindrop handles the fuller article pipeline; see EXTERNAL-INTEGRATIONS.md).
 
 ---
 
@@ -68,7 +69,7 @@ README:[README](../../README.md)
 
 ## Ideas Under Consideration
 
-- Use `metadata-menu` plugin to edit frontmatter via dropdowns.
+- Use `metadata-menu` plugin to edit frontmatter via dropdowns. — done: ships preconfigured for the closed-vocabulary fields (see PLUGINS.md, ADR 0007).
 - Canvas dashboard for visual navigation.
 - Audio transcription via whisper.cpp for lecture notes.
 - Automatic bi‑directional linking based on named entity recognition.

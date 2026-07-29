@@ -5,6 +5,113 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+## [2.14.0] – 2026-07-29
+
+### Added
+- **A Source Recap on captured YouTube notes.** Below the `## Notes` bucket, a
+  captured video now scaffolds your *holistic* response to the source — restate
+  it in your own words, react, connect — the reflection that used to be the whole
+  point of a literature note. Atomic claims still go to their own literature
+  notes; this is the whole-source take that had nowhere else to live. It ships as
+  a shared `helpers.recapBlock(noun)` so the same block can roll out to the other
+  earning source types (Book, Article, Paper, Video, Podcast) without re-deriving
+  its shape. Part of #26, closes #44.
+- **`(TEMPLATE) Section Hub.md`** — an *insertable* block (not a note template)
+  that turns a literature note into a **Section note**: a Dataview list of its
+  direct children (`contains(section, [[]])`) plus a one-paragraph through-line.
+  Reach for it only when a source is long enough that its ideas need an
+  intermediate layer between the source and its atomic notes.
+- **Coursera-style YouTube capture through Media Extended** (v4.2.7, vendored at
+  `.obsidian/plugins/media-extended/`) — a captured YouTube note now renders a
+  real MX player, and timestamps and screenshots drop straight into the note as
+  you watch. Screenshots land in `07 - Attachments/Screenshots` as WEBP. Capture
+  is **view-gated**: it fires only from an open side-pane player view, never
+  from the inline embed, so the note's guiding prompt tells you to open the
+  player in a side pane rather than right-click the embed. Hotkeys for the
+  timestamp and screenshot commands ship in `.obsidian/hotkeys.json`.
+  Part of #26, closes #45.
+
+### Changed
+- **Literature notes are now atomic, and the literature/permanent line is
+  source-dependence, not size.** `(TEMPLATE) Literature Note.md` is reshaped to
+  parallel the Permanent template (`One-liner` → `Core Idea` → a required
+  `From the Source` anchor → `Evidence` → `Related Notes`), so promotion to a
+  permanent note is a near-mechanical transform. A literature note is one that
+  *needs its source to be intelligible* — it may be atomic and still be
+  literature; a permanent note stands alone. The holistic scaffold that used to
+  live here moved to the Source Recap (above). Part of #26, closes #44.
+- **`source:` is a list; `section:` and `review:` join the literature schema.**
+  `source:` opens to one-or-more links, so a single atomic claim can rest on
+  several sources. `section:` carries containment (a note's immediate parent
+  Section note) and stays flat-to-the-source for one-hop metadata traversal;
+  it is omitted when a note sits directly under its source. `review:` puts
+  literature notes into a review queue — a **new** dashboard section,
+  `02 - Literature Notes`-scoped, asking *does this still need its source?* —
+  which is what gives promotion a trigger. The literature review interval is
+  **30 days**, against Permanent's 14, because source-independence changes over
+  months.
+- **The YouTube note body is rebuilt around the MX player.** The fixed 569×317
+  `<iframe>` becomes a bare responsive `![](url)` embed that MX can seek and
+  capture from; the in-body thumbnail is dropped (the player shows the poster
+  frame itself, and `thumbnail:` stays queryable in frontmatter); and the
+  hand-written `%%` seek-link stub is gone — MX writes correctly-formed
+  seek-links itself, where the stub's `?t=` was simply wrong.
+- **YouTube captures now carry `media:` and a minted `mx-uid:`.** Media Extended
+  identifies its media-notes by `mx-uid` *alone* — its parser gives up before it
+  ever reads `media:` — and offers no way to adopt an existing note, so the
+  capture module mints the id itself. Without it, MX silently creates a duplicate
+  note under `media-lib/` for every video. Both fields sit in the schema
+  conformance contract precisely because this integration fails quietly rather
+  than loudly. Notes captured before this change carry no id and will still
+  spawn duplicates; there is no backfill.
+- **Excalidraw link clicks: Ctrl/Cmd+click opens the target in the active pane.**
+  The `LinkClickAction` rule that previously fired on an unmodified click now
+  fires on Ctrl/Cmd+click, so a modified click opens in the active pane while a
+  plain click falls through to the default and opens a new tab — the inverse of
+  the more common convention, and worth knowing before you wonder why a drawing's
+  links behave unlike the rest of the vault. Ships in
+  `.obsidian/plugins/obsidian-excalidraw-plugin/data.json`, so vaults taking this
+  update inherit it.
+
+### Fixed
+- **`captions:` — the third Media Extended key — is documented instead of
+  arriving unannounced.** After MX fetches a video's captions it writes a
+  `captions:` list back into our frontmatter, and the field appeared in no
+  template, no capture module, no `METADATA.md` block and no schema vocabulary.
+  The conformance fixture couldn't have caught it: both its directions are
+  anchored on what *our* producers declare, so a key a plugin invents at runtime
+  sits outside its world entirely and the suite stays green while real notes
+  carry an unknown field. `captions` is now documented under *YouTube / Video*
+  (value shape included: a list of wikilinks to `.vtt` files in flat
+  `07 - Attachments/`, each with a `#lang=…&label=…` fragment, named
+  `<mx-uid>.<short>.<lang>.vtt`), marked **plugin-written, do not hand-edit**,
+  and carried in a new `PLUGIN_WRITTEN` group in the fixture — separate from the
+  producer contracts, with a test that keeps it that way, since listing it as
+  something we emit would be a different and false claim. All three MX keys
+  (`media`, `mx-uid`, `captions`) are now enumerated as a conformance contract in
+  `EXTERNAL-INTEGRATIONS.md`, because this integration fails silently. Closes #49.
+- **The Literature template no longer asks for a seek-link shape Media Extended
+  never produces.** The required `From the Source` anchor specified
+  `[mm:ss](url#t=SECONDS)`; MX actually writes both a `&t=<seconds>` query param
+  *and* a clock-time `#t=mm:ss.dd` fragment, on a host-normalised
+  `www.youtube.com/watch?v=…` URL. Since the reader pastes the link rather than
+  composing it, the template now points at the command instead of a format. The
+  real shape — including the host normalisation, which rules out matching an
+  anchor to its source by string comparison — is documented in
+  `EXTERNAL-INTEGRATIONS.md`. Closes #50.
+- **A captured YouTube note now names a Media Extended command that exists.** The
+  guiding prompt said to "use **Open media switcher**" — a title that matches
+  nothing in the command palette, so a reader following it hit exactly the dead
+  end the prompt was written to prevent and reasonably concluded the workflow was
+  missing. MX registers the command as **Open media quick switcher**, and mirrors
+  it on a play icon in the left ribbon; the prompt now names both, since the
+  ribbon works without the palette open. Closes #51.
+- **`STRUCTURE.md` no longer contradicts the vault it documents.** It stated the
+  flat-attachments rule absolutely while `07 - Attachments/Screenshots/` was
+  already shipping. The exception is now carved explicitly, with its reasoning
+  (plugin-generated dumps are not hand-curated attachments) and an explicit
+  boundary against reading it as licence to sort attachments generally.
+
 ## [2.13.0] – 2026-07-21
 
 ### Added
@@ -392,7 +499,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ---
 
-[Unreleased]: https://github.com/tenebrishv/shadowvault-setup/compare/v2.13.0...HEAD
+[Unreleased]: https://github.com/tenebrishv/shadowvault-setup/compare/v2.14.0...HEAD
+[2.14.0]: https://github.com/tenebrishv/shadowvault-setup/compare/v2.13.0...v2.14.0
 [2.13.0]: https://github.com/tenebrishv/shadowvault-setup/compare/v2.12.0...v2.13.0
 [2.12.0]: https://github.com/tenebrishv/shadowvault-setup/compare/v2.11.1...v2.12.0
 [2.11.1]: https://github.com/tenebrishv/shadowvault-setup/compare/v2.11.0...v2.11.1

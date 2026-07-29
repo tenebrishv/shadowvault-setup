@@ -166,3 +166,31 @@ dv.view("99 - Meta/05 - Views/badge-table", {
   columns: [["Review Date", p => p.review], "growth", "type"],
 })
 ```
+
+---
+
+## 📆 Literature — Still Source-Bound?
+
+Ask of each: **does this still need its source to be intelligible?** A "no" is
+[Promotion](../99%20-%20Meta/01%20-%20Documentation/STRUCTURE.md) — drop `source:`
+(relocating the links to a body `## Sources`), drop `section:` and the
+`From the Source` anchor, flip `type`, move the file to `03 - Permanent Notes`.
+
+```dataviewjs
+dv.view("99 - Meta/05 - Views/badge-table", {
+  // A SEPARATE section from "Due for Review" above, not a widening of it.
+  // The two ask different questions — that one is general revision, this one is
+  // the source-dependence check that gives Promotion its trigger (ADR 0010) —
+  // and a dense source can yield dozens of due literature notes at once, which
+  // in a merged list would crowd permanent notes out of their own queue.
+  //
+  // Folder-scoped, like the section above, and for the same reason: Source
+  // Capture writes `review:` onto EVERY captured note via buildBaseYaml, so an
+  // unscoped query would surface every book and video ever captured.
+  pages: dv.pages('"02 - Literature Notes"')
+    .where(p => p.review && p.review <= dv.luxon.DateTime.now())
+    .sort(p => p.review, "asc")
+    .limit(10),
+  columns: [["Review Date", p => p.review], "growth", "type"],
+})
+```

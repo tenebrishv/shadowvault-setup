@@ -17,8 +17,8 @@ ShadowVault/
 	├── Lectures/  
 	├── Papers/  
 	└── Videos/  
-├── 02 - Literature Notes/ # Your response to a source, in your own words  
-├── 03 - Permanent Notes/ # Atomic, evergreen ideas – the vault's core  
+├── 02 - Literature Notes/ # Atomic ideas that need their source to make sense  
+├── 03 - Permanent Notes/ # Evergreen ideas that stand on their own – the vault's core  
 ├── 04 - MOCS/ # Maps of Content (curated pathways)  
 	├── Courses/ # One MOC per academic course  
 	├── Units/ # One MOC per course unit/module  
@@ -71,16 +71,33 @@ ShadowVault/
 |--------|---------|
 | `00 - Inbox` | Temporary holding area. Everything starts here; nothing stays. |
 | `01 - Sources` | Raw inputs (Articles, Books, Lectures, Papers, Videos). Original material, not interpretation. |
-| `02 - Literature Notes` | Your understanding of a source: summaries, insights, takeaways in your own words. |
-| `03 - Permanent Notes` | Atomic, evergreen, linked ideas. One claim per note. The vault's core. |
+| `02 - Literature Notes` | Atomic ideas that need one or more sources to be intelligible — usually several per source, nesting under Section notes when a source is long. Carry `source:`. |
+| `03 - Permanent Notes` | Atomic ideas that stand alone, needing no source to make sense. May still cite origins in a body `## Sources` list, but carry no `source:` frontmatter. The vault's core. |
 | `04 - MOCS` | Maps of Content. Curated navigation paths that reflect understanding, not classification. |
 | `05 - Projects` | Work with a defined outcome and deadline (courses, research, writing, etc.). |
 | `06 - Daily` | Daily, weekly, monthly, yearly notes. Temporal backbone and primary capture space. |
-| `07 - Attachments` | Non‑markdown files: PDFs, images, diagrams. No notes here. **One flat folder — no subfolders by type, source, or date.** Attachments are storage; you find them through the note that embeds them (a link), never by browsing this folder, so structure here would be friction with no payoff. Pasted images and new attachments land here automatically (set in `.obsidian/app.json`). |
+| `07 - Attachments` | Non‑markdown files: PDFs, images, diagrams. No notes here. **Flat by default — no subfolders by type, source, or date.** Attachments are storage; you find them through the note that embeds them (a link), never by browsing this folder, so structure here would be friction with no payoff. Pasted images and new attachments land here automatically (set in `.obsidian/app.json`). **One carved exception: `Screenshots/`** — see below. |
 | `08 - Nexus` | Vault‑wide dashboards (reviews, reading, growth). Operational control centre. |
 | `09 - Entities/Agents` | People, Organizations, Countries, Synthetic/AI systems — entities with decision-making power. |
 | `09 - Entities/Non-Agents` | Places, Artifacts, Tools, Systems, Natural entities, Events — entities with structural/relational influence only. |
 | `99 - Meta` | Infrastructure: templates, documentation, configuration. Supports the system itself. |
+
+### The one attachment subfolder: `07 - Attachments/Screenshots`
+
+Media Extended writes video screenshots to `07 - Attachments/Screenshots` (as
+WEBP), set in its plugin settings. This is a deliberate exception to the flat
+rule, not a lapse from it.
+
+The flat rule exists because *hand-curated* attachments are found through the
+note that embeds them, so foldering them adds friction and buys nothing. Video
+screenshots are not hand-curated: a single lecture can drop dozens of them in
+one sitting, they are named by the plugin rather than by you, and you never go
+looking for one directly — you reach it through the note it was captured into.
+Machine-generated dumps mixed into the same folder as your PDFs would make that
+folder unbrowsable for the times you *do* open it.
+
+The exception is narrow: it covers plugin-generated capture output only. Do not
+read it as licence to sort attachments by type, source, or date.
 
 ## Why Folders Are Shallow
 

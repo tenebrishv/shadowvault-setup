@@ -44,7 +44,37 @@ const ENUMS = {
 };
 
 // ---------------------------------------------------------------------------
-// Closed field vocabulary (rule 2). Every field any producer may emit.
+// Plugin-written fields (issue #49).
+//
+// Fields that appear in real notes' frontmatter which NO producer in this vault
+// emits — an Obsidian plugin writes them at runtime, after capture. They sit
+// outside both rules in this file's header: rule 1 has no producer to be
+// descriptive about, and rule 2's closed world is built from what our templates
+// and docs declare, so a key a plugin invents is invisible to the whole fixture.
+// `captions` was carried by real notes with this suite fully green, and only the
+// first live end-to-end run of the YouTube workflow surfaced it (#49).
+//
+// Listing them here does the one thing a fixture still can: make the vault KNOW
+// the field exists. They join VOCABULARY (so the name is claimed and documented)
+// and DOC_SECTIONS (so METADATA.md must document them under the type they
+// actually appear on). They must NEVER enter a `required`/`optional` producer
+// contract — that would assert we emit them, and the test below holds that line.
+// ---------------------------------------------------------------------------
+
+const PLUGIN_WRITTEN = {
+    // Media Extended, v4.2.7, observed live 2026-07-28. After MX fetches a
+    // video's caption tracks it writes `captions:` back into our frontmatter: a
+    // LIST of wikilinks to `.vtt` files in flat `07 - Attachments/`, each with a
+    // `#lang=…&label=…` fragment. The third MX key in our notes after `media`
+    // and `mx-uid` (ADR 0012) — and the only one MX writes rather than us. The
+    // filename is `<mx-uid>.<short>.<lang>.vtt`, so it inherits whatever uid MX
+    // resolved.
+    Youtube: ["captions"],
+};
+
+// ---------------------------------------------------------------------------
+// Closed field vocabulary (rule 2). Every field any producer may emit, plus the
+// plugin-written fields above, which no producer emits but real notes carry.
 // Grouped for readability only — the test flattens this.
 // ---------------------------------------------------------------------------
 
@@ -53,10 +83,14 @@ const VOCABULARY = {
            "tags", "aliases", "cssclasses", "publish"],
     periodic: ["date", "period", "week", "month", "year"],
     curriculum: ["institution", "default_lecturer", "course", "semester"],
-    literature: ["source"],
+    // `section` names a literature note's immediate container, a Section note
+    // (ADR 0011). Optional ON A NOTE — present only where an intermediate
+    // Section note exists — but the template emits the key, so it is `required`
+    // below under rule 1 (descriptive: what the producer emits today).
+    literature: ["source", "section"],
     source: ["authors", "publish_date", "publisher", "isbn", "general_subject", "specific_subject",
              "url", "publication", "doi", "citekey", "keywords", "channel", "channel_url",
-             "thumbnail", "watched", "released",
+             "thumbnail", "watched", "released", "media", "mx-uid",
              "platform", "host", "guest", "account", "tweet_text", "context", "led_here",
              "unit", "lecturer", "lecture_num", "date_given"],
     entity: ["role", "organization", "contact", "website", "founded", "sector", "headquarters",
@@ -64,6 +98,8 @@ const VOCABULARY = {
              "release_date", "model_family", "coordinates", "region", "country", "historical",
              "date_created", "location", "medium", "category", "version", "scope", "origin_date",
              "components", "classification", "participants"],
+    // Not emitted by anything in this vault — see PLUGIN_WRITTEN above.
+    pluginWritten: Object.values(PLUGIN_WRITTEN).flat(),
 };
 
 // ---------------------------------------------------------------------------
@@ -85,8 +121,11 @@ const TEMPLATES = {
     },
     "(TEMPLATE) Literature Note": {
         typeValue: "literature",
-        required: ["id", "type", "growth", "status", "source",
-                   "created", "modified", "tags", "aliases", "cssclasses"],
+        // `review` joins here per ADR 0010 decision 4: without it, literature
+        // notes never surface in a review queue and Promotion — the move to
+        // permanent — has no trigger, so it never fires.
+        required: ["id", "type", "growth", "status", "source", "section",
+                   "created", "modified", "review", "tags", "aliases", "cssclasses"],
     },
     "(TEMPLATE) MOC": {
         typeValue: "moc",
@@ -176,6 +215,11 @@ const EXEMPT_TEMPLATES = {
     "(TEMPLATE) Source Capture":
         "Pure <%* … %> orchestrator. Emits no frontmatter of its own; the YAML it " +
         "assembles at runtime is checked via CAPTURE below.",
+    "(TEMPLATE) Section Hub":
+        "A BLOCK, not a note: inserted at the cursor into an existing literature " +
+        "note when it becomes a Section note (a hub with descendants). Emits no " +
+        "frontmatter — the host note already carries the literature schema, and a " +
+        "Section note is not a distinct type (ADR 0011 §5).",
 };
 
 // ---------------------------------------------------------------------------
@@ -221,7 +265,12 @@ const CAPTURE = {
     },
     Youtube: {
         promptScript: ["https://youtu.be/broken", "Manual Title", "Manual Channel"],
-        required: ["channel", "channel_url", "url", "thumbnail", "watched", "released"],
+        // `media` mirrors `url`, and `mx-uid` is minted by helpers.mxUid — the
+        // pair is what makes Media Extended adopt this note as its media-note
+        // rather than spawning a duplicate under `media-lib/`. `mx-uid` is a
+        // deliberate write into MX's namespace; it is in this contract because
+        // we emit it, so dropping it can never pass silently.
+        required: ["channel", "channel_url", "url", "media", "mx-uid", "thumbnail", "watched", "released"],
     },
     Video: {
         promptScript: ["A Great Talk", "Vimeo", "Some Creator", "https://vimeo.com/123", "2023-05-01"],
@@ -335,8 +384,12 @@ const DOC_SECTIONS = {
     "Book": [...CAPTURE.Book.required],
     "Article": [...CAPTURE.Article.required],
     "Paper": [...CAPTURE.Paper.required],
-    // One block documents both YouTube and non-YouTube video.
-    "YouTube / Video": [...new Set([...CAPTURE.Youtube.required, ...CAPTURE.Video.required])],
+    // One block documents both YouTube and non-YouTube video. It also has to
+    // document `captions`, which Media Extended writes after capture — bound
+    // through PLUGIN_WRITTEN, not through the module contract, because the
+    // module does not emit it.
+    "YouTube / Video": [...new Set([...CAPTURE.Youtube.required, ...CAPTURE.Video.required,
+                                    ...PLUGIN_WRITTEN.Youtube])],
     "Podcast": [...CAPTURE.Podcast.required],
     "Tweet": [...CAPTURE.Tweet.required, ...(CAPTURE.Tweet.optional || [])],
     "Lecture": [...CAPTURE.Lecture.required],
@@ -359,6 +412,7 @@ const DOC_SECTIONS = {
 module.exports = {
     ENUMS,
     VOCABULARY,
+    PLUGIN_WRITTEN,
     TEMPLATES,
     EXEMPT_TEMPLATES,
     DOC_SECTIONS,
