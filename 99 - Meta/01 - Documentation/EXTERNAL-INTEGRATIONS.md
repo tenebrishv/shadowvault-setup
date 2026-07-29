@@ -13,7 +13,33 @@ Tools currently in the vault.
 
 | Tool | Purpose | Platform | Status |
 |------|---------|----------|--------|
-| **Media Extended** (v4.2.7) | Timestamped notes + screenshots for YouTube/video directly in Obsidian (Coursera-style) | Obsidian plugin | Plugin installed and enabled. YouTube capture emits an MX player embed plus `media:` and a minted `mx-uid:`, which together make the source note MX's media-note — one note per video, no `media-lib/` duplicate. Screenshots land in `07 - Attachments/Screenshots` as WEBP. **Capture is view-gated** — timestamps and screenshots only register from an open side-pane player view, never from the inline embed. See issue #26 (Map: Coursera-style YouTube note-taking). Chosen over HoverNotes and the Web Clipper for video. |
+| **Media Extended** (v4.2.7) | Timestamped notes + screenshots for YouTube/video directly in Obsidian (Coursera-style) | Obsidian plugin | Plugin installed and enabled. YouTube capture emits an MX player embed plus `media:` and a minted `mx-uid:`, which together make the source note MX's media-note — one note per video, no `media-lib/` duplicate. Screenshots land in `07 - Attachments/Screenshots` as WEBP. **Capture is view-gated** — timestamps and screenshots only register from an open side-pane player view, never from the inline embed. Seek-links are pasted, never hand-written — see *Media Extended seek-links* below for their actual shape. See issue #26 (Map: Coursera-style YouTube note-taking). Chosen over HoverNotes and the Web Clipper for video. |
+
+### Media Extended seek-links
+
+What MX's timestamp command actually inserts (observed live, v4.2.7, 2026-07-28):
+
+```
+[00:17](https://www.youtube.com/watch?v=caCeQppJOW4&t=18#t=00:17.60)
+[03:23](https://www.youtube.com/watch?v=lq7tnxGLWGk&t=204#t=03:23.64)
+```
+
+Three things about that shape, none of which match the `[mm:ss](url#t=SECONDS)`
+form the capability audit (#27) recorded — corrected by **#50**:
+
+1. **Both** a `&t=` query param and a `#t=` fragment are written, not the
+   fragment alone.
+2. The **fragment is clock time**, `#t=mm:ss.dd` — `#t=00:17.60`, not `#t=18`
+   (hundredths are dropped when zero: `#t=01:00`). Whole seconds, rounded, go
+   in the *query* param instead.
+3. **MX normalises the host.** A note captured from `https://youtu.be/<id>`
+   gets anchors on `https://www.youtube.com/watch?v=<id>`, so an anchor URL
+   will **not** string-match the note's own `url:` / `media:` values. Any future
+   "does this anchor point at this source?" check must compare video ids, not
+   URLs. Relevant to #46, which generalises the seek-link to non-AV media.
+
+Nobody composes these by hand — the reader pastes what MX gives them — so
+documentation should point at the command, not at a format to reproduce.
 
 ---
 ## Planned Integrations

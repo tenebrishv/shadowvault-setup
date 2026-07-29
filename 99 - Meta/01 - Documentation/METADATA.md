@@ -218,6 +218,11 @@ the canonical pointer every source type carries and the dashboards read, while
 `media` is Media Extended's own property key (it recognises `media`, `video` and
 `audio`), which is what makes the embed and its seek-links resolve.
 
+Don't expect a seek-link's URL to equal `url` or `media`: MX normalises the host
+when it writes an anchor (a note captured from `youtu.be/<id>` gets anchors on
+`www.youtube.com/watch?v=<id>`). See EXTERNAL-INTEGRATIONS.md → *Media Extended
+seek-links*.
+
 **`mx-uid` is what actually does the identifying, and we mint it.** Verified in
 Obsidian 2026-07-23: MX keys its media-notes on `mx-uid`, *not* on `media` — its
 parser reads `mx-uid` and gives up before it ever looks at `media`. A note
