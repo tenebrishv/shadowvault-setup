@@ -44,7 +44,37 @@ const ENUMS = {
 };
 
 // ---------------------------------------------------------------------------
-// Closed field vocabulary (rule 2). Every field any producer may emit.
+// Plugin-written fields (issue #49).
+//
+// Fields that appear in real notes' frontmatter which NO producer in this vault
+// emits — an Obsidian plugin writes them at runtime, after capture. They sit
+// outside both rules in this file's header: rule 1 has no producer to be
+// descriptive about, and rule 2's closed world is built from what our templates
+// and docs declare, so a key a plugin invents is invisible to the whole fixture.
+// `captions` was carried by real notes with this suite fully green, and only the
+// first live end-to-end run of the YouTube workflow surfaced it (#49).
+//
+// Listing them here does the one thing a fixture still can: make the vault KNOW
+// the field exists. They join VOCABULARY (so the name is claimed and documented)
+// and DOC_SECTIONS (so METADATA.md must document them under the type they
+// actually appear on). They must NEVER enter a `required`/`optional` producer
+// contract — that would assert we emit them, and the test below holds that line.
+// ---------------------------------------------------------------------------
+
+const PLUGIN_WRITTEN = {
+    // Media Extended, v4.2.7, observed live 2026-07-28. After MX fetches a
+    // video's caption tracks it writes `captions:` back into our frontmatter: a
+    // LIST of wikilinks to `.vtt` files in flat `07 - Attachments/`, each with a
+    // `#lang=…&label=…` fragment. The third MX key in our notes after `media`
+    // and `mx-uid` (ADR 0012) — and the only one MX writes rather than us. The
+    // filename is `<mx-uid>.<short>.<lang>.vtt`, so it inherits whatever uid MX
+    // resolved.
+    Youtube: ["captions"],
+};
+
+// ---------------------------------------------------------------------------
+// Closed field vocabulary (rule 2). Every field any producer may emit, plus the
+// plugin-written fields above, which no producer emits but real notes carry.
 // Grouped for readability only — the test flattens this.
 // ---------------------------------------------------------------------------
 
@@ -68,6 +98,8 @@ const VOCABULARY = {
              "release_date", "model_family", "coordinates", "region", "country", "historical",
              "date_created", "location", "medium", "category", "version", "scope", "origin_date",
              "components", "classification", "participants"],
+    // Not emitted by anything in this vault — see PLUGIN_WRITTEN above.
+    pluginWritten: Object.values(PLUGIN_WRITTEN).flat(),
 };
 
 // ---------------------------------------------------------------------------
@@ -352,8 +384,12 @@ const DOC_SECTIONS = {
     "Book": [...CAPTURE.Book.required],
     "Article": [...CAPTURE.Article.required],
     "Paper": [...CAPTURE.Paper.required],
-    // One block documents both YouTube and non-YouTube video.
-    "YouTube / Video": [...new Set([...CAPTURE.Youtube.required, ...CAPTURE.Video.required])],
+    // One block documents both YouTube and non-YouTube video. It also has to
+    // document `captions`, which Media Extended writes after capture — bound
+    // through PLUGIN_WRITTEN, not through the module contract, because the
+    // module does not emit it.
+    "YouTube / Video": [...new Set([...CAPTURE.Youtube.required, ...CAPTURE.Video.required,
+                                    ...PLUGIN_WRITTEN.Youtube])],
     "Podcast": [...CAPTURE.Podcast.required],
     "Tweet": [...CAPTURE.Tweet.required, ...(CAPTURE.Tweet.optional || [])],
     "Lecture": [...CAPTURE.Lecture.required],
@@ -376,6 +412,7 @@ const DOC_SECTIONS = {
 module.exports = {
     ENUMS,
     VOCABULARY,
+    PLUGIN_WRITTEN,
     TEMPLATES,
     EXEMPT_TEMPLATES,
     DOC_SECTIONS,
