@@ -53,7 +53,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
   capture from; the in-body thumbnail is dropped (the player shows the poster
   frame itself, and `thumbnail:` stays queryable in frontmatter); and the
   hand-written `%%` seek-link stub is gone — MX writes correctly-formed
-  `[mm:ss](url#t=SECONDS)` links itself, where the stub's `?t=` was simply wrong.
+  seek-links itself, where the stub's `?t=` was simply wrong.
 - **YouTube captures now carry `media:` and a minted `mx-uid:`.** Media Extended
   identifies its media-notes by `mx-uid` *alone* — its parser gives up before it
   ever reads `media:` — and offers no way to adopt an existing note, so the
@@ -64,6 +64,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
   spawn duplicates; there is no backfill.
 
 ### Fixed
+- **The Literature template no longer asks for a seek-link shape Media Extended
+  never produces.** The required `From the Source` anchor specified
+  `[mm:ss](url#t=SECONDS)`; MX actually writes both a `&t=<seconds>` query param
+  *and* a clock-time `#t=mm:ss.dd` fragment, on a host-normalised
+  `www.youtube.com/watch?v=…` URL. Since the reader pastes the link rather than
+  composing it, the template now points at the command instead of a format. The
+  real shape — including the host normalisation, which rules out matching an
+  anchor to its source by string comparison — is documented in
+  `EXTERNAL-INTEGRATIONS.md`. Closes #50.
 - **A captured YouTube note now names a Media Extended command that exists.** The
   guiding prompt said to "use **Open media switcher**" — a title that matches
   nothing in the command palette, so a reader following it hit exactly the dead

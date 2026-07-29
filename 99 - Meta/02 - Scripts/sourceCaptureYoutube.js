@@ -78,8 +78,10 @@ module.exports = async function sourceCaptureYoutube(tp, helpers) {
     body += "![](" + data.url + ")\n\n";
     body += "## Notes\n";
     // No `%%`-commented seek-link stub: MX writes its own correctly-formed
-    // `[mm:ss](url#t=SECONDS)` links, so a hand-rolled `?t=` example was both
-    // redundant and wrong (see issue #29).
+    // seek-links, so a hand-rolled `?t=` example was both redundant and wrong
+    // (see issue #29). Their real shape carries BOTH a `&t=<seconds>` query
+    // param and a clock-time `#t=mm:ss.dd` fragment, on a host-normalised
+    // watch URL — see EXTERNAL-INTEGRATIONS.md, corrected by #50.
     //
     // Capture is VIEW-GATED (issue #33): the commands check for an active
     // media VIEW, so the inline embed above can never capture — it is a

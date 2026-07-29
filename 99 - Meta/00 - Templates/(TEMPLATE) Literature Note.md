@@ -27,7 +27,7 @@ cssclasses:
 ---
 
 > [!quote] From the Source
-> *Where this idea lives in the source — **required**: a `[mm:ss](url#t=SECONDS)` seek-link for video or audio, a page for a book, a section for a paper. Optionally paste the passage itself, a screenshot, or a transcript pull-quote.*
+> *Where this idea lives in the source — **required**: for video or audio, the seek-link Media Extended inserts (paste it, don't compose it); a page for a book, a section for a paper. Optionally paste the passage itself, a screenshot, or a transcript pull-quote.*
 >
 > *Author, URL, and medium live on the linked `source` note — never copy them here.*
 
