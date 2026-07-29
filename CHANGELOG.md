@@ -62,6 +62,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
   conformance contract precisely because this integration fails quietly rather
   than loudly. Notes captured before this change carry no id and will still
   spawn duplicates; there is no backfill.
+- **Excalidraw link clicks: Ctrl/Cmd+click opens the target in the active pane.**
+  The `LinkClickAction` rule that previously fired on an unmodified click now
+  fires on Ctrl/Cmd+click, so a modified click opens in the active pane while a
+  plain click falls through to the default and opens a new tab — the inverse of
+  the more common convention, and worth knowing before you wonder why a drawing's
+  links behave unlike the rest of the vault. Ships in
+  `.obsidian/plugins/obsidian-excalidraw-plugin/data.json`, so vaults taking this
+  update inherit it.
 
 ### Fixed
 - **`captions:` — the third Media Extended key — is documented instead of
