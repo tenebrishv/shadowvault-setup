@@ -7,6 +7,9 @@ CLAUDE.md
 # Claude Code skills (kept local only, not published)
 .claude/skills/
 
+# Claude Code agent worktrees (transient checkouts, live inside the repo)
+.claude/worktrees/
+
 # Agent-skill config and agent-facing dev docs (kept local only, not published)
 docs/
 CONTEXT.md
