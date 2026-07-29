@@ -13,7 +13,29 @@ Tools currently in the vault.
 
 | Tool | Purpose | Platform | Status |
 |------|---------|----------|--------|
-| **Media Extended** (v4.2.7) | Timestamped notes + screenshots for YouTube/video directly in Obsidian (Coursera-style) | Obsidian plugin | Plugin installed and enabled. YouTube capture emits an MX player embed plus `media:` and a minted `mx-uid:`, which together make the source note MX's media-note — one note per video, no `media-lib/` duplicate. Screenshots land in `07 - Attachments/Screenshots` as WEBP. **Capture is view-gated** — timestamps and screenshots only register from an open side-pane player view, never from the inline embed. Seek-links are pasted, never hand-written — see *Media Extended seek-links* below for their actual shape. See issue #26 (Map: Coursera-style YouTube note-taking). Chosen over HoverNotes and the Web Clipper for video. |
+| **Media Extended** (v4.2.7) | Timestamped notes + screenshots for YouTube/video directly in Obsidian (Coursera-style) | Obsidian plugin | Plugin installed and enabled. YouTube capture emits an MX player embed plus `media:` and a minted `mx-uid:`, which together make the source note MX's media-note — one note per video, no `media-lib/` duplicate. MX writes one key back at us — `captions:`, after its caption fetch; see *Media Extended frontmatter keys* below for all three. Screenshots land in `07 - Attachments/Screenshots` as WEBP. **Capture is view-gated** — timestamps and screenshots only register from an open side-pane player view, never from the inline embed. Seek-links are pasted, never hand-written — see *Media Extended seek-links* below for their actual shape. See issue #26 (Map: Coursera-style YouTube note-taking). Chosen over HoverNotes and the Web Clipper for video. |
+
+### Media Extended frontmatter keys — the conformance contract
+
+Three MX keys live in our notes. This integration **fails silently** — a missing
+or malformed key throws nothing, it just quietly stops working — so each one is
+written down here with who writes it and what breaks without it:
+
+| Key | Written by | Purpose | What breaks if it's wrong |
+|-----|-----------|---------|---------------------------|
+| `media` | **Us** (`sourceCaptureYoutube.js`) — mirrors `url` | MX's own media property (it recognises `media`, `video`, `audio`); makes the embed and its seek-links resolve | Player embed and seek-links stop resolving |
+| `mx-uid` | **Us** (`helpers.mxUid`) — minted at capture | MX's *identity* key; its parser gates on this and never reaches `media` without it (ADR 0012) | MX can't see the note, spawns a duplicate under `media-lib/` |
+| `captions` | **Media Extended**, after its caption fetch | List of wikilinks to fetched `.vtt` tracks | Nothing we own — but hand-edits are lost/ignored; re-run the fetch instead |
+
+`captions` is the odd one out: the only MX key **MX writes into our frontmatter**
+rather than one we write into MX's namespace. Its value is a list of wikilinks to
+`.vtt` files in flat `07 - Attachments/`, each with a `#lang=…&label=…` fragment,
+named `<mx-uid>.<short>.<lang>.vtt` — so the caption files inherit whatever uid MX
+resolved. Full shape in METADATA.md → *YouTube / Video*; it is in the schema
+fixture's `PLUGIN_WRITTEN` so the vault at least knows it exists (#49).
+
+Any of the three changing across an MX upgrade is a silent break, which is why
+they are enumerated rather than left to be rediscovered live.
 
 ### Media Extended seek-links
 

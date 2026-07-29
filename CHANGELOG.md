@@ -64,6 +64,22 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
   spawn duplicates; there is no backfill.
 
 ### Fixed
+- **`captions:` — the third Media Extended key — is documented instead of
+  arriving unannounced.** After MX fetches a video's captions it writes a
+  `captions:` list back into our frontmatter, and the field appeared in no
+  template, no capture module, no `METADATA.md` block and no schema vocabulary.
+  The conformance fixture couldn't have caught it: both its directions are
+  anchored on what *our* producers declare, so a key a plugin invents at runtime
+  sits outside its world entirely and the suite stays green while real notes
+  carry an unknown field. `captions` is now documented under *YouTube / Video*
+  (value shape included: a list of wikilinks to `.vtt` files in flat
+  `07 - Attachments/`, each with a `#lang=…&label=…` fragment, named
+  `<mx-uid>.<short>.<lang>.vtt`), marked **plugin-written, do not hand-edit**,
+  and carried in a new `PLUGIN_WRITTEN` group in the fixture — separate from the
+  producer contracts, with a test that keeps it that way, since listing it as
+  something we emit would be a different and false claim. All three MX keys
+  (`media`, `mx-uid`, `captions`) are now enumerated as a conformance contract in
+  `EXTERNAL-INTEGRATIONS.md`, because this integration fails silently. Closes #49.
 - **The Literature template no longer asks for a seek-link shape Media Extended
   never produces.** The required `From the Source` anchor specified
   `[mm:ss](url#t=SECONDS)`; MX actually writes both a `&t=<seconds>` query param

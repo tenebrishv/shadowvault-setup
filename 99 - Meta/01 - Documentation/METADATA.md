@@ -202,6 +202,7 @@ channel_url:  # YouTube only — auto-fetched from oEmbed
 url:
 media:        # YouTube only — same URL as `url`; Media Extended's property key
 mx-uid:       # YouTube only — minted at capture; Media Extended's identity key
+captions:     # YouTube only — WRITTEN BY Media Extended, not by us; do not hand-edit
 thumbnail:    # YouTube only — auto-fetched from oEmbed
 watched: YYYY-MM-DD
 released:     # optional
@@ -235,6 +236,33 @@ This is a deliberate write into another plugin's private namespace, accepted to
 keep **one note per source**. If an MX upgrade stops adopting captured notes,
 `helpers.mxUid` is the first place to look — MX ships a `migrate-media-uid`
 command, so the scheme has changed before.
+
+**`captions` is written by Media Extended, not by us — don't hand-edit it.** It
+is the one field in this schema no template or capture module emits: MX appends
+it after you run its caption-fetch on an adopted note (observed live, v4.2.7,
+2026-07-28). The value is a **list** of wikilinks to `.vtt` files in flat
+`07 - Attachments/`, each carrying a query-ish fragment:
+
+<!-- Plain fence, not ```yaml, on purpose: the conformance test reads every
+     yaml-tagged block in this file as a field DECLARATION. This is an example
+     of a value; the declaration is the YouTube / Video block above, and only
+     that one block should have to stay in sync. -->
+
+```
+captions:
+  - "[[mms5g4owpxkvm29rdzhev8c4.7zI4.en.vtt#lang=en&label=English+%28auto-generated%29]]"
+```
+
+The filename is `<mx-uid>.<short>.<lang>.vtt`, so the caption files inherit
+whatever uid MX resolved for the note — change `mx-uid` after a fetch and the
+link still resolves, but the name stops meaning anything. The `label` fragment
+is URL-encoded (`%28auto-generated%29`), so don't pattern-match it raw.
+
+Editing this list by hand does not change what MX loads; re-run the fetch
+instead. It is documented here, and carried in the fixture's `PLUGIN_WRITTEN`,
+purely so the vault knows the field exists — the schema fixture is built from
+what our own producers emit, so a key a plugin invents is otherwise invisible to
+it (#49).
 
 ### Podcast
 ```yaml

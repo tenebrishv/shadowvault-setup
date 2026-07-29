@@ -402,6 +402,39 @@ for (const [type, contract] of Object.entries(schema.CAPTURE)) {
 }
 
 // ---------------------------------------------------------------------------
+// Plugin-written fields (issue #49)
+//
+// These are in the vocabulary so the vault knows they exist, NOT because we
+// write them. The distinction is the whole point: if one ever turns up in a
+// producer contract, the fixture has quietly started claiming we emit a field a
+// plugin owns — and the per-producer checks above would then wave through a
+// template or module that emitted it.
+// ---------------------------------------------------------------------------
+
+test("Schema: no producer contract claims a plugin-written field", () => {
+    const pluginFields = Object.values(schema.PLUGIN_WRITTEN).flat();
+    const contracts = [
+        ["buildBaseYaml", schema.BASE_CAPTURE_FIELDS],
+        ...Object.entries(schema.TEMPLATES).map(([name, c]) =>
+            [name, [...c.required, ...(c.optional || [])]]),
+        ...Object.entries(schema.CAPTURE).map(([type, c]) =>
+            [`${type} capture`, [...c.required, ...(c.optional || [])]]),
+    ];
+    const claimed = [];
+    for (const [producer, fields] of contracts) {
+        for (const field of pluginFields) {
+            if (fields.includes(field)) claimed.push(`${producer} → ${field}`);
+        }
+    }
+    assert.deepEqual(
+        claimed, [],
+        `PLUGIN_WRITTEN fields are written by a plugin AFTER capture, so no producer ` +
+        `may list them: ${claimed.join(", ")}. If we genuinely started emitting one, ` +
+        `move it out of PLUGIN_WRITTEN into VOCABULARY proper.`,
+    );
+});
+
+// ---------------------------------------------------------------------------
 // METADATA.md
 //
 // Coupled at field NAMES and ENUM VALUES only. Descriptions, ordering and prose
