@@ -60,6 +60,13 @@ test("YouTube: the capture prompt names the side-pane view, never the inline emb
 
     assert.match(result.body, /side-pane player/i);
     assert.match(result.body, /cannot capture/i);
+    // The switcher command MUST be named exactly as Media Extended registers
+    // it. Issue #51: the prompt said "Open media switcher", which matches
+    // nothing in the palette, so the reader hit the same dead end the prompt
+    // was written to prevent. MX's real title is "Open media quick switcher"
+    // (`open-media-switcher`, verified in the vendored v4.2.7 main.js).
+    assert.match(result.body, /\bOpen media quick switcher\b/);
+    assert.doesNotMatch(result.body, /Open media switcher/);
     // The old hand-rolled seek-link stub used `?t=`; MX emits `#t=` itself.
     assert.doesNotMatch(result.body, /\?t=/);
     assert.doesNotMatch(result.body, /%%/);
