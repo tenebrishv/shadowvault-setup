@@ -127,27 +127,34 @@ function failingFetch() {
     installMockFetch(async () => { throw new Error("network error (mocked)"); });
 }
 
-// Fake app.vault / app.metadataCache / app.fileManager for the Lecture module.
+// Fake app.vault / app.metadataCache / app.fileManager for the Lecture module
+// and moveSourceNote.js.
 // folders: { "04 - MOCS/Courses": ["Existing Course"] } - basenames present in that folder
 // files:   { "04 - MOCS/Courses/Existing Course.md": { frontmatter: {...} } } - existence + frontmatter
-// Returns { created, frontmatterEdits, renames, state, activeFile }:
+// Returns { created, createdFolders, frontmatterEdits, renames, state, activeFile }:
 //   created         — direct app.vault.create calls (should stay empty now that
 //                     stubs are born from template files)
+//   createdFolders  — every app.vault.createFolder path, in call order
 //   frontmatterEdits — every processFrontMatter application, as { path, frontmatter }
 //   renames         — every fileManager.renameFile call, as { from, to }
 //   state           — live { folders, files }; pass as createMockTp's vaultState
 //   activeFile      — the file getActiveFile() returns
 // `activeFile`: what app.workspace.getActiveFile() returns — the note the
-// orchestrator renames once capture succeeds. Defaults to a note sitting in
-// 00 - Inbox, which is where Source Capture is normally run.
+// orchestrator renames once capture succeeds, and the note moveSourceNote
+// files. Defaults to a note sitting in 00 - Inbox, which is where Source
+// Capture is normally run. Carries `name` (basename + extension) as well as
+// `basename`, mirroring Obsidian's TFile, since moveSourceNote builds the
+// destination path from `name`.
 function installMockApp({ folders = {}, files = {}, activeFile } = {}) {
     const created = [];
+    const createdFolders = [];
     const frontmatterEdits = [];
     const renames = [];
     const state = { folders, files };
     const active = activeFile ?? {
         path: "00 - Inbox/Untitled.md",
         basename: "Untitled",
+        name: "Untitled.md",
         extension: "md",
         parent: { path: "00 - Inbox" },
     };
@@ -178,6 +185,12 @@ function installMockApp({ folders = {}, files = {}, activeFile } = {}) {
             async create(path, content) {
                 created.push({ path, content });
             },
+            // Registers the folder in `folders` so a following
+            // getAbstractFileByPath finds it, the way Obsidian's would.
+            async createFolder(path) {
+                createdFolders.push(path);
+                folders[path] ??= [];
+            },
         },
         fileManager: {
             async renameFile(file, newPath) {
@@ -197,7 +210,7 @@ function installMockApp({ folders = {}, files = {}, activeFile } = {}) {
             },
         },
     };
-    return { created, frontmatterEdits, renames, state, activeFile: active };
+    return { created, createdFolders, frontmatterEdits, renames, state, activeFile: active };
 }
 
 module.exports = {

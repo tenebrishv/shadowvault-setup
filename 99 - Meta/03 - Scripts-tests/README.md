@@ -37,6 +37,15 @@ documented filename prefix, each naming a module that loads). This logic used
 to live inside `(TEMPLATE) Source Capture.md`, where none of it was reachable
 from here; keeping the template a one-line adapter is what preserves that.
 
+`moveSourceNote.test.js` covers the filing command — the counterpart to
+capture, which moves a note out of `00 - Inbox` into its type folder. It drives
+`resolveType` directly as a table over all nine types and every shape
+frontmatter `tags` can take, then drives the module itself through mocked
+`app`/`Notice` to assert the rename that came out, or that none did (Thought's
+exemption, an unrecognised note, a note already filed, a name collision at the
+destination). The type→folder mapping it asserts is the `folder` column of the
+orchestrator's registry, not a restatement of it.
+
 `sourceCaptureHelpers.test.js` covers the shared helpers, including
 `sanitizeTitle` (a table test over the characters the old per-module regex
 variants disagreed on) and `fetchWithFallback` (success, failure, skip,

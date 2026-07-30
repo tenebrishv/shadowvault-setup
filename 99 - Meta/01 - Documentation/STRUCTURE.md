@@ -16,7 +16,9 @@ ShadowVault/
 	├── Books/  
 	├── Lectures/  
 	├── Papers/  
-	└── Videos/  
+	├── Videos/  
+	├── Podcasts/ # created on first use  
+	└── Tweets/ # created on first use  
 ├── 02 - Literature Notes/ # Atomic ideas that need their source to make sense  
 ├── 03 - Permanent Notes/ # Evergreen ideas that stand on their own – the vault's core  
 ├── 04 - MOCS/ # Maps of Content (curated pathways)  
@@ -61,7 +63,7 @@ ShadowVault/
 | Entity note (Organization/Place/etc.) | Descriptive Name | `United Nations`, `Paris` |
 
 ## Special Folders
-- **`00 - Inbox/`** – All new notes (except those created by Source Capture, which can be moved here manually) should land here. Process regularly.
+- **`00 - Inbox/`** – All new notes should land here, Source Capture's included. Process regularly: run [Move Source Note](TEMPLATES.md#filing-a-note-move-source-note) on a source note to file it into `01 - Sources/<type>`. Notes left here stay invisible to the folder-scoped hub queries, so the Inbox is a staging area, not a home.
 - **`08 - Nexus/`** – Contains Dataview dashboards that aggregate information across the vault (e.g., due reviews, unprocessed inbox items).
 - **`09 - Entities/`** – Real-world nouns. Split into two flat folders by whether the entity can decide/act (`Agents/`) or only exerts structural/relational influence (`Non-Agents/`). Subtype (Person, Organization, Place, Artifact, etc.) is a tag, not a subfolder — see [METADATA](METADATA.md#tags-system).
 -
@@ -70,7 +72,7 @@ ShadowVault/
 | Folder | Purpose |
 |--------|---------|
 | `00 - Inbox` | Temporary holding area. Everything starts here; nothing stays. |
-| `01 - Sources` | Raw inputs (Articles, Books, Lectures, Papers, Videos). Original material, not interpretation. |
+| `01 - Sources` | Raw inputs (Articles, Books, Lectures, Papers, Videos). Original material, not interpretation. `Podcasts/` and `Tweets/` don't ship — the [Move Source Note](TEMPLATES.md#filing-a-note-move-source-note) command creates whichever destination is missing the first time it files a note there. |
 | `02 - Literature Notes` | Atomic ideas that need one or more sources to be intelligible — usually several per source, nesting under Section notes when a source is long. Carry `source:`. |
 | `03 - Permanent Notes` | Atomic ideas that stand alone, needing no source to make sense. May still cite origins in a body `## Sources` list, but carry no `source:` frontmatter. The vault's core. |
 | `04 - MOCS` | Maps of Content. Curated navigation paths that reflect understanding, not classification. |

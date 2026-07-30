@@ -5,6 +5,30 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+### Added
+- **A one-key way to file a captured note out of the Inbox.** New
+  `(TEMPLATE) Move Source Note.md` — bind it under Templater's *Template
+  Hotkeys* and it moves the active source note into its type folder under
+  `01 - Sources`, reading the type from the note's frontmatter tag (filename
+  prefix as fallback). Capture still lands everything in `00 - Inbox` on
+  purpose; this is the separate, deliberate filing step, not automatic routing.
+  It matters more than tidiness since 2.14.0: the Section- and Source-note hub
+  queries are folder-scoped, so a note left in the Inbox is invisible to its own
+  hub even with correct frontmatter, which reads as a broken query rather than a
+  misfiled note. Thought notes are exempt (they aren't sources); an unrecognised
+  note, one already filed, or a name collision at the destination each show a
+  Notice and move nothing. `01 - Sources/Podcasts` and `01 - Sources/Tweets`
+  don't ship — they're created the first time a note is filed into them. Closes #37.
+
+### Changed
+- `TYPE_REGISTRY` rows in `sourceCaptureOrchestrator.js` gain a **`folder`**
+  column — the type→filing-destination mapping, in the same one-row-per-type
+  table that already holds the tag, prefix, and capturer, so capture and filing
+  cannot disagree about where a type belongs. `moveSourceNote.js` reads it at
+  runtime through the existing `typeRegistry()` accessor. Thought's is `null`,
+  and the test suite requires every row to state the field either way, so a new
+  source type can't silently ship unfileable.
+
 ## [2.14.0] – 2026-07-29
 
 ### Added

@@ -71,6 +71,10 @@ test("every registry row is fully populated", () => {
         assert.match(row.icon, /\S/, `${row.name} icon`);
         assert.match(row.tag, /^(source|note)\//, `${row.name} tag`);
         assert.match(row.capturer, /^sourceCapture\w+$/, `${row.name} capturer name`);
+        // `folder` is the one field allowed to be absent — Thought is not a
+        // source and has nowhere to be filed to. Everything else must declare
+        // a destination, or moveSourceNote would silently exempt it too.
+        assert.ok("folder" in row, `${row.name} declares a folder (null is a valid answer)`);
     }
 });
 

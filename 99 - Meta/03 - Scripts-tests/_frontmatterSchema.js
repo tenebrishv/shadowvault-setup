@@ -215,6 +215,10 @@ const EXEMPT_TEMPLATES = {
     "(TEMPLATE) Source Capture":
         "Pure <%* … %> orchestrator. Emits no frontmatter of its own; the YAML it " +
         "assembles at runtime is checked via CAPTURE below.",
+    "(TEMPLATE) Move Source Note":
+        "An ACTION, not a note: a pure <%* … %> adapter over moveSourceNote.js " +
+        "that files the active note into its type folder. Emits nothing at all — " +
+        "no frontmatter, no body — and never creates a note.",
     "(TEMPLATE) Section Hub":
         "A BLOCK, not a note: inserted at the cursor into an existing literature " +
         "note when it becomes a Section note (a hub with descendants). Emits no " +

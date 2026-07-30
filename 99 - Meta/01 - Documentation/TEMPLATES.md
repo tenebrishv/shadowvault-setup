@@ -91,6 +91,7 @@ All type-specific logic (prompts, auto-fetch, YAML fields, note body) lives in `
 | `sourceCaptureTweet.js` | Tweet — oEmbed lookup + manual fallback |
 | `sourceCaptureThought.js` | Thought — manual |
 | `sourceCaptureLecture.js` | Lecture — Course/Unit/Lecturer picker-or-create flow plus lecture details |
+| `moveSourceNote.js` | Not capture — the [Move Source Note](#filing-a-note-move-source-note) command, which files a captured note out of the Inbox using the registry's `folder` column |
 
 Each per-type module is a Templater User Script: `module.exports` is an `async function(tp, helpers)` that prompts/fetches as needed and returns `{ noteTitle, yamlFields, body }`, or `null` if the user cancels. This requires Templater's **User Scripts Folder** setting to point at `99 - Meta/02 - Scripts` (already configured in this vault's `.obsidian/plugins/templater-obsidian/data.json`) — after pulling changes to these scripts, run Obsidian's **Templater: Reload templates** command (or restart Obsidian) so it picks them up.
 
@@ -104,12 +105,40 @@ Two steps, no more:
 2. Add **one row** to `TYPE_REGISTRY` in `sourceCaptureOrchestrator.js`:
 
 ```js
-{ name: "Podcast", icon: "🎧 Podcast", tag: "source/podcast", prefix: "%", capturer: "sourceCapturePodcast" },
+{ name: "Podcast", icon: "🎧 Podcast", tag: "source/podcast", prefix: "%", folder: "01 - Sources/Podcasts", capturer: "sourceCapturePodcast" },
 ```
 
-`capturer` is the user-script name as a string; the orchestrator resolves it through `tp.user` at call time. `prefix` need not be unique — Video and YouTube deliberately share `+`.
+`capturer` is the user-script name as a string; the orchestrator resolves it through `tp.user` at call time. `prefix` need not be unique — Video and YouTube deliberately share `+`, and share a `folder` to match. `folder` is the filing destination used by [Move Source Note](#filing-a-note-move-source-note), *not* by capture — capture always lands notes in `00 - Inbox`. Set it to `null` only for a type that isn't a source (currently just Thought); the test suite requires every row to state the field one way or the other, so a new type can't silently become unfileable.
 
 This replaced the five parallel `TYPE_LABELS`/`TYPE_ICONS`/`TYPE_TAGS`/`TYPE_PREFIX`/`TYPE_CAPTURERS` tables that used to sit at the top of the template, where forgetting one of the five shipped a half-registered type. `sourceCaptureOrchestrator.test.js` now fails on a malformed or incomplete row.
+
+### Filing a note: `Move Source Note`
+
+Capture always leaves a note in `00 - Inbox`, on purpose — the Inbox is the review staging area, and routing automatically on capture would remove that review step. `(TEMPLATE) Move Source Note.md` is the separate, opt-in action that files one: run it with a source note active and it moves that note into its type folder under `01 - Sources`.
+
+This is **not** cosmetic tidiness. The Section- and Source-note hub queries are folder-scoped, so a note still sitting in the Inbox is invisible to its own hub even with correct `source:`/`section:` frontmatter — which reads as a broken query rather than a misfiled note.
+
+| Type | Destination |
+|------|-------------|
+| Book | `01 - Sources/Books` |
+| Article | `01 - Sources/Articles` |
+| Paper | `01 - Sources/Papers` |
+| Lecture | `01 - Sources/Lectures` |
+| Video, YouTube | `01 - Sources/Videos` |
+| Podcast | `01 - Sources/Podcasts` |
+| Tweet | `01 - Sources/Tweets` |
+| Thought | *none — exempt* |
+
+Notes on the behaviour:
+
+- **The mapping is the registry.** Destinations come from the `folder` column of `TYPE_REGISTRY`, read at runtime through `tp.user.sourceCaptureOrchestrator.typeRegistry()`, so capture and filing cannot disagree about where a type belongs.
+- **Type is resolved from the frontmatter tag**, with the filename prefix as a fallback for a note whose frontmatter was edited away. The `type` field is *not* usable for this — it only ever says `source` or `thought`, never which source type.
+- **Thought is exempt.** It's the one registry row that isn't a source, so it has no destination; the command says so and moves nothing.
+- **Podcasts/ and Tweets/ don't ship** in the vault — they're created the first time a note is filed into them, so a fresh vault works without setup.
+- **It's a no-op, never an error,** for a note that isn't a recognised source, one already sitting in its type folder, or one whose name is already taken at the destination. Each case shows a Notice explaining which it was.
+- **The move goes through Obsidian's file manager**, not a raw vault rename, so inbound `[[wikilinks]]` are rewritten and frontmatter is left untouched.
+
+Bind it to a hotkey via **Templater → Settings → Template Hotkeys**, which also registers it in the command palette — see [PLUGINS.md](PLUGINS.md#installation-notes). Like `Source Capture`, the template is a one-line adapter; the logic lives in `moveSourceNote.js` where `moveSourceNote.test.js` can reach it.
 
 ---
 

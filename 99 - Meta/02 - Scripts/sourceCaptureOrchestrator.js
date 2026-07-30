@@ -28,17 +28,25 @@
 // rather than captured here, so the registry stays plain data.
 //
 // Prefixes are not unique: Video and YouTube deliberately share "+", since
-// both are videos on disk (see CLAUDE.md's filename-prefix table).
+// both are videos on disk (see CLAUDE.md's filename-prefix table). `folder` is
+// likewise shared by those two — one destination, "01 - Sources/Videos".
+//
+// `folder` is the note's filing destination, read by moveSourceNote.js rather
+// than by capture: capture always lands notes in "00 - Inbox" on purpose, and
+// filing is a separate, deliberate action (issue #37). Thought carries null —
+// it is the one row that is not a source, so it has nowhere to be filed to and
+// the move command exempts it. Podcasts/ and Tweets/ do not exist in a fresh
+// vault; moveSourceNote creates a missing destination on first use.
 const TYPE_REGISTRY = [
-    { name: "Book",    icon: "📚 Book",    tag: "source/book",    prefix: "{", capturer: "sourceCaptureBook" },
-    { name: "Article", icon: "📰 Article", tag: "source/article", prefix: "(", capturer: "sourceCaptureArticle" },
-    { name: "Paper",   icon: "📜 Paper",   tag: "source/paper",   prefix: "&", capturer: "sourceCapturePaper" },
-    { name: "YouTube", icon: "🎥 YouTube", tag: "source/youtube", prefix: "+", capturer: "sourceCaptureYoutube" },
-    { name: "Video",   icon: "🎬 Video",   tag: "source/video",   prefix: "+", capturer: "sourceCaptureVideo" },
-    { name: "Podcast", icon: "🎧 Podcast", tag: "source/podcast", prefix: "%", capturer: "sourceCapturePodcast" },
-    { name: "Tweet",   icon: "🐦 Tweet",   tag: "source/tweet",   prefix: "!", capturer: "sourceCaptureTweet" },
-    { name: "Thought", icon: "💭 Thought", tag: "note/thought",   prefix: "=", capturer: "sourceCaptureThought" },
-    { name: "Lecture", icon: "🎓 Lecture", tag: "source/lecture", prefix: "§", capturer: "sourceCaptureLecture" },
+    { name: "Book",    icon: "📚 Book",    tag: "source/book",    prefix: "{", folder: "01 - Sources/Books",    capturer: "sourceCaptureBook" },
+    { name: "Article", icon: "📰 Article", tag: "source/article", prefix: "(", folder: "01 - Sources/Articles", capturer: "sourceCaptureArticle" },
+    { name: "Paper",   icon: "📜 Paper",   tag: "source/paper",   prefix: "&", folder: "01 - Sources/Papers",   capturer: "sourceCapturePaper" },
+    { name: "YouTube", icon: "🎥 YouTube", tag: "source/youtube", prefix: "+", folder: "01 - Sources/Videos",   capturer: "sourceCaptureYoutube" },
+    { name: "Video",   icon: "🎬 Video",   tag: "source/video",   prefix: "+", folder: "01 - Sources/Videos",   capturer: "sourceCaptureVideo" },
+    { name: "Podcast", icon: "🎧 Podcast", tag: "source/podcast", prefix: "%", folder: "01 - Sources/Podcasts", capturer: "sourceCapturePodcast" },
+    { name: "Tweet",   icon: "🐦 Tweet",   tag: "source/tweet",   prefix: "!", folder: "01 - Sources/Tweets",   capturer: "sourceCaptureTweet" },
+    { name: "Thought", icon: "💭 Thought", tag: "note/thought",   prefix: "=", folder: null,                    capturer: "sourceCaptureThought" },
+    { name: "Lecture", icon: "🎓 Lecture", tag: "source/lecture", prefix: "§", folder: "01 - Sources/Lectures", capturer: "sourceCaptureLecture" },
 ];
 
 // Returns the assembled note as a string for the template to assign to tR,
@@ -92,10 +100,21 @@ module.exports = async function sourceCaptureOrchestrator(tp) {
     return note;
 };
 
-// Exposed so the test suite can check registry completeness without restating
-// the rows. A function (not a plain object) because Templater's User Scripts
-// loader rejects modules with non-function exports (see CHANGELOG 2.2.0,
-// periodicNoteHelpers). Hands out copies so callers can't mutate the registry.
+// The registry's public accessor. Two callers:
+//   - the test suite, to check registry completeness without restating the rows;
+//   - moveSourceNote.js at runtime, as tp.user.sourceCaptureOrchestrator
+//     .typeRegistry(), which is how the type->folder mapping stays defined in
+//     exactly one place.
+//
+// That runtime path works because Templater's user-script loader stores a
+// function export *raw* — `if (typeof l === "function") map.set(basename, l)`,
+// then Object.fromEntries onto tp.user — so properties hanging off the exported
+// function survive onto tp.user. Verified by reading the shipped Templater
+// bundle, not assumed.
+//
+// A function (not a plain object) because that same loader rejects an exported
+// object with any non-function property (see CHANGELOG 2.2.0, periodicNoteHelpers).
+// Hands out copies so callers can't mutate the registry.
 module.exports.typeRegistry = function typeRegistry() {
     return TYPE_REGISTRY.map(row => ({ ...row }));
 };
