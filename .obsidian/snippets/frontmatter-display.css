@@ -19,6 +19,11 @@
  * from every per-VALUE emoji below, so a vocab row never shows the same glyph
  * on both sides.
  *
+ * The core eleven ship ON. Every other field in the schema — source, entity,
+ * literature, curriculum-MOC, periodic — has a glyph too, but behind an OPT-IN
+ * switch that is OFF by default, so an existing vault sees no change until the
+ * reader flips it. Same decorative rules, same hand-sync obligation (#36).
+ *
  * VALUE EMOJI (right slot, per-VALUE — growth/status/type)
  * The value is the text content of a contenteditable div, which CSS cannot
  * select on. The first-party shadowvault-property-icons plugin reads it and
@@ -60,7 +65,13 @@ settings:
     -
         id: sv-hide-field-icons
         title: Hide field emoji icons
-        description: Turn on to drop the per-field emoji and restore Obsidian's native property icons.
+        description: Turn on to drop the per-field emoji and restore Obsidian's native property icons. Overrides the source/entity switch below.
+        type: class-toggle
+        default: false
+    -
+        id: sv-show-source-field-icons
+        title: Also icon source & entity fields
+        description: "Off by default: only the core schema fields carry an emoji. Turn on to extend it to the source and entity properties too (isbn, doi, channel, role, …)."
         type: class-toggle
         default: false
     -
@@ -120,11 +131,136 @@ body:not(.sv-hide-field-icons) .metadata-property[data-property-key="tags"]     
 body:not(.sv-hide-field-icons) .metadata-property[data-property-key="aliases"]    .metadata-property-icon::after { content: "🎭"; }
 body:not(.sv-hide-field-icons) .metadata-property[data-property-key="cssclasses"] .metadata-property-icon::after { content: "🎨"; }
 
-/* Size the injected emoji to sit like the icon it replaces. */
+/* Size the injected emoji to sit like the icon it replaces. Deliberately keyed
+ * on the field-icons switch alone and not on any one key, so it also sizes the
+ * opt-in source/entity glyphs below without a second copy. */
 body:not(.sv-hide-field-icons) .metadata-property .metadata-property-icon::after {
 	font-size: 0.9em;
 	line-height: 1;
 }
+
+/* ---------- source & entity field icons (OPT-IN, default off) ----------
+ * The same per-FIELD mechanism as the core block above, extended to every
+ * non-core field in METADATA.md. Gated on body.sv-show-source-field-icons so a
+ * vault that never flips the switch renders exactly as it did before: core
+ * fields iconned, everything else on Obsidian's native icon.
+ *
+ * The two switches compose as master-off: `sv-hide-field-icons` kills ALL
+ * per-field emoji, so it is spelled into the guard here too — "hide field
+ * icons" means all of them, not just the core eleven.
+ *
+ * Same free-choice decorative layer as the core block, with the same two hand
+ * obligations and no test behind either: keep it in sync with the table in
+ * METADATA.md#property-icons, and keep every glyph off the per-VALUE list
+ * further down, so a row never shows the same emoji on both sides. */
+
+body.sv-show-source-field-icons:not(.sv-hide-field-icons) .metadata-property:is(
+	/* source-specific (Book / Article / Paper / YouTube / Podcast / Tweet / Lecture / Thought) */
+	[data-property-key="authors"], [data-property-key="url"], [data-property-key="publish_date"],
+	[data-property-key="publisher"], [data-property-key="isbn"], [data-property-key="general_subject"],
+	[data-property-key="specific_subject"], [data-property-key="publication"], [data-property-key="doi"],
+	[data-property-key="citekey"], [data-property-key="keywords"], [data-property-key="channel"],
+	[data-property-key="channel_url"], [data-property-key="media"], [data-property-key="mx-uid"],
+	[data-property-key="captions"], [data-property-key="thumbnail"], [data-property-key="watched"],
+	[data-property-key="released"], [data-property-key="platform"], [data-property-key="host"],
+	[data-property-key="guest"], [data-property-key="account"], [data-property-key="tweet_text"],
+	[data-property-key="course"], [data-property-key="unit"], [data-property-key="lecturer"],
+	[data-property-key="lecture_num"], [data-property-key="date_given"], [data-property-key="context"],
+	[data-property-key="led_here"],
+	/* entity (Person / Organization / Country / Synthetic / Place / Artifact / Tool / System / Natural / Event) */
+	[data-property-key="role"], [data-property-key="organization"], [data-property-key="contact"],
+	[data-property-key="website"], [data-property-key="founded"], [data-property-key="sector"],
+	[data-property-key="headquarters"], [data-property-key="key_people"], [data-property-key="government_type"],
+	[data-property-key="established"], [data-property-key="capital"], [data-property-key="leader"],
+	[data-property-key="creator"], [data-property-key="release_date"], [data-property-key="model_family"],
+	[data-property-key="coordinates"], [data-property-key="region"], [data-property-key="country"],
+	[data-property-key="historical"], [data-property-key="date_created"], [data-property-key="location"],
+	[data-property-key="medium"], [data-property-key="category"], [data-property-key="version"],
+	[data-property-key="scope"], [data-property-key="origin_date"], [data-property-key="components"],
+	[data-property-key="classification"], [data-property-key="date"], [data-property-key="participants"],
+	/* literature / curriculum-MOC / periodic */
+	[data-property-key="source"], [data-property-key="section"], [data-property-key="institution"],
+	[data-property-key="default_lecturer"], [data-property-key="semester"], [data-property-key="period"],
+	[data-property-key="week"], [data-property-key="month"], [data-property-key="year"]
+) .metadata-property-icon > svg {
+	display: none;
+}
+
+/* source-specific */
+body.sv-show-source-field-icons:not(.sv-hide-field-icons) .metadata-property[data-property-key="authors"]          .metadata-property-icon::after { content: "✍️"; }
+body.sv-show-source-field-icons:not(.sv-hide-field-icons) .metadata-property[data-property-key="url"]              .metadata-property-icon::after { content: "🔗"; }
+body.sv-show-source-field-icons:not(.sv-hide-field-icons) .metadata-property[data-property-key="publish_date"]     .metadata-property-icon::after { content: "🗓️"; }
+body.sv-show-source-field-icons:not(.sv-hide-field-icons) .metadata-property[data-property-key="publisher"]        .metadata-property-icon::after { content: "🏢"; }
+body.sv-show-source-field-icons:not(.sv-hide-field-icons) .metadata-property[data-property-key="isbn"]             .metadata-property-icon::after { content: "🔢"; }
+body.sv-show-source-field-icons:not(.sv-hide-field-icons) .metadata-property[data-property-key="general_subject"]  .metadata-property-icon::after { content: "🧭"; }
+body.sv-show-source-field-icons:not(.sv-hide-field-icons) .metadata-property[data-property-key="specific_subject"] .metadata-property-icon::after { content: "🎯"; }
+body.sv-show-source-field-icons:not(.sv-hide-field-icons) .metadata-property[data-property-key="publication"]      .metadata-property-icon::after { content: "📰"; }
+body.sv-show-source-field-icons:not(.sv-hide-field-icons) .metadata-property[data-property-key="doi"]              .metadata-property-icon::after { content: "🪪"; }
+body.sv-show-source-field-icons:not(.sv-hide-field-icons) .metadata-property[data-property-key="citekey"]          .metadata-property-icon::after { content: "🔖"; }
+body.sv-show-source-field-icons:not(.sv-hide-field-icons) .metadata-property[data-property-key="keywords"]         .metadata-property-icon::after { content: "🗝️"; }
+body.sv-show-source-field-icons:not(.sv-hide-field-icons) .metadata-property[data-property-key="channel"]          .metadata-property-icon::after { content: "📺"; }
+body.sv-show-source-field-icons:not(.sv-hide-field-icons) .metadata-property[data-property-key="channel_url"]      .metadata-property-icon::after { content: "📡"; }
+body.sv-show-source-field-icons:not(.sv-hide-field-icons) .metadata-property[data-property-key="media"]            .metadata-property-icon::after { content: "🎬"; }
+body.sv-show-source-field-icons:not(.sv-hide-field-icons) .metadata-property[data-property-key="mx-uid"]           .metadata-property-icon::after { content: "🧬"; }
+body.sv-show-source-field-icons:not(.sv-hide-field-icons) .metadata-property[data-property-key="captions"]         .metadata-property-icon::after { content: "💬"; }
+body.sv-show-source-field-icons:not(.sv-hide-field-icons) .metadata-property[data-property-key="thumbnail"]        .metadata-property-icon::after { content: "🖼️"; }
+body.sv-show-source-field-icons:not(.sv-hide-field-icons) .metadata-property[data-property-key="watched"]          .metadata-property-icon::after { content: "👁️"; }
+body.sv-show-source-field-icons:not(.sv-hide-field-icons) .metadata-property[data-property-key="released"]         .metadata-property-icon::after { content: "🚀"; }
+body.sv-show-source-field-icons:not(.sv-hide-field-icons) .metadata-property[data-property-key="platform"]         .metadata-property-icon::after { content: "🛰️"; }
+body.sv-show-source-field-icons:not(.sv-hide-field-icons) .metadata-property[data-property-key="host"]             .metadata-property-icon::after { content: "🎙️"; }
+body.sv-show-source-field-icons:not(.sv-hide-field-icons) .metadata-property[data-property-key="guest"]            .metadata-property-icon::after { content: "🤝"; }
+body.sv-show-source-field-icons:not(.sv-hide-field-icons) .metadata-property[data-property-key="account"]          .metadata-property-icon::after { content: "👤"; }
+body.sv-show-source-field-icons:not(.sv-hide-field-icons) .metadata-property[data-property-key="tweet_text"]       .metadata-property-icon::after { content: "🐦"; }
+body.sv-show-source-field-icons:not(.sv-hide-field-icons) .metadata-property[data-property-key="course"]           .metadata-property-icon::after { content: "🎓"; }
+body.sv-show-source-field-icons:not(.sv-hide-field-icons) .metadata-property[data-property-key="unit"]             .metadata-property-icon::after { content: "📦"; }
+body.sv-show-source-field-icons:not(.sv-hide-field-icons) .metadata-property[data-property-key="lecturer"]         .metadata-property-icon::after { content: "🗣️"; }
+body.sv-show-source-field-icons:not(.sv-hide-field-icons) .metadata-property[data-property-key="lecture_num"]      .metadata-property-icon::after { content: "#️⃣"; }
+body.sv-show-source-field-icons:not(.sv-hide-field-icons) .metadata-property[data-property-key="date_given"]       .metadata-property-icon::after { content: "🕰️"; }
+body.sv-show-source-field-icons:not(.sv-hide-field-icons) .metadata-property[data-property-key="context"]          .metadata-property-icon::after { content: "🧠"; }
+body.sv-show-source-field-icons:not(.sv-hide-field-icons) .metadata-property[data-property-key="led_here"]         .metadata-property-icon::after { content: "➡️"; }
+
+/* entity */
+body.sv-show-source-field-icons:not(.sv-hide-field-icons) .metadata-property[data-property-key="role"]             .metadata-property-icon::after { content: "🎖️"; }
+body.sv-show-source-field-icons:not(.sv-hide-field-icons) .metadata-property[data-property-key="organization"]     .metadata-property-icon::after { content: "🏛️"; }
+body.sv-show-source-field-icons:not(.sv-hide-field-icons) .metadata-property[data-property-key="contact"]          .metadata-property-icon::after { content: "📇"; }
+body.sv-show-source-field-icons:not(.sv-hide-field-icons) .metadata-property[data-property-key="website"]          .metadata-property-icon::after { content: "🌍"; }
+body.sv-show-source-field-icons:not(.sv-hide-field-icons) .metadata-property[data-property-key="founded"]          .metadata-property-icon::after { content: "🎂"; }
+body.sv-show-source-field-icons:not(.sv-hide-field-icons) .metadata-property[data-property-key="sector"]           .metadata-property-icon::after { content: "🏭"; }
+body.sv-show-source-field-icons:not(.sv-hide-field-icons) .metadata-property[data-property-key="headquarters"]     .metadata-property-icon::after { content: "🏬"; }
+body.sv-show-source-field-icons:not(.sv-hide-field-icons) .metadata-property[data-property-key="key_people"]       .metadata-property-icon::after { content: "👥"; }
+body.sv-show-source-field-icons:not(.sv-hide-field-icons) .metadata-property[data-property-key="government_type"]  .metadata-property-icon::after { content: "⚖️"; }
+body.sv-show-source-field-icons:not(.sv-hide-field-icons) .metadata-property[data-property-key="established"]      .metadata-property-icon::after { content: "🏗️"; }
+body.sv-show-source-field-icons:not(.sv-hide-field-icons) .metadata-property[data-property-key="capital"]          .metadata-property-icon::after { content: "⭐"; }
+body.sv-show-source-field-icons:not(.sv-hide-field-icons) .metadata-property[data-property-key="leader"]           .metadata-property-icon::after { content: "👑"; }
+body.sv-show-source-field-icons:not(.sv-hide-field-icons) .metadata-property[data-property-key="creator"]          .metadata-property-icon::after { content: "🖌️"; }
+body.sv-show-source-field-icons:not(.sv-hide-field-icons) .metadata-property[data-property-key="release_date"]     .metadata-property-icon::after { content: "📤"; }
+body.sv-show-source-field-icons:not(.sv-hide-field-icons) .metadata-property[data-property-key="model_family"]     .metadata-property-icon::after { content: "🤖"; }
+body.sv-show-source-field-icons:not(.sv-hide-field-icons) .metadata-property[data-property-key="coordinates"]      .metadata-property-icon::after { content: "📐"; }
+body.sv-show-source-field-icons:not(.sv-hide-field-icons) .metadata-property[data-property-key="region"]           .metadata-property-icon::after { content: "🗾"; }
+body.sv-show-source-field-icons:not(.sv-hide-field-icons) .metadata-property[data-property-key="country"]          .metadata-property-icon::after { content: "🏳️"; }
+body.sv-show-source-field-icons:not(.sv-hide-field-icons) .metadata-property[data-property-key="historical"]       .metadata-property-icon::after { content: "🏺"; }
+body.sv-show-source-field-icons:not(.sv-hide-field-icons) .metadata-property[data-property-key="date_created"]     .metadata-property-icon::after { content: "🐣"; }
+body.sv-show-source-field-icons:not(.sv-hide-field-icons) .metadata-property[data-property-key="location"]         .metadata-property-icon::after { content: "📌"; }
+body.sv-show-source-field-icons:not(.sv-hide-field-icons) .metadata-property[data-property-key="medium"]           .metadata-property-icon::after { content: "🪵"; }
+body.sv-show-source-field-icons:not(.sv-hide-field-icons) .metadata-property[data-property-key="category"]         .metadata-property-icon::after { content: "🧱"; }
+body.sv-show-source-field-icons:not(.sv-hide-field-icons) .metadata-property[data-property-key="version"]          .metadata-property-icon::after { content: "🆚"; }
+body.sv-show-source-field-icons:not(.sv-hide-field-icons) .metadata-property[data-property-key="scope"]            .metadata-property-icon::after { content: "📏"; }
+body.sv-show-source-field-icons:not(.sv-hide-field-icons) .metadata-property[data-property-key="origin_date"]      .metadata-property-icon::after { content: "⏳"; }
+body.sv-show-source-field-icons:not(.sv-hide-field-icons) .metadata-property[data-property-key="components"]       .metadata-property-icon::after { content: "🧰"; }
+body.sv-show-source-field-icons:not(.sv-hide-field-icons) .metadata-property[data-property-key="classification"]   .metadata-property-icon::after { content: "🔬"; }
+body.sv-show-source-field-icons:not(.sv-hide-field-icons) .metadata-property[data-property-key="date"]             .metadata-property-icon::after { content: "⌚"; }
+body.sv-show-source-field-icons:not(.sv-hide-field-icons) .metadata-property[data-property-key="participants"]     .metadata-property-icon::after { content: "🫂"; }
+
+/* literature / curriculum-MOC / periodic */
+body.sv-show-source-field-icons:not(.sv-hide-field-icons) .metadata-property[data-property-key="source"]           .metadata-property-icon::after { content: "📖"; }
+body.sv-show-source-field-icons:not(.sv-hide-field-icons) .metadata-property[data-property-key="section"]          .metadata-property-icon::after { content: "🧷"; }
+body.sv-show-source-field-icons:not(.sv-hide-field-icons) .metadata-property[data-property-key="institution"]      .metadata-property-icon::after { content: "🏫"; }
+body.sv-show-source-field-icons:not(.sv-hide-field-icons) .metadata-property[data-property-key="default_lecturer"] .metadata-property-icon::after { content: "📣"; }
+body.sv-show-source-field-icons:not(.sv-hide-field-icons) .metadata-property[data-property-key="semester"]         .metadata-property-icon::after { content: "🍂"; }
+body.sv-show-source-field-icons:not(.sv-hide-field-icons) .metadata-property[data-property-key="period"]           .metadata-property-icon::after { content: "⏱️"; }
+body.sv-show-source-field-icons:not(.sv-hide-field-icons) .metadata-property[data-property-key="week"]             .metadata-property-icon::after { content: "🗒️"; }
+body.sv-show-source-field-icons:not(.sv-hide-field-icons) .metadata-property[data-property-key="month"]            .metadata-property-icon::after { content: "🌙"; }
+body.sv-show-source-field-icons:not(.sv-hide-field-icons) .metadata-property[data-property-key="year"]             .metadata-property-icon::after { content: "🎊"; }
 
 /* ---------- per-value emoji (growth / status / type) ----------
  * Painted on the value side (::before) from data-sv-value, which the

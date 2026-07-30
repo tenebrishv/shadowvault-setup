@@ -131,8 +131,17 @@ row is — a fixed emoji per field, independent of its value, in the row's **lef
 icon slot. They come from the `.obsidian/snippets/frontmatter-display.css` snippet
 (toggle in Settings → Style Settings → "ShadowVault — Frontmatter"), which
 replaces Obsidian's native icon. This is a free-choice **decorative** layer with
-no test behind it (the glyphs are arbitrary), so keep the snippet and this table
-in sync by hand — unlike the per-value emoji, which have a tested contract.
+no test behind it (the glyphs are arbitrary), so keep the snippet and the tables
+below in sync by hand — unlike the per-value emoji, which have a tested contract.
+Adding a field to any schema block in this document means adding a row here and
+a rule in the snippet; nothing will red if you forget.
+
+The map comes in two tiers, split by a Style Settings switch. The **core eleven
+ship on**; every other field in this document is iconned too, but **off by
+default** — see [Opt-in: the rest of the schema](#opt-in-the-rest-of-the-schema)
+below.
+
+### Core fields (always on)
 
 | Field | Icon | Field | Icon |
 |---|---|---|---|
@@ -143,10 +152,72 @@ in sync by hand — unlike the per-value emoji, which have a tested contract.
 | `created` | 📅 | `review` | 🔁 |
 | `modified` | ✏️ | | |
 
+### Opt-in: the rest of the schema
+
+Everything below is behind **Style Settings → ShadowVault — Frontmatter → *Also
+icon source & entity fields***, a `class-toggle` (`sv-show-source-field-icons`)
+that is **off by default**. With it off, these fields keep Obsidian's native
+icon and the panel looks exactly as it did before #36; with it on, every field
+declared anywhere in this document carries its own glyph. The two switches
+compose as **master-off**: *Hide field emoji icons* kills all per-field emoji,
+core and opt-in alike.
+
+The scope is deliberately *every* non-core field rather than a curated subset —
+the rules are pure CSS with no runtime cost, and a curated list only makes
+"which fields made the cut" a recurring question.
+
+**Source-specific**
+
+| Field | Icon | Field | Icon | Field | Icon |
+|---|---|---|---|---|---|
+| `authors` | ✍️ | `channel` | 📺 | `account` | 👤 |
+| `url` | 🔗 | `channel_url` | 📡 | `tweet_text` | 🐦 |
+| `publish_date` | 🗓️ | `media` | 🎬 | `course` | 🎓 |
+| `publisher` | 🏢 | `mx-uid` | 🧬 | `unit` | 📦 |
+| `isbn` | 🔢 | `captions` | 💬 | `lecturer` | 🗣️ |
+| `general_subject` | 🧭 | `thumbnail` | 🖼️ | `lecture_num` | #️⃣ |
+| `specific_subject` | 🎯 | `watched` | 👁️ | `date_given` | 🕰️ |
+| `publication` | 📰 | `released` | 🚀 | `context` | 🧠 |
+| `doi` | 🪪 | `platform` | 🛰️ | `led_here` | ➡️ |
+| `citekey` | 🔖 | `host` | 🎙️ | | |
+| `keywords` | 🗝️ | `guest` | 🤝 | | |
+
+**Entity**
+
+| Field | Icon | Field | Icon | Field | Icon |
+|---|---|---|---|---|---|
+| `role` | 🎖️ | `capital` | ⭐ | `medium` | 🪵 |
+| `organization` | 🏛️ | `leader` | 👑 | `category` | 🧱 |
+| `contact` | 📇 | `creator` | 🖌️ | `version` | 🆚 |
+| `website` | 🌍 | `release_date` | 📤 | `scope` | 📏 |
+| `founded` | 🎂 | `model_family` | 🤖 | `origin_date` | ⏳ |
+| `sector` | 🏭 | `coordinates` | 📐 | `components` | 🧰 |
+| `headquarters` | 🏬 | `region` | 🗾 | `classification` | 🔬 |
+| `key_people` | 👥 | `country` | 🏳️ | `date` | ⌚ |
+| `government_type` | ⚖️ | `historical` | 🏺 | `participants` | 🫂 |
+| `established` | 🏗️ | `date_created` | 🐣 | | |
+| | | `location` | 📌 | | |
+
+**Literature / curriculum-MOC / periodic**
+
+| Field | Icon | Field | Icon |
+|---|---|---|---|
+| `source` | 📖 | `semester` | 🍂 |
+| `section` | 🧷 | `period` | ⏱️ |
+| `institution` | 🏫 | `week` | 🗒️ |
+| `default_lecturer` | 📣 | `month` | 🌙 |
+| | | `year` | 🎊 |
+
+Fields shared by several types (`url`, `course`, `creator`, `location`,
+`website`, `date`) carry **one** glyph, since the panel keys on the property
+name and cannot see which note type it is on.
+
 `growth`, `status`, and `type` **also** show a per-**value** emoji on the row's
 **right** (value) side — 🌱 seedling vs 🌲 evergreen — from the [Visual
 Badges](#visual-badges) map above. Their field glyphs (🪴/🗂️/🚦) are chosen to
-differ from every value emoji so a row never shows the same glyph twice. Because
+differ from every value emoji so a row never shows the same glyph twice; that
+disjointness is a rule for the **whole** field map, core and opt-in, and every
+glyph above is also distinct from every other. Because
 CSS can't read the panel's contenteditable value, the first-party
 `shadowvault-property-icons` plugin stamps it as `data-sv-value` for the CSS to
 paint; `propertyIconsEnums.test.js` guards that CSS map against the badge SSOT.
