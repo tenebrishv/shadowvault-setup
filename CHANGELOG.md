@@ -19,6 +19,21 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
   note, one already filed, or a name collision at the destination each show a
   Notice and move nothing. `01 - Sources/Podcasts` and `01 - Sources/Tweets`
   don't ship — they're created the first time a note is filed into them. Closes #37.
+- **Optional emoji icons for every non-core property.** The Properties panel has
+  only ever iconned the eleven core schema fields; `isbn`, `doi`, `channel`,
+  `role` and the rest kept Obsidian's native icon. Every field declared in
+  `METADATA.md` now has a glyph — source, entity, literature, curriculum-MOC and
+  periodic alike — behind a new Style Settings switch (*ShadowVault —
+  Frontmatter* → *Also icon source & entity fields*) that is **off by default**,
+  so an existing vault looks exactly as it did until you flip it. It covers the
+  whole schema rather than a curated subset because the rules are pure CSS keyed
+  on each row's `data-property-key`, with no runtime cost, and a hand-picked list
+  would only make *which fields made the cut* a recurring question. The
+  `shadowvault-property-icons` plugin is untouched — it exists solely for the
+  per-**value** emoji that CSS cannot read — and *Hide field emoji icons* still
+  wins over both tiers. The field→glyph tables in `METADATA.md` are the record
+  and stay hand-maintained: these glyphs are decorative and arbitrary, so unlike
+  the per-value emoji there is no SSOT to test them against. Closes #36.
 
 ### Changed
 - `TYPE_REGISTRY` rows in `sourceCaptureOrchestrator.js` gain a **`folder`**
