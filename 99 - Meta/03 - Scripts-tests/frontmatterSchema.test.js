@@ -2,8 +2,8 @@
  * Frontmatter schema conformance.
  *
  * Checks every frontmatter producer in the vault against the single fixture in
- * _frontmatterSchema.js: the ~21 templates, the Source Capture base-YAML
- * builder, the 9 per-type capture modules, and the METADATA.md field tables.
+ * _frontmatterSchema.js: the ~25 templates, the Source Capture base-YAML
+ * builder, the 11 per-type capture modules, and the METADATA.md field tables.
  *
  * Tests external behaviour only — the YAML TEXT each producer emits — never how
  * a template or helper builds it. See docs/adr/0003.

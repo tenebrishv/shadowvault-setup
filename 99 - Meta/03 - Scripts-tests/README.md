@@ -32,14 +32,14 @@ type picker, registry dispatch, note assembly, and the rename. It drives the
 orchestrator through its real interface — script the type pick on the mocked
 `tp`, hand it a stub capturer via `tp.user`, assert the assembled note and
 the rename that came out — with no assertions on internal call structure.
-It also holds the registry-completeness checks (nine rows, each carrying its
+It also holds the registry-completeness checks (eleven rows, each carrying its
 documented filename prefix, each naming a module that loads). This logic used
 to live inside `(TEMPLATE) Source Capture.md`, where none of it was reachable
 from here; keeping the template a one-line adapter is what preserves that.
 
 `moveSourceNote.test.js` covers the filing command — the counterpart to
 capture, which moves a note out of `00 - Inbox` into its type folder. It drives
-`resolveType` directly as a table over all nine types and every shape
+`resolveType` directly as a table over all eleven types and every shape
 frontmatter `tags` can take, then drives the module itself through mocked
 `app`/`Notice` to assert the rename that came out, or that none did (Thought's
 exemption, an unrecognised note, a note already filed, a name collision at the
@@ -59,9 +59,9 @@ and amount), not that the resulting dates are calendrically correct. Trust
 moment.js for that.
 
 `frontmatterSchema.test.js` is different in kind: rather than testing one
-module, it checks every frontmatter **producer** in the vault — all 21
+module, it checks every frontmatter **producer** in the vault — all 25
 templates (read from `00 - Templates/` on disk), the `buildBaseYaml` helper,
-all 9 capture modules, and `METADATA.md`'s own field tables — against the
+all 11 capture modules, and `METADATA.md`'s own field tables — against the
 single fixture in `_frontmatterSchema.js`. Read the header comment in that
 fixture before editing it: the `required` lists are deliberately
 hand-transcribed rather than computed, and contracts are keyed on template
