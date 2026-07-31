@@ -92,7 +92,15 @@ const VOCABULARY = {
              "url", "publication", "doi", "citekey", "keywords", "channel", "channel_url",
              "thumbnail", "watched", "released", "media", "mx-uid",
              "platform", "host", "guest", "account", "tweet_text", "context", "led_here",
-             "unit", "lecturer", "lecture_num", "date_given"],
+             "unit", "lecturer", "lecture_num", "date_given",
+             "director", "runtime", "series", "season", "episode"],
+    // Series MOC / Season MOC fields. `series` is listed under `source` above
+    // because the Episode note emits it too — the Season MOC carries the same
+    // key as its backlink. `episode_count` is the one field only a Season MOC
+    // has: TVmaze returns `episodeOrder` on the /seasons call, so it is free at
+    // capture time, and a Dataview count could only ever see the episodes
+    // already captured.
+    serial: ["episode_count"],
     entity: ["role", "organization", "contact", "website", "founded", "sector", "headquarters",
              "key_people", "government_type", "established", "capital", "leader", "creator",
              "release_date", "model_family", "coordinates", "region", "country", "historical",
@@ -145,6 +153,17 @@ const TEMPLATES = {
     "(TEMPLATE) Unit MOC": {
         typeValue: "moc",
         required: ["type", "tags", "course", "semester", "aliases", "created"],
+    },
+
+    // --- Series MOCs: the same light structural schema, for TV (ADR 0013) ----
+    "(TEMPLATE) Series MOC": {
+        typeValue: "moc",
+        required: ["type", "tags", "publisher", "general_subject", "released",
+                   "thumbnail", "url", "aliases", "created"],
+    },
+    "(TEMPLATE) Season MOC": {
+        typeValue: "moc",
+        required: ["type", "tags", "series", "released", "episode_count", "aliases", "created"],
     },
 
     // --- Entities: lightweight schema, no id/growth/status/review ---------
@@ -312,6 +331,34 @@ const CAPTURE = {
         },
         required: ["course", "unit", "lecturer", "lecture_num", "date_given", "url", "keywords"],
     },
+    Movie: {
+        // Title, Year(skip), then the manual branch: Director, Year Released,
+        // Runtime, Studio, Genre, URL — and finally the always-asked platform.
+        promptScript: ["Dune", "", "Denis Villeneuve", "2021", "155", "Legendary Pictures",
+                       "Science fiction", "https://www.wikidata.org/entity/Q55712478", "Stremio"],
+        // `runtime` is the one field the module builds by hand, UNQUOTED, so
+        // Dataview compares it numerically. It is in this contract like any
+        // other, because the check here is on field NAMES — the quoting is
+        // pinned by sourceCaptureMovie.test.js.
+        required: ["director", "runtime", "publisher", "general_subject", "released",
+                   "platform", "url", "thumbnail", "watched"],
+    },
+    Series: {
+        // Needs the Series picker satisfied before its prompts. Both the Series
+        // and Season notes are seeded as already existing, so no stub is born
+        // down this path — stub birth is sourceCaptureSeries.test.js's subject.
+        suggestions: ["Severance"],
+        promptScript: ["2", "3", "Apple TV", "Who Is Alive?", "2025-01-31", "53",
+                       "https://www.tvmaze.com/episodes/2939703/severance-2x03-who-is-alive"],
+        mockApp: {
+            folders: { "04 - MOCS/Series": ["Severance"] },
+            files: {
+                "04 - MOCS/Series/Severance.md": { frontmatter: {} },
+                "04 - MOCS/Seasons/Severance S02.md": { frontmatter: {} },
+            },
+        },
+        required: ["series", "season", "episode", "released", "runtime", "url", "watched"],
+    },
 };
 
 // `type` values Source Capture writes, by module. Thought is the odd one out —
@@ -358,6 +405,8 @@ const CAPTURE_INLINE_PLACEHOLDERS = {
     Tweet: [],
     Thought: [],
     Lecture: [],
+    Movie: [],
+    Series: [],
 };
 
 // ---------------------------------------------------------------------------
@@ -398,6 +447,8 @@ const DOC_SECTIONS = {
     "Tweet": [...CAPTURE.Tweet.required, ...(CAPTURE.Tweet.optional || [])],
     "Lecture": [...CAPTURE.Lecture.required],
     "Thought": [...CAPTURE.Thought.required],
+    "Movie": [...CAPTURE.Movie.required],
+    "Series": [...CAPTURE.Series.required],
 
     // Entity subtype blocks → the subtype's distinctive fields (the shared
     // type/tags/aliases/created live in the Entity base block, not bound here).

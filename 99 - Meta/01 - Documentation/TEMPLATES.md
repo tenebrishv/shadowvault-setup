@@ -28,7 +28,7 @@ The primary intake tool. Run via Templater command: **Insert Template** → `(TE
 
 ### Features
 
-- Prompts for source type (9 types)
+- Prompts for source type (11 types)
 - Auto‑fetches metadata when possible (ISBN, DOI, URL oEmbed)
 - For **Lecture**: validated pickers for Course → Unit → Lecturer
   - Lists existing Courses (`#course` in `04 - MOCS/Courses/`)
@@ -52,6 +52,8 @@ The primary intake tool. Run via Templater command: **Insert Template** → `(TE
 | 🐦 Tweet | `!` | `source/tweet` | Twitter oEmbed API |
 | 💭 Thought | `=` | `note/thought` | Manual |
 | 🎓 Lecture | `§` | `source/lecture` | Smart pickers (Course/Unit/Lecturer) |
+| 🎞️ Movie | `~` | `source/movie` | Wikidata SPARQL + Wikimedia REST (keyless) |
+| 📺 Series | `»` | `source/episode` | TVmaze (keyless), cascading to Series/Season/Episode |
 
 ### Lecture Automation
 
@@ -69,6 +71,26 @@ Course
 └── Unit
     └── Lecture
 ```
+
+### Series Automation
+
+Series capture is the same shape, one level at a time, for TV:
+
+- Picks an existing Series (`04 - MOCS/Series/`) or creates one
+- Creates the Season MOC if missing, **series-qualified** (`Severance S02`, never
+  a bare `S02` — the Seasons folder is flat, and every series has a second season)
+- Fills both MOCs from the same keyless TVmaze fetch that supplies the episode,
+  rather than leaving bare stubs where free metadata was available
+- Points the episode at **both** levels with flat wikilinks, never a chain
+
+```text
+Series
+└── Season
+    └── Episode
+```
+
+The episode is the Source note (`source/episode`); the Series and Season are
+MOCs. See [ADR 0013](../../docs/adr/0013-tv-containment-hierarchy.md).
 
 ---
 
@@ -91,6 +113,8 @@ All type-specific logic (prompts, auto-fetch, YAML fields, note body) lives in `
 | `sourceCaptureTweet.js` | Tweet — oEmbed lookup + manual fallback |
 | `sourceCaptureThought.js` | Thought — manual |
 | `sourceCaptureLecture.js` | Lecture — Course/Unit/Lecturer picker-or-create flow plus lecture details |
+| `sourceCaptureMovie.js` | Movie — keyless Wikidata SPARQL lookup, a disambiguation picker, an optional Wikimedia poster GET, and a manual fallback |
+| `sourceCaptureSeries.js` | Series — Series/Season picker-or-create flow plus a cascading keyless TVmaze fetch that fills all three levels |
 | `moveSourceNote.js` | Not capture — the [Move Source Note](#filing-a-note-move-source-note) command, which files a captured note out of the Inbox using the registry's `folder` column |
 
 Each per-type module is a Templater User Script: `module.exports` is an `async function(tp, helpers)` that prompts/fetches as needed and returns `{ noteTitle, yamlFields, body }`, or `null` if the user cancels. This requires Templater's **User Scripts Folder** setting to point at `99 - Meta/02 - Scripts` (already configured in this vault's `.obsidian/plugins/templater-obsidian/data.json`) — after pulling changes to these scripts, run Obsidian's **Templater: Reload templates** command (or restart Obsidian) so it picks them up.
@@ -127,6 +151,8 @@ This is **not** cosmetic tidiness. The Section- and Source-note hub queries are 
 | Video, YouTube | `01 - Sources/Videos` |
 | Podcast | `01 - Sources/Podcasts` |
 | Tweet | `01 - Sources/Tweets` |
+| Movie | `01 - Sources/Movies` |
+| Series | `01 - Sources/Series` |
 | Thought | *none — exempt* |
 
 Notes on the behaviour:
@@ -144,13 +170,15 @@ Bind it to a hotkey via **Templater → Settings → Template Hotkeys**, which a
 
 ## Helper Templates
 
-`Source Capture`'s lecture flow births missing Courses, Units, and People directly *from* these template files (`tp.file.find_tfile` + `tp.file.create_new`), then fills in what the picker already knows via `processFrontMatter` — the template file is the single source of the note's shape, so a stub-born note and a manually templated note are identical by construction.
+`Source Capture`'s lecture and series flows birth missing Courses, Units, People, Series, and Seasons directly *from* these template files (`tp.file.find_tfile` + `tp.file.create_new`), then fills in what the picker already knows via `processFrontMatter` — the template file is the single source of the note's shape, so a stub-born note and a manually templated note are identical by construction.
 
 | File | Used for | Filled on creation |
 |------|----------|--------------------|
 | `(TEMPLATE) Course MOC.md` | New course stub (`#course`) | `default_lecturer` is written back (as a quoted wikilink) once the first lecture's lecturer is picked |
 | `(TEMPLATE) Unit MOC.md` | New unit stub (`#course-unit`) | `course` is set to the picked course |
 | `(TEMPLATE) Person.md` | New person stub (`agent/person`) — the Lecturer picker in `sourceCaptureLecture.js` only offers `09 - Entities/Agents` notes tagged `agent/person`, since that folder also holds Organizations/Countries/Synthetic agents | — |
+| `(TEMPLATE) Series MOC.md` | New series stub (`#series`) | `publisher` (network or streaming service), `general_subject` (genres), `released`, `thumbnail` and `url`, all from the TVmaze fetch |
+| `(TEMPLATE) Season MOC.md` | New season stub (`#series-season`) | `series` is set to the picked series; `released` and `episode_count` come from TVmaze's `/seasons` call |
 
 ---
 

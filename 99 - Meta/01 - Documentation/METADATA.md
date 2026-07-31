@@ -10,7 +10,8 @@ README: [README](../../README.md)
 
 These are the fields carried by notes moving through the pipeline — Permanent,
 Literature, MOC, Fleeting, and captured Sources. They are **not** universal:
-entity, curriculum-MOC, and periodic notes use their own lighter schemas,
+entity, curriculum-MOC, series-MOC, and periodic notes use their own lighter
+schemas,
 documented further down.
 
 ```yaml
@@ -58,8 +59,9 @@ Notes on the asymmetries, all of them deliberate as of this writing:
   minimal template (ADR 0001); speed of capture wins over structure.
 - **MOC carries `growth`** — a MOC ripens from a bare stub link-list (`seedling`)
   to a curated, annotated map (`evergreen`); `status` tracks whether it is live,
-  `growth` how developed it is. Curriculum MOCs (Course/Unit) are the exception —
-  they are structural scaffolding and carry no `growth`, documented further down.
+  `growth` how developed it is. The structural MOCs (Course/Unit, Series/Season)
+  are the exception — they are navigation scaffolding and carry no `growth`,
+  documented further down.
 
 - id
 	- Permanent reference
@@ -179,8 +181,11 @@ the rules are pure CSS with no runtime cost, and a curated list only makes
 | `specific_subject` | 🎯 | `watched` | 👁️ | `date_given` | 🕰️ |
 | `publication` | 📰 | `released` | 🚀 | `context` | 🧠 |
 | `doi` | 🪪 | `platform` | 🛰️ | `led_here` | ➡️ |
-| `citekey` | 🔖 | `host` | 🎙️ | | |
-| `keywords` | 🗝️ | `guest` | 🤝 | | |
+| `citekey` | 🔖 | `host` | 🎙️ | `director` | 🎞️ |
+| `keywords` | 🗝️ | `guest` | 🤝 | `runtime` | ⏲️ |
+| | | | | `series` | 📼 |
+| | | | | `season` | 🍿 |
+| | | | | `episode` | 🎟️ |
 
 **Entity**
 
@@ -198,7 +203,7 @@ the rules are pure CSS with no runtime cost, and a curated list only makes
 | `established` | 🏗️ | `date_created` | 🐣 | | |
 | | | `location` | 📌 | | |
 
-**Literature / curriculum-MOC / periodic**
+**Literature / curriculum- and series-MOC / periodic**
 
 | Field | Icon | Field | Icon |
 |---|---|---|---|
@@ -206,10 +211,10 @@ the rules are pure CSS with no runtime cost, and a curated list only makes
 | `section` | 🧷 | `period` | ⏱️ |
 | `institution` | 🏫 | `week` | 🗒️ |
 | `default_lecturer` | 📣 | `month` | 🌙 |
-| | | `year` | 🎊 |
+| `episode_count` | 🧮 | `year` | 🎊 |
 
-Fields shared by several types (`url`, `course`, `creator`, `location`,
-`website`, `date`) carry **one** glyph, since the panel keys on the property
+Fields shared by several types (`url`, `course`, `series`, `released`,
+`runtime`, `creator`, `location`, `website`, `date`) carry **one** glyph, since the panel keys on the property
 name and cannot see which note type it is on.
 
 `growth`, `status`, and `type` **also** show a per-**value** emoji on the row's
@@ -368,6 +373,77 @@ keywords:
 
 The Course and Unit MOC templates hold **link-valued fields** (`default_lecturer` on Course, `course` on Unit). When unset, the template leaves the field empty with a YAML comment hint — e.g. `default_lecturer: # "[[link to an agent/person]]"` — so the parsed value stays genuinely empty while the raw frontmatter still teaches what belongs there. When set, the value is a quoted wikilink (`default_lecturer: "[[Jane Doe]]"`), which Obsidian renders as a link in the Properties panel. The lecture capture flow fills both automatically: a new Unit gets its `course`, and a newly created Course gets `default_lecturer` set to the first captured lecture's lecturer.
 
+### Movie
+
+```yaml
+director:         # plain string, never a wikilink — see below
+runtime:          # UNQUOTED whole minutes — see below
+publisher:        # the studio
+general_subject:  # the genre
+released:         # release year
+platform:         # where you watched it (Stremio, cinema, Blu-ray)
+url:              # the Wikidata entity page (auto-fetch) or a manual link
+thumbnail:        # the poster, from the film's English Wikipedia lead image
+watched: YYYY-MM-DD
+```
+
+Studio reuses `publisher` and genre reuses `general_subject` deliberately, so
+Movie inherits the dashboards Book/Paper/Podcast already feed rather than needing
+new queries of its own. Only `director` and `runtime` are new vocabulary.
+
+**`runtime` is emitted UNQUOTED, and it is the one frontmatter field a capture
+module builds by hand.** `helpers.yamlField` always quotes, and a quoted number
+makes Dataview compare **lexically** — `WHERE runtime < 100` would then be
+silently wrong, because `"90" < "100"` is false. `sourceCaptureMovie.js`
+therefore emits it as a bare YAML number, behind a digits-only guard on both the
+fetched value and the prompt so the unquoted field can never be invalid YAML.
+Don't "fix" it back to `yamlField`. (The vault's existing `lecture_num: "3"` is a
+quoted number that has never bitten only because nothing queries it numerically.
+It is not a precedent to copy.)
+
+**`director` is a plain string, never a wikilink.** A validated picker over
+`09 - Entities/Agents` like the Lecturer picker was costed and declined:
+directors are long-tail — roughly 90 across 100 films — so auto-created Person
+stubs become a note graveyard. Converting the field to wikilinks later is a
+find-and-replace over one folder.
+
+**No `media` / `mx-uid`.** Media Extended cannot play what a Movie note points
+at, so a minted uid would be an orphan — the live bug in #48. Auto-fetch is
+keyless, from Wikidata (`query.wikidata.org/sparql`), with the poster coming from
+the Wikimedia REST summary endpoint; the primary-source survey behind that choice
+is `research/movie-metadata-apis.md`.
+
+### Series
+
+The captured note is an **episode** — hence the `source/episode` tag. The series
+and the season are MOCs, documented under [Series MOC
+Fields](#series-moc-fields-04---mocsseries-04---mocsseasons) below.
+
+```yaml
+series:                    # "[[link to a Series MOC]]"
+season:                    # "[[link to a Season MOC]]" — always series-qualified
+episode:  3                # UNQUOTED, like runtime
+released: YYYY-MM-DD       # the airdate
+runtime:  53               # UNQUOTED whole minutes
+url:                       # the canonical TVmaze episode page
+watched: YYYY-MM-DD
+```
+
+**Flat pointers to both levels, never a chain.** The episode carries `series:`
+**and** `season:`, exactly as a lecture carries `course:` and `unit:`. Chaining
+(`season:` alone, with the series reachable only through it) was considered and
+rejected in ADR 0011 as "option A" — it breaks one-hop metadata traversal.
+
+**`episode` and `runtime` are both unquoted**, for the reason spelled out under
+Movie above: the Season MOC sorts with `SORT episode ASC`, and a quoted number
+would put episode 10 before episode 9.
+
+Airdate reuses `released`, network reuses `publisher`, genres reuse
+`general_subject` and the poster reuses `thumbnail`, consistent with Movie. Only
+`series`, `season` and `episode` are new vocabulary. Auto-fetch is keyless, from
+TVmaze, which is CC BY-SA — attribution is satisfied by storing the canonical
+TVmaze URL in `url`.
+
 ### Thought
 
 ```yaml
@@ -489,6 +565,50 @@ semester:
 
 Both are created by hand or born as stubs by the lecture capture flow; either
 way the template file is the single source of their shape.
+
+---
+
+## Series MOC Fields (`04 - MOCS/Series`, `04 - MOCS/Seasons`)
+
+Series and Season MOCs use the **same light structural schema** as the
+curriculum MOCs above — no `id`/`growth`/`status`/`review` — because Series →
+Season → Episode is structurally identical to Course → Unit → Lecture. They carry
+`type: moc`, so they render and query as MOCs. See ADR 0013.
+
+### Series MOC
+
+```yaml
+type: moc
+publisher:          # the network or streaming service
+general_subject:    # genres
+released:           # first aired
+thumbnail:          # poster
+url:                # the canonical TVmaze show page
+```
+
+### Season MOC
+
+```yaml
+type: moc
+series:             # "[[link to a Series MOC]]"
+released:           # the season's premiere date
+episode_count:      # how many episodes the season ordered
+```
+
+**Season notes are always series-qualified** — `Severance S02`, never `S02`. The
+Seasons folder is flat and stub creation returns early when the path already
+exists, so a bare `S02` would silently reuse another series' season note with the
+wrong `series:` field. Every series has an S02, so this is not a hypothetical.
+
+**`episode_count` is a stored field rather than a Dataview count.** TVmaze
+returns `episodeOrder` on the `/seasons` call, so it costs nothing at capture
+time — and a count over captured notes could only ever report how many episodes
+you have *already* written up, which is the opposite of the question the field
+answers.
+
+Both are created by hand or born as stubs by the series capture flow, which fills
+them from the same fetch that supplies the episode; either way the template file
+is the single source of their shape.
 
 ---
 
@@ -631,9 +751,13 @@ Tags are **broad categorical umbrellas**. Links carry meaning. Tags tell you _
 |`source/podcast`|Podcast notes|
 |`source/tweet`|Tweet notes|
 |`source/lecture`|Lecture notes|
+|`source/movie`|Movie notes|
+|`source/episode`|Series episode notes|
 |`note/thought`|Thought notes|
 |`course`|Course MOCs|
 |`course-unit`|Unit MOCs|
+|`series`|Series MOCs|
+|`series-season`|Season MOCs|
 |`agent/person`|Person entity notes|
 |`agent/organization`|Organization entity notes|
 |`agent/country`|Country entity notes|
@@ -664,6 +788,8 @@ Source prefixes:
 ! Tweet
 = Thought
 § Lecture
+~ Movie
+» Series (an episode)
 ```
 
 Examples:
@@ -672,8 +798,16 @@ Examples:
 { Thinking Fast and Slow
 & Attention and Working Memory
 § 2025-02-14 – PSY101 – Introduction to Memory
+~ Dune
+» Severance S02E03 – Who Is Alive?
 ```
 
 Lecture notes are titled `§ YYYY-MM-DD – CourseCode – Lecture Title`, where `CourseCode` is the linked Course MOC's name — see [TEMPLATES.md](TEMPLATES.md).
+
+Episode notes are titled `» SeriesName SxxEyy – Episode Title`, keeping the
+episode's own title in the filename because that is how a reader recognises one
+in a file list. The known cost is that a title can be spoilery for an unwatched
+episode; the fallback, if that becomes annoying, is a code-only filename with the
+title in `aliases`.
 
 ---
