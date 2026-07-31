@@ -3,7 +3,7 @@
  * "00 - Inbox" into its type folder under "01 - Sources" (issue #37).
  *
  * Two surfaces are driven separately:
- *   - resolveType, directly, as a table over all nine registry types plus the
+ *   - resolveType, directly, as a table over all eleven registry types plus the
  *     shapes frontmatter `tags` can legitimately take;
  *   - the module itself, through mocked app/Notice, asserting the rename that
  *     came out (or that none did).
@@ -57,6 +57,8 @@ test("every type except Thought carries its documented destination folder", () =
         Tweet: "01 - Sources/Tweets",
         Thought: null,
         Lecture: "01 - Sources/Lectures",
+        Movie: "01 - Sources/Movies",
+        Series: "01 - Sources/Series",
     };
     const actual = Object.fromEntries(REGISTRY.map(row => [row.name, row.folder]));
     assert.deepEqual(actual, EXPECTED_FOLDER);

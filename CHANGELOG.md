@@ -6,6 +6,57 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ## [Unreleased]
 
 ### Added
+- **Movie and Series (TV) source-capture types**, taking the type registry from
+  nine rows to eleven. **Movie** (`~`, `source/movie`) is a standalone cinematic
+  work; **Series** (`»`, `source/episode`) is anything with episodes — a
+  docuseries is a Series. The discriminator is the *structure of the work*, not
+  the platform and not the runtime: a film watched on Stremio, in a cinema, or
+  released free on YouTube is a Movie, while a feature-length video essay is
+  still a Video.
+  - **Both auto-fetch keylessly**, because this repo is public and ships as a
+    distributable framework, so no API key can be committed. Movie reads
+    Wikidata (one SPARQL GET for title/director/year/runtime/studio, plus an
+    optional Wikimedia REST GET for the poster — Wikidata's own film-poster
+    property covers 1.2% of films, since posters are not free-licensed). Series
+    reads TVmaze, which is CC BY-SA; attribution is satisfied by storing the
+    canonical TVmaze URL in `url`. TMDb was declined: it has no keyless read
+    path at all, and its attribution clause would propagate to every framework
+    user.
+  - **Movie raises a disambiguation picker**, auto-skipped when exactly one film
+    comes back. Same-titled films are the normal case, not the exception —
+    *The Thing* resolves to seven, *Dune* to four, *True Grit* to both 1969 and
+    2010 — and an optional year prompt narrows the list before the picker.
+  - **Series mirrors the Curriculum MOC exactly**: Series → Season → Episode,
+    the same shape as Course → Unit → Lecture, with two new MOC templates
+    (`(TEMPLATE) Series MOC.md`, `(TEMPLATE) Season MOC.md`) on the same light
+    structural schema. The fetch **cascades**, filling the Series and Season
+    MOCs from the same lookup that supplies the episode rather than leaving bare
+    stubs. Season notes are **series-qualified** (`Severance S02`, never `S02`),
+    which sidesteps a flat-folder name collision that every series would hit.
+  - **The episode points at both levels with flat wikilinks, never a chain** —
+    `series:` *and* `season:`, exactly as a lecture carries `course:` and
+    `unit:`. Chaining was rejected in ADR 0011; it breaks one-hop traversal.
+  - **`runtime` and `episode` are emitted UNQUOTED**, which is a first for this
+    vault: every other field goes through `helpers.yamlField`, which always
+    quotes, and a quoted number makes Dataview compare *lexically* — `WHERE
+    runtime < 100` would silently return nonsense (`"90" < "100"` is false) and
+    the Season MOC's `SORT episode ASC` would put episode 10 before 9. Both are
+    built by hand behind a digits-only guard on the fetched value and the
+    prompt.
+  - **Studio reuses `publisher`, genre reuses `general_subject`, airdate reuses
+    `released`**, so both types inherit the dashboards Book/Paper/Podcast
+    already feed. Only `director`, `runtime`, `series`, `season`, `episode` and
+    `episode_count` are new vocabulary.
+  - **`director` is a plain string, never a wikilink.** A validated picker over
+    `09 - Entities/Agents` was costed and declined: directors are long-tail, so
+    auto-created Person stubs become a note graveyard. Converting the field
+    later is a find-and-replace over one folder.
+  - **Neither type emits `media` or `mx-uid`.** Media Extended cannot play what
+    these notes point at, so a minted uid would be an orphan — the live bug in
+    #48. Both get a Source Recap at birth (`film` / `episode`); #41's backlog
+    for the other five types is untouched.
+  - Four new folders ship with the framework: `01 - Sources/Movies`,
+    `01 - Sources/Series`, `04 - MOCS/Series`, `04 - MOCS/Seasons`. Closes #57.
 - **A one-key way to file a captured note out of the Inbox.** New
   `(TEMPLATE) Move Source Note.md` — bind it under Templater's *Template
   Hotkeys* and it moves the active source note into its type folder under

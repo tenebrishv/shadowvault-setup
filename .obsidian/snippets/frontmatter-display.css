@@ -166,7 +166,8 @@ body.sv-show-source-field-icons:not(.sv-hide-field-icons) .metadata-property:is(
 	[data-property-key="guest"], [data-property-key="account"], [data-property-key="tweet_text"],
 	[data-property-key="course"], [data-property-key="unit"], [data-property-key="lecturer"],
 	[data-property-key="lecture_num"], [data-property-key="date_given"], [data-property-key="context"],
-	[data-property-key="led_here"],
+	[data-property-key="led_here"], [data-property-key="director"], [data-property-key="runtime"],
+	[data-property-key="series"], [data-property-key="season"], [data-property-key="episode"],
 	/* entity (Person / Organization / Country / Synthetic / Place / Artifact / Tool / System / Natural / Event) */
 	[data-property-key="role"], [data-property-key="organization"], [data-property-key="contact"],
 	[data-property-key="website"], [data-property-key="founded"], [data-property-key="sector"],
@@ -181,7 +182,8 @@ body.sv-show-source-field-icons:not(.sv-hide-field-icons) .metadata-property:is(
 	/* literature / curriculum-MOC / periodic */
 	[data-property-key="source"], [data-property-key="section"], [data-property-key="institution"],
 	[data-property-key="default_lecturer"], [data-property-key="semester"], [data-property-key="period"],
-	[data-property-key="week"], [data-property-key="month"], [data-property-key="year"]
+	[data-property-key="week"], [data-property-key="month"], [data-property-key="year"],
+	[data-property-key="episode_count"]
 ) .metadata-property-icon > svg {
 	display: none;
 }
@@ -218,6 +220,11 @@ body.sv-show-source-field-icons:not(.sv-hide-field-icons) .metadata-property[dat
 body.sv-show-source-field-icons:not(.sv-hide-field-icons) .metadata-property[data-property-key="date_given"]       .metadata-property-icon::after { content: "🕰️"; }
 body.sv-show-source-field-icons:not(.sv-hide-field-icons) .metadata-property[data-property-key="context"]          .metadata-property-icon::after { content: "🧠"; }
 body.sv-show-source-field-icons:not(.sv-hide-field-icons) .metadata-property[data-property-key="led_here"]         .metadata-property-icon::after { content: "➡️"; }
+body.sv-show-source-field-icons:not(.sv-hide-field-icons) .metadata-property[data-property-key="director"]          .metadata-property-icon::after { content: "🎞️"; }
+body.sv-show-source-field-icons:not(.sv-hide-field-icons) .metadata-property[data-property-key="runtime"]           .metadata-property-icon::after { content: "⏲️"; }
+body.sv-show-source-field-icons:not(.sv-hide-field-icons) .metadata-property[data-property-key="series"]            .metadata-property-icon::after { content: "📼"; }
+body.sv-show-source-field-icons:not(.sv-hide-field-icons) .metadata-property[data-property-key="season"]            .metadata-property-icon::after { content: "🍿"; }
+body.sv-show-source-field-icons:not(.sv-hide-field-icons) .metadata-property[data-property-key="episode"]           .metadata-property-icon::after { content: "🎟️"; }
 
 /* entity */
 body.sv-show-source-field-icons:not(.sv-hide-field-icons) .metadata-property[data-property-key="role"]             .metadata-property-icon::after { content: "🎖️"; }
@@ -261,6 +268,7 @@ body.sv-show-source-field-icons:not(.sv-hide-field-icons) .metadata-property[dat
 body.sv-show-source-field-icons:not(.sv-hide-field-icons) .metadata-property[data-property-key="week"]             .metadata-property-icon::after { content: "🗒️"; }
 body.sv-show-source-field-icons:not(.sv-hide-field-icons) .metadata-property[data-property-key="month"]            .metadata-property-icon::after { content: "🌙"; }
 body.sv-show-source-field-icons:not(.sv-hide-field-icons) .metadata-property[data-property-key="year"]             .metadata-property-icon::after { content: "🎊"; }
+body.sv-show-source-field-icons:not(.sv-hide-field-icons) .metadata-property[data-property-key="episode_count"]    .metadata-property-icon::after { content: "🧮"; }
 
 /* ---------- per-value emoji (growth / status / type) ----------
  * Painted on the value side (::before) from data-sv-value, which the
