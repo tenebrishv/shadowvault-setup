@@ -95,6 +95,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
   and the test suite requires every row to state the field either way, so a new
   source type can't silently ship unfileable.
 
+### Fixed
+- **`(TEMPLATE) Move Source Note.md` pasted itself into the note instead of
+  filing it.** A comment inside the template's leading execution block contained
+  a literal Templater closing tag, written there as an illustration. Templater
+  stops at the *first* closing tag, so the block ended mid-comment and the rest
+  of the file — including the `tp.user.moveSourceNote(tp)` call — was emitted as
+  plain text. The command has never run since it shipped; the unit suite could
+  not see it, because the suite exercises `moveSourceNote.js` and never parses
+  the template. The comment no longer contains a closing tag, and now says why
+  one must never be written there.
+
 ## [2.14.0] – 2026-07-29
 
 ### Added
