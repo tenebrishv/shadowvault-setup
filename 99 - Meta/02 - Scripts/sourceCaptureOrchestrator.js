@@ -31,6 +31,16 @@
 // both are videos on disk (see CLAUDE.md's filename-prefix table). `folder` is
 // likewise shared by those two — one destination, "01 - Sources/Videos".
 //
+// Movie takes "~" rather than the more obvious "?", which is illegal on Windows
+// and stripped by ILLEGAL_TITLE_CHARS; sharing "+" with Video would break
+// moveSourceNote's prefix fallback, since their folders differ. Series takes
+// "»" — "@" is reserved for people notes.
+//
+// Series' tag is `source/episode`, not `source/series`: the captured note IS an
+// episode. The series and season are MOCs in "04 - MOCS/Series" and
+// "04 - MOCS/Seasons", not sources, and the episode points at both with flat
+// wikilinks (ADR 0013).
+//
 // `folder` is the note's filing destination, read by moveSourceNote.js rather
 // than by capture: capture always lands notes in "00 - Inbox" on purpose, and
 // filing is a separate, deliberate action (issue #37). Thought carries null —
@@ -47,6 +57,8 @@ const TYPE_REGISTRY = [
     { name: "Tweet",   icon: "🐦 Tweet",   tag: "source/tweet",   prefix: "!", folder: "01 - Sources/Tweets",   capturer: "sourceCaptureTweet" },
     { name: "Thought", icon: "💭 Thought", tag: "note/thought",   prefix: "=", folder: null,                    capturer: "sourceCaptureThought" },
     { name: "Lecture", icon: "🎓 Lecture", tag: "source/lecture", prefix: "§", folder: "01 - Sources/Lectures", capturer: "sourceCaptureLecture" },
+    { name: "Movie",   icon: "🎞️ Movie",   tag: "source/movie",   prefix: "~", folder: "01 - Sources/Movies",   capturer: "sourceCaptureMovie" },
+    { name: "Series",  icon: "📺 Series",  tag: "source/episode", prefix: "»", folder: "01 - Sources/Series",   capturer: "sourceCaptureSeries" },
 ];
 
 // Returns the assembled note as a string for the template to assign to tR,

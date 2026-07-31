@@ -38,16 +38,16 @@ const CAPTURE = {
 
 // --- registry completeness ---
 
-test("registry covers all nine source types with one row each", () => {
+test("registry covers all eleven source types with one row each", () => {
     const rows = orchestrator.typeRegistry();
     const names = rows.map(r => r.name);
 
-    assert.equal(rows.length, 9);
+    assert.equal(rows.length, 11);
     assert.deepEqual(names, [
         "Book", "Article", "Paper", "YouTube", "Video",
-        "Podcast", "Tweet", "Thought", "Lecture",
+        "Podcast", "Tweet", "Thought", "Lecture", "Movie", "Series",
     ]);
-    assert.equal(new Set(names).size, 9, "type names must be unique");
+    assert.equal(new Set(names).size, 11, "type names must be unique");
 });
 
 test("each type carries the filename prefix its convention specifies", () => {
@@ -58,6 +58,7 @@ test("each type carries the filename prefix its convention specifies", () => {
     const EXPECTED_PREFIX = {
         Book: "{", Article: "(", Paper: "&", YouTube: "+", Video: "+",
         Podcast: "%", Tweet: "!", Thought: "=", Lecture: "§",
+        Movie: "~", Series: "»",
     };
     const actual = Object.fromEntries(
         orchestrator.typeRegistry().map(row => [row.name, row.prefix]),
