@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+## [2.15.0] – 2026-07-30
+
 ### Added
 - **Movie and Series (TV) source-capture types**, taking the type registry from
   nine rows to eleven. **Movie** (`~`, `source/movie`) is a standalone cinematic
@@ -600,7 +602,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ---
 
-[Unreleased]: https://github.com/tenebrishv/shadowvault-setup/compare/v2.14.0...HEAD
+[Unreleased]: https://github.com/tenebrishv/shadowvault-setup/compare/v2.15.0...HEAD
+[2.15.0]: https://github.com/tenebrishv/shadowvault-setup/compare/v2.14.0...v2.15.0
 [2.14.0]: https://github.com/tenebrishv/shadowvault-setup/compare/v2.13.0...v2.14.0
 [2.13.0]: https://github.com/tenebrishv/shadowvault-setup/compare/v2.12.0...v2.13.0
 [2.12.0]: https://github.com/tenebrishv/shadowvault-setup/compare/v2.11.1...v2.12.0
