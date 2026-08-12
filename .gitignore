@@ -42,7 +42,6 @@ opencode.json
 # Per-vault backups written by the framework updater (99 - Meta/04 - Tooling)
 99 - Meta/05 - Backups/
 
-# Movie/Series design record and API survey (kept local only, not published).
-# Pushed temporarily so the #57 agent run could read them from a fresh clone.
-research/movie-series-capture-design.md
-research/movie-metadata-apis.md
+# Research notes are a local-only working surface. Docs and ADRs cite them by
+# filename for provenance, but the notes themselves are never published.
+research/
