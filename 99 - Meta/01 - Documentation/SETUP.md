@@ -35,9 +35,11 @@ Open Obsidian → **Open folder as vault** → select the `ShadowVault` fold
 ### 3:  Enable Plugins
 
 
-Go to **Settings → Community plugins → Turn on community plugins → Browse**.
+Go to **Settings → Community plugins → Turn on community plugins → Browse**.
 
 Install and enable the plugins listed in [PLUGINS](PLUGINS.md).
+
+Then open **Settings → ShadowVault Property Icons → Plugin health** and hit **Refresh**. It flags anything still missing or disabled — only **Media Extended** genuinely needs a manual install (it can't be redistributed; see [PLUGINS](PLUGINS.md)) — and its **Framework** section can point you at the latest release. Run it once and a red flag is the vault telling you exactly what to fix.
 
 ---
 

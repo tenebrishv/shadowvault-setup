@@ -1,9 +1,9 @@
 {
 	"id": "shadowvault-property-icons",
 	"name": "ShadowVault Property Icons",
-	"version": "1.0.0",
+	"version": "1.1.0",
 	"minAppVersion": "1.4.0",
-	"description": "Stamps a data-sv-value attribute on growth/status/type rows in the Properties panel so frontmatter-display.css can paint per-value emoji. First-party to this vault; degrades to plain text if disabled.",
+	"description": "Stamps a data-sv-value attribute on growth/status/type rows in the Properties panel so frontmatter-display.css can paint per-value emoji, and adds a Plugin health settings tab that verifies/enables the vault's shipped plugins and flags framework updates. First-party to this vault; degrades to plain text if disabled.",
 	"author": "ShadowVault",
 	"isDesktopOnly": false
 }

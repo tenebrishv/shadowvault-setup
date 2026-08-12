@@ -6,6 +6,25 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ## [Unreleased]
 
 ### Added
+- **Plugin health settings tab** in the first-party `shadowvault-property-icons`
+  plugin, so a new adopter can confirm the vault's plugin set is intact without
+  cross-referencing `PLUGINS.md` against Settings by hand. It verifies the
+  shipped set live (installed / enabled / loaded, with versions) behind a
+  health banner that scores only what it can judge — Obsidian Git ships
+  deliberately off and is never counted against the vault — enables
+  installed-but-disabled plugins one at a time or in bulk, explains *why* Media
+  Extended has to be installed by hand (it ships no upstream licence, so the
+  vault carries its settings but not its code), and on demand compares the
+  installed framework version against GitHub's latest release, pointing at
+  `update-vault.ps1`/`.sh`. A new `styles.css` paints it entirely from
+  Obsidian's own CSS variables, so it follows the user's theme and accent
+  colour in both light and dark and reflows on a phone-width pane.
+  Presentation is data rather than branching: every string and colour the tab
+  shows comes out of a pure function, so `pluginHealth.test.js` covers the
+  wording and the state machine (and pins the plugin's registry copy to
+  `community-plugins.json`, the bundled plugin folders and
+  `framework-manifest.json`) while only DOM assembly needs an eyeball in
+  Obsidian.
 - **GitHub Sponsors** alongside Ko-fi in `.github/FUNDING.yml`, which puts a
   Sponsor button in the repo header and on release pages. GitHub takes 0% from
   personal-account sponsors. `SUPPORT.md` lists both.

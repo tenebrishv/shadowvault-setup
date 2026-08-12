@@ -1,0 +1,316 @@
+/*
+ * shadowvault-property-icons — Plugin health settings tab.
+ *
+ * Auto-loaded by Obsidian from the plugin folder. Scoped entirely under
+ * .sv-health so it cannot leak into the rest of Settings.
+ *
+ * EVERY colour, radius and font size here is an Obsidian CSS variable. That is
+ * deliberate and is the whole styling rule for this file: the tab then follows
+ * the user's theme, their accent colour, and light/dark automatically, with no
+ * media queries and nothing to re-tune when a theme changes. If you need a
+ * colour that has no variable, derive it from one with color-mix() — as the
+ * tone blocks below do — rather than hardcoding a hex.
+ *
+ * TONE SYSTEM. main.js stamps data-sv-tone="ok|warn|error|neutral" on the
+ * banner, the section counts and each card. This file maps a tone to two local
+ * variables (--sv-tone, --sv-tone-bg); everything downstream paints from those,
+ * so a new tone is one block here plus one row in STATUS_META, and no rule
+ * anywhere needs to know which statuses exist.
+ */
+
+.sv-health {
+	--sv-gap: var(--size-4-3);
+	--sv-radius: var(--radius-m);
+}
+
+.sv-health__title {
+	margin: 0 0 var(--size-4-1);
+}
+
+.sv-health__lede {
+	margin: 0 0 var(--size-4-5);
+	color: var(--text-muted);
+	font-size: var(--font-ui-small);
+	line-height: var(--line-height-tight);
+	max-width: 62ch;
+}
+
+.sv-loading {
+	padding: var(--size-4-6) 0;
+	color: var(--text-faint);
+	font-size: var(--font-ui-small);
+	text-align: center;
+}
+
+/* --- tones ------------------------------------------------------------------- */
+
+.sv-health [data-sv-tone='ok'] {
+	--sv-tone: var(--color-green);
+	--sv-tone-bg: color-mix(in srgb, var(--color-green) 12%, transparent);
+}
+
+.sv-health [data-sv-tone='warn'] {
+	--sv-tone: var(--color-yellow);
+	--sv-tone-bg: color-mix(in srgb, var(--color-yellow) 14%, transparent);
+}
+
+.sv-health [data-sv-tone='error'] {
+	--sv-tone: var(--color-red);
+	--sv-tone-bg: color-mix(in srgb, var(--color-red) 12%, transparent);
+}
+
+.sv-health [data-sv-tone='neutral'] {
+	--sv-tone: var(--text-muted);
+	--sv-tone-bg: var(--background-modifier-hover);
+}
+
+/* --- banner ------------------------------------------------------------------ */
+
+.sv-banner {
+	display: flex;
+	align-items: flex-start;
+	gap: var(--sv-gap);
+	padding: var(--size-4-4);
+	margin-bottom: var(--size-4-6);
+	border: 1px solid color-mix(in srgb, var(--sv-tone) 35%, transparent);
+	border-radius: var(--sv-radius);
+	background: var(--sv-tone-bg);
+}
+
+.sv-banner__glyph {
+	flex: 0 0 auto;
+	display: grid;
+	place-items: center;
+	width: 2rem;
+	height: 2rem;
+	border-radius: 50%;
+	background: var(--sv-tone);
+	color: var(--text-on-accent);
+	font-size: var(--font-ui-medium);
+	font-weight: var(--font-bold);
+	line-height: 1;
+}
+
+.sv-banner__text {
+	flex: 1 1 auto;
+	min-width: 0;
+}
+
+.sv-banner__title {
+	color: var(--text-normal);
+	font-size: var(--font-ui-medium);
+	font-weight: var(--font-semibold);
+}
+
+.sv-banner__detail {
+	margin-top: var(--size-2-1);
+	color: var(--text-muted);
+	font-size: var(--font-ui-smaller);
+	line-height: var(--line-height-tight);
+}
+
+.sv-banner__actions {
+	flex: 0 0 auto;
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--size-2-2);
+}
+
+/* --- meter -------------------------------------------------------------------- */
+
+.sv-meter {
+	height: 4px;
+	margin-top: var(--size-4-2);
+	border-radius: var(--radius-s);
+	background: var(--background-modifier-border);
+	overflow: hidden;
+}
+
+.sv-meter__fill {
+	height: 100%;
+	border-radius: inherit;
+	background: var(--sv-tone);
+	/* The bar animates on Refresh and after Enable, so a fix reads as movement
+	   rather than a silent redraw. Respects reduced-motion below. */
+	transition: width 320ms ease-out;
+}
+
+.sv-meter__caption {
+	margin-top: var(--size-2-1);
+	color: var(--text-faint);
+	font-size: var(--font-ui-smaller);
+}
+
+/* --- sections ----------------------------------------------------------------- */
+
+.sv-section {
+	margin-bottom: var(--size-4-6);
+}
+
+.sv-section__head {
+	display: flex;
+	align-items: baseline;
+	gap: var(--size-4-2);
+	padding-bottom: var(--size-2-2);
+	border-bottom: 1px solid var(--background-modifier-border);
+}
+
+/* The recommended list is a <details>; make its summary look like the other
+   heads and carry a rotating marker instead of the browser default triangle. */
+summary.sv-section__head {
+	cursor: var(--cursor);
+	list-style: none;
+}
+
+summary.sv-section__head::-webkit-details-marker {
+	display: none;
+}
+
+summary.sv-section__head::after {
+	content: '›';
+	margin-left: auto;
+	color: var(--text-faint);
+	font-size: var(--font-ui-medium);
+	transition: transform 150ms ease;
+}
+
+details[open] > summary.sv-section__head::after {
+	transform: rotate(90deg);
+}
+
+.sv-section__title {
+	color: var(--text-normal);
+	font-size: var(--font-ui-small);
+	font-weight: var(--font-semibold);
+	letter-spacing: 0.04em;
+	text-transform: uppercase;
+}
+
+.sv-section__count {
+	color: var(--sv-tone);
+	font-size: var(--font-ui-smaller);
+}
+
+.sv-section__inner {
+	padding-top: var(--size-4-2);
+}
+
+.sv-section__blurb {
+	margin-bottom: var(--size-4-2);
+	color: var(--text-muted);
+	font-size: var(--font-ui-smaller);
+}
+
+/* --- cards -------------------------------------------------------------------- */
+
+.sv-list {
+	display: flex;
+	flex-direction: column;
+	gap: var(--size-2-2);
+}
+
+.sv-card {
+	display: flex;
+	align-items: flex-start;
+	gap: var(--sv-gap);
+	padding: var(--size-4-2) var(--size-4-3);
+	border: 1px solid var(--background-modifier-border);
+	/* The tone reads as a spine down the left edge — enough to scan the list by
+	   colour, not so much that a healthy vault is a wall of green. */
+	border-left: 3px solid var(--sv-tone);
+	border-radius: var(--sv-radius);
+	background: var(--background-secondary);
+	transition: background 120ms ease;
+}
+
+.sv-card:hover {
+	background: var(--background-modifier-hover);
+}
+
+.sv-card__pill {
+	flex: 0 0 auto;
+	display: grid;
+	place-items: center;
+	width: 1.25rem;
+	height: 1.25rem;
+	margin-top: 0.1rem;
+	border-radius: 50%;
+	background: var(--sv-tone-bg);
+	color: var(--sv-tone);
+	font-size: var(--font-ui-smaller);
+	font-weight: var(--font-bold);
+	line-height: 1;
+}
+
+.sv-card__main {
+	flex: 1 1 auto;
+	min-width: 0;
+}
+
+.sv-card__heading {
+	display: flex;
+	align-items: baseline;
+	flex-wrap: wrap;
+	gap: var(--size-2-2);
+}
+
+.sv-card__name {
+	color: var(--text-normal);
+	font-size: var(--font-ui-small);
+	font-weight: var(--font-medium);
+}
+
+.sv-card__status {
+	color: var(--text-faint);
+	font-size: var(--font-ui-smaller);
+}
+
+.sv-card__note {
+	margin-top: var(--size-2-1);
+	color: var(--text-muted);
+	font-size: var(--font-ui-smaller);
+	line-height: var(--line-height-tight);
+	max-width: 68ch;
+}
+
+.sv-tag {
+	padding: 0 var(--size-2-2);
+	border-radius: var(--radius-s);
+	background: var(--background-modifier-border);
+	color: var(--text-faint);
+	font-size: var(--font-ui-smaller);
+	text-transform: lowercase;
+}
+
+.sv-card__action {
+	flex: 0 0 auto;
+	align-self: center;
+}
+
+/* --- narrow panes -------------------------------------------------------------- */
+
+/* Settings on a phone, or a narrow desktop pane: stop the action button from
+   squeezing the name to one word per line. */
+@media (max-width: 500px) {
+	.sv-banner,
+	.sv-card {
+		flex-wrap: wrap;
+	}
+
+	.sv-banner__actions,
+	.sv-card__action {
+		width: 100%;
+	}
+
+	.sv-card__action button {
+		width: 100%;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.sv-meter__fill,
+	.sv-card,
+	summary.sv-section__head::after {
+		transition: none;
+	}
+}
