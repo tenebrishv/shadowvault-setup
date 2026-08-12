@@ -5,6 +5,29 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+### Added
+- **GitHub Sponsors** alongside Ko-fi in `.github/FUNDING.yml`, which puts a
+  Sponsor button in the repo header and on release pages. GitHub takes 0% from
+  personal-account sponsors. `SUPPORT.md` lists both.
+- **A commercial-licensing section in `SUPPORT.md`.** It states plainly that
+  AGPL already covers use, modification and internal corporate deployment at no
+  cost, and that a separate licence is only relevant for redistributing a
+  derivative *without* the source-availability obligation. Commercial licences
+  are unenforceable by detection for a local-first vault, so a visible way to
+  ask is the only route by which one is ever granted.
+
+### Changed
+- **Contributor terms in `CONTRIBUTING.md` hardened from three clauses to six**,
+  closing the gaps found by `research/licensing-shortlist.md` §12 against the
+  Apache ICLA v2.2 and Harmony HA-CLA-I v1.0: an express patent licence, an
+  employer-rights representation, a moral-rights waiver, a grant that runs to
+  successors and assigns, the statutory §106 verbs in place of colloquial ones,
+  and the third-party-material rule folded into the agreement instead of sitting
+  below it as advice. The relicensing grant in clause 2 — the clause that keeps
+  dual licensing possible — is unchanged in substance. Done now because the repo
+  has no external human contributor yet, so it costs one edit rather than
+  chasing past contributors for a re-agreement.
+
 ## [2.16.0] - 2026-08-12
 
 ### Changed

@@ -15,23 +15,44 @@ see [NOTICE](NOTICE).
 
 **By submitting a contribution, you agree that:**
 
-1. You are the sole author of the contribution, or otherwise have the right to
-   submit it under these terms.
-2. You grant tenebrishv a perpetual, worldwide, irrevocable, royalty-free
-   licence to use, reproduce, modify, sublicense and distribute your
-   contribution, **including under commercial licence terms**, and to relicense
-   the project as a whole in future.
-3. You retain copyright in your contribution. This grants a licence; it does not
-   transfer ownership.
+1. **Ownership and right to submit.** You are the sole author of the
+   contribution, or you otherwise have the right to submit it under these terms.
+   If your employer has rights to intellectual property you create, you have
+   either received permission to submit the contribution on your employer's
+   behalf, or your employer has waived those rights for it.
+2. **Copyright licence.** You grant tenebrishv, and tenebrishv's successors and
+   assigns, a perpetual, worldwide, non-exclusive, transferable, irrevocable,
+   royalty-free copyright licence to reproduce, prepare derivative works of,
+   publicly display, publicly perform, sublicense and distribute your
+   contribution and such derivative works, **including under commercial licence
+   terms**, and to relicense the project as a whole in future.
+3. **Patent licence.** You grant tenebrishv, and tenebrishv's successors and
+   assigns, a perpetual, worldwide, non-exclusive, transferable, irrevocable,
+   royalty-free patent licence to make, have made, use, offer to sell, sell,
+   import and otherwise transfer your contribution, limited to those patent
+   claims licensable by you that are necessarily infringed by your contribution
+   alone or by its combination with the project.
+4. **Moral rights.** To the fullest extent permitted by applicable law, you
+   waive and agree not to assert any moral rights in your contribution against
+   tenebrishv or downstream recipients.
+5. **Third-party material.** Your contribution contains no third-party material
+   — book text, article bodies, subtitle lines, or code you did not write —
+   unless you have clearly identified it and the terms under which it may be
+   used. Frontmatter and structural examples are enough.
+6. **Retained ownership.** You retain copyright in your contribution. This
+   grants a licence; it does not transfer ownership.
 
 Clause 2 exists because commercial licences are granted separately. Without it,
 every past contributor would hold a permanent veto over that — including people
-who have long since disappeared. If you are not comfortable with these terms,
-open an issue describing the change instead of a PR. A well-described bug is
-genuinely useful and carries no licensing entanglement.
+who have long since disappeared. Clauses 3 and 4 are the standard companions to
+it, modelled on the Apache ICLA and the Harmony agreements: a copyright licence
+alone leaves a contributor free to assert a patent over the same code, or to
+assert moral rights in jurisdictions where those survive a licence grant. If you
+are not comfortable with these terms, open an issue describing the change instead
+of a PR. A well-described bug is genuinely useful and carries no licensing
+entanglement.
 
-Do not paste third-party content — book text, article bodies, subtitle lines —
-into issues, tests or fixtures. Frontmatter and structural examples are enough.
+Clause 5 also applies to issues, tests and fixtures, not just to code.
 
 ## Setup
 
