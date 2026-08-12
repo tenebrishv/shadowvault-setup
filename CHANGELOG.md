@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+## [2.17.0] – 2026-08-12
+
 ### Added
 - **Plugin health settings tab** in the first-party `shadowvault-property-icons`
   plugin, so a new adopter can confirm the vault's plugin set is intact without
@@ -659,7 +661,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ---
 
-[Unreleased]: https://github.com/tenebrishv/shadowvault-setup/compare/v2.16.0...HEAD
+[Unreleased]: https://github.com/tenebrishv/shadowvault-setup/compare/v2.17.0...HEAD
+[2.17.0]: https://github.com/tenebrishv/shadowvault-setup/compare/v2.16.0...v2.17.0
 [2.16.0]: https://github.com/tenebrishv/shadowvault-setup/compare/v2.15.0...v2.16.0
 [2.15.0]: https://github.com/tenebrishv/shadowvault-setup/compare/v2.14.0...v2.15.0
 [2.14.0]: https://github.com/tenebrishv/shadowvault-setup/compare/v2.13.0...v2.14.0
