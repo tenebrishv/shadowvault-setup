@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: AGPL-3.0-only
 <#
 .SYNOPSIS
 Generates framework-manifest.json at the vault root — the authoritative list of
@@ -89,10 +90,13 @@ Add-Tree '08 - Nexus' 'core' @()
 Add-Entry '04 - MOCS/Home.md' 'core'
 Add-Entry '04 - MOCS/Entities.md' 'core'
 
-# Root docs
+# Root docs. LICENSE/NOTICE/THIRD-PARTY-NOTICES must ship: both our own licence
+# and the bundled plugins' licences require their notices to travel with copies.
 Add-Entry 'README.md' 'core'
 Add-Entry 'CHANGELOG.md' 'core'
 Add-Entry 'LICENSE' 'core'
+Add-Entry 'NOTICE' 'core'
+Add-Entry 'THIRD-PARTY-NOTICES.md' 'core'
 
 # Folder scaffolding: every .gitkeep in the vault (content folders ship empty).
 # Skip .git (repo internals) and .claude (gitignored agent tooling, whose
@@ -117,7 +121,9 @@ $pluginsDir = Join-Path $VaultPath '.obsidian\plugins'
 if (Test-Path -LiteralPath $pluginsDir) {
     Get-ChildItem -LiteralPath $pluginsDir -Directory | ForEach-Object {
         $pluginName = $_.Name
-        foreach ($name in @('main.js', 'manifest.json', 'styles.css')) {
+        # LICENSE ships with the plugin code it covers — MIT/ISC require the
+        # notice to accompany copies, GPL/AGPL require the licence text itself.
+        foreach ($name in @('main.js', 'manifest.json', 'styles.css', 'LICENSE')) {
             $f = Join-Path $_.FullName $name
             if (Test-Path -LiteralPath $f -PathType Leaf) {
                 $entries[".obsidian/plugins/$pluginName/$name"] = 'core'
@@ -140,7 +146,7 @@ $gitDir = Join-Path $VaultPath '.git'
 if ((Test-Path -LiteralPath $gitDir) -and (Get-Command git -ErrorAction SilentlyContinue)) {
     $tracked = @(git -C $VaultPath ls-files)
     # Tracked files intentionally not distributed to vaults:
-    $repoOnly = @('.gitignore', '.gitattributes', '.github/')
+    $repoOnly = @('.gitignore', '.gitattributes', '.github/', 'CONTRIBUTING.md')
     foreach ($t in $tracked) {
         if ($entries.ContainsKey($t)) { continue }
         $isRepoOnly = $false

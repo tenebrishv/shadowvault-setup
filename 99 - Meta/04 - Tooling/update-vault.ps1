@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: AGPL-3.0-only
 <#
 .SYNOPSIS
 Updates this ShadowVault vault to the latest framework release from GitHub,

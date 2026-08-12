@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-only
 /*
  * Video capture (non-YouTube, e.g. Vimeo/Nebula): fully manual.
  * Returns { noteTitle, yamlFields, body }, or null if cancelled.

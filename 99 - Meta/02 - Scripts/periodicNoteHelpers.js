@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-only
 /*
  * Shared helpers for the Daily/Weekly/Monthly/Yearly periodic note templates.
  * Exposed to templates as tp.user.periodicNoteHelpers.<fn>

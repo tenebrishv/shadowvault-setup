@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-only
 /*
  * Property-panel per-value emoji conformance (issue #35, ADR 0009).
  *

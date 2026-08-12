@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-only
 /*
  * Shared test doubles for the sourceCapture<Type>.js and
  * periodicNoteHelpers.js unit tests.

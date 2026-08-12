@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-only
 /*
  * Podcast capture: fully manual.
  * Returns { noteTitle, yamlFields, body }, or null if cancelled.

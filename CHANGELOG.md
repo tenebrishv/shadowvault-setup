@@ -5,6 +5,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+### Changed
+- **ShadowVault relicensed to the GNU AGPL-3.0 (AGPL-3.0-only), replacing
+  PolyForm Noncommercial 1.0.0.** Open source instead of source-available:
+  anyone may use, modify and redistribute the vault for any purpose including
+  commercial and internal corporate use; redistribution carries the usual AGPL
+  source-availability obligation. The scope carve-out for the bundled plugins
+  in `NOTICE` is now compatibility rather than a noncommercial boundary — AGPL
+  is compatible with the AGPL/GPL plugins ShadowVault ships (Templater,
+  Excalidraw, Style Settings), which also resolves the combined-work question
+  around the Templater user scripts. All SPDX headers rewritten to
+  `AGPL-3.0-only`. `LICENSE` is the canonical GNU text; third-party notices
+  are unchanged and still required.
+
 ## [2.15.0] – 2026-07-30
 
 ### Added

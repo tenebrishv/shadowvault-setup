@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-only
 /*
  * badge-table — the vault's one growth/status/type emoji renderer.
  *

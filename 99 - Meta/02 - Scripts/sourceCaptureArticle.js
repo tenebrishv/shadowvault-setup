@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-only
 /*
  * Article capture: Microlink metadata auto-fetch with manual fallback.
  * Returns { noteTitle, yamlFields, body }, or null if cancelled.

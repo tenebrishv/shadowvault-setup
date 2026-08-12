@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-only
 /*
  * Book capture: ISBN auto-fetch (Open Library) with manual fallback.
  * Returns { noteTitle, yamlFields, body }, or null if cancelled.

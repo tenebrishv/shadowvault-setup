@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-only
 /*
  * Shared helpers for the Source Capture template family.
  * Exposed to templates as tp.user.sourceCaptureHelpers.<fn>

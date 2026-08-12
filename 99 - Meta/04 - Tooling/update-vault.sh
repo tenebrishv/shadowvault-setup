@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# SPDX-License-Identifier: AGPL-3.0-only
 #
 # Updates this ShadowVault vault to the latest framework release from GitHub,
 # touching ONLY the framework-owned files listed in framework-manifest.json --

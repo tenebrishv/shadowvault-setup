@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-only
 /*
  * Tests for sourceCaptureMovie.js — the keyless Wikidata fetch, the
  * disambiguation picker, the optional Wikimedia poster lookup, and the one

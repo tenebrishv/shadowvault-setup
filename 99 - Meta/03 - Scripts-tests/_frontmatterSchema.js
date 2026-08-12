@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-only
 /*
  * The frontmatter schema fixture — the single definition every frontmatter
  * producer in the vault is checked against by frontmatterSchema.test.js.

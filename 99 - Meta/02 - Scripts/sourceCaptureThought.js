@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-only
 /*
  * Thought capture: fully manual, freeform reflection note.
  * Returns { noteTitle, yamlFields, body }, or null if cancelled.

@@ -4,6 +4,19 @@ ShadowVault relies on a combination of core and community plugins.
 
 README: [README](../../README.md)
 
+## What ships and what you install
+
+Most community plugins listed here are bundled under `.obsidian/plugins/`, so
+they work as soon as you open the vault. Their licences are reproduced in
+[THIRD-PARTY-NOTICES.md](../../THIRD-PARTY-NOTICES.md).
+
+**Media Extended is the exception — you must install it yourself.** Its upstream
+project publishes no licence, so ShadowVault has no right to redistribute its
+code and deliberately does not. Install it from Settings → Community plugins →
+Browse → "Media Extended". The vault ships its settings file, so it will pick up
+the configuration ShadowVault expects as soon as it is installed. Nothing else
+about the YouTube workflow changes.
+
 ## Core Plugins (Obsidian built‑in, enabled)
 File Explorer, Global Search, Graph View, Backlinks, Canvas, Outgoing Links, Tag Pane, Properties, Page Preview, Daily Notes, Templates, Note Composer, Command Palette, Slash Commands, Bookmarks, Unique Note Creator (ZK Prefixer), Outline, Word Count, File Recovery.
 ## Required Community Plugins
@@ -15,7 +28,7 @@ File Explorer, Global Search, Graph View, Backlinks, Canvas, Outgoing Links, Tag
 | Plugin                           | Role                                                                                                     |
 | -------------------------------- | -------------------------------------------------------------------------------------------------------- |
 | **Calendar**                     | Visual daily note navigation                                                                             |
-| **Media Extended**               | Timestamped notes + screenshots for YouTube/video directly in Obsidian (Coursera-style capture workflow). Capture is **view-gated**: open the video in a side pane, not the inline embed. Bind hotkeys for *Add timestamp to note* / *Add screenshot to note* |
+| **Media Extended** *(install yourself — see above)* | Timestamped notes + screenshots for YouTube/video directly in Obsidian (Coursera-style capture workflow). Capture is **view-gated**: open the video in a side pane, not the inline embed. Bind hotkeys for *Add timestamp to note* / *Add screenshot to note* |
 | **Tag Wrangler**                 | Bulk rename and merge tags                                                                               |
 | **Kanban**                       | Visual note status tracking (e.g., Inbox → Processing → Done)                                            |
 | **Natural Language Dates**       | Write "next Friday" in daily note to get a link                                                          |

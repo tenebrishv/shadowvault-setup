@@ -1,6 +1,6 @@
 # ShadowVault
 
-[![License: CC BY-NC-SA 4.0](https://img.shields.io/badge/License-CC%20BY--NC--SA%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by-nc-sa/4.0/)
+[![Licence: AGPL-3.0-only](https://img.shields.io/badge/licence-AGPL--3.0--only-blue.svg)](LICENSE)
 
 > _The brain is for having ideas, not storing them._
 
@@ -136,24 +136,28 @@ Check [Note Maturity Model](99%20-%20Meta/01%20-%20Documentation/WORKFLOWS.md#No
 - **CSS themes (planned)** – notebook backgrounds, daily note colours, coloured sidebar, general tweaks will be added in a future release.
 - **Metadata-Driven Organization** - Every note has a growth stage, status, review dates, metadata and relationships. Extremely powerful using Dataview dashboards
 
-## License
+## Licence
 
-**✅ Free for hobbyists, students, educators, and personal use.**  
-You are welcome to use, share, and adapt this vault for non‑commercial purposes – including learning, tinkering, and building your own PKM system – as long as you give credit and share alike.
+**[GNU AGPL-3.0](LICENSE) — open source, copyleft.**
 
-This work © tenebrishv is licensed under a [Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License](http://creativecommons.org/licenses/by-nc-sa/4.0/).
+- **Free for everyone, including companies.** You may use, modify, fork and
+  share ShadowVault for any purpose, including commercially and internally
+  within an organisation. The only obligation is on redistribution: if you
+  distribute a copy, you must make its source available under the same terms.
+  That means a fork you hand to others must stay open — not that using it
+  costs anything.
+- You may charge for copies if you wish, provided you still pass on the source
+  under the same terms.
+- Writing about, reviewing or quoting the project is unaffected — AGPL does not
+  restrict fair use or rights you have by law.
 
-> **Clarification of NonCommercial:**  
-> For the purposes of this license, “commercial use” includes, but is not limited to:  
-> - Selling the vault or any part of it  
-> - Using it in paid training, consulting, or tutoring  
-> - Internal corporate use that supports revenue‑generating activities  
-> - Integrating it into a SaaS, web service, or mobile app  
->  
-> If you are unsure whether your intended use is allowed, please contact [tenebrishv222@gmail.com](mailto:tenebrishv222@gmail.com).  
-> The copyright holder reserves the right to grant commercial exceptions on a case‑by‑case basis.
+Notes you capture into your own vault are yours. The licence covers
+ShadowVault's own scripts, templates, docs and example scaffolding only, and
+grants no rights in anything you capture with it.
 
-*This clarification does not modify the official license terms. The full legal code is in the `LICENSE` file.*
+The Obsidian community plugins bundled under `.obsidian/plugins/` belong to
+their respective authors and are **not** covered by this licence — see
+[THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md) and [NOTICE](NOTICE).
 
 ## Support
 

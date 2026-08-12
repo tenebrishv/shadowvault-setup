@@ -15,6 +15,13 @@ docs/
 CONTEXT.md
 CONTEXT-MAP.md
 
+# Cline project rules (kept local only, not published — mirrors CLAUDE.md)
+.clinerules
+
+# opencode agent config + session skills (kept local only, not published)
+.opencode/
+opencode.json
+
 # Obsidian local view state (churns from normal app usage, not real config)
 .obsidian/workspace.json
 .obsidian/workspace-mobile.json
@@ -22,6 +29,15 @@ CONTEXT-MAP.md
 
 # obsidian-git plugin's local auth/state (device-specific, not shared)
 .obsidian/plugins/obsidian-git/data.json
+
+# Media Extended ships NO licence upstream — no LICENSE file, no package.json
+# `license` field — so nobody has been granted redistribution rights. Its code
+# is deliberately not distributed; users install it from Obsidian's community
+# browser and pick up our data.json settings. Do not re-add these if a local
+# install puts them back. See THIRD-PARTY-NOTICES.md.
+.obsidian/plugins/media-extended/main.js
+.obsidian/plugins/media-extended/manifest.json
+.obsidian/plugins/media-extended/styles.css
 
 # Per-vault backups written by the framework updater (99 - Meta/04 - Tooling)
 99 - Meta/05 - Backups/

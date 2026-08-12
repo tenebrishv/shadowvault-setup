@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-only
 /*
  * Tweet capture: oEmbed auto-fetch with manual fallback.
  * Returns { noteTitle, yamlFields, body }, or null if cancelled.

@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-only
 /*
  * Tests for the Source Capture orchestrator — the type picker, registry
  * dispatch, note assembly, and file rename that used to live as untestable

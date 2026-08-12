@@ -1,0 +1,50 @@
+ShadowVault
+Copyright 2026 tenebrishv
+
+Licensed under the GNU Affero General Public License version 3 only
+(AGPL-3.0-only). See LICENSE.
+
+
+What the licence covers
+-----------------------
+
+ShadowVault's own work: the templates under `99 - Meta/00 - Templates/`, the
+Templater user scripts under `02 - Scripts/`, the test suite under
+`03 - Scripts-tests/`, the updater and manifest generator under `04 - Tooling/`,
+the views under `05 - Views/`, the CSS snippets under `.obsidian/snippets/`, the
+documentation under `01 - Documentation/`, and the example notes, MOCs,
+dashboards and folder scaffolding that ship with the vault.
+
+
+Third-party software — NOT covered
+----------------------------------
+
+`.obsidian/plugins/` contains Obsidian community plugins written and owned by
+other people, redistributed here so the vault functions on unzip. That code is
+not ShadowVault's to license. Each plugin is governed by its own terms,
+reproduced in THIRD-PARTY-NOTICES.md.
+
+ShadowVault is licensed under AGPL-3.0, which is compatible with the AGPL-3.0
+and GPL-3.0 plugins bundled here (Templater, Excalidraw, Style Settings), so the
+combination imposes no further obligation on you beyond what those plugins
+already require. The MIT- and ISC-licensed plugins remain under their own
+permissive terms. Nothing here restricts your rights in any of them.
+
+
+External data sources
+---------------------
+
+The Source Capture pipeline queries Open Library, Microlink, CrossRef, YouTube
+oEmbed, Twitter oEmbed, Wikidata and TVmaze. ShadowVault ships no API
+credentials and bundles no data from these services. Metadata retrieved at
+capture time is subject to each provider's own terms; it is fetched into the
+user's local vault and is not redistributed by this project.
+
+
+Vault content
+-------------
+
+Notes captured into a vault built on ShadowVault belong to the person who wrote
+them. This licence covers ShadowVault's own scripts, templates, documentation
+and example scaffolding only, and grants no rights in any material a user
+captures, quotes or stores.

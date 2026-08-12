@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-only
 /*
  * Tests for moveSourceNote.js — the command that files the active note out of
  * "00 - Inbox" into its type folder under "01 - Sources" (issue #37).

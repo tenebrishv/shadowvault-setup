@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-only
 const test = require("node:test");
 const assert = require("node:assert/strict");
 const helpers = require("../02 - Scripts/sourceCaptureHelpers.js");

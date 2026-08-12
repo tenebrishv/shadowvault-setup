@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-only
 /*
  * Series (TV) capture: a Series -> Season -> Episode hierarchy that mirrors the
  * existing Course -> Unit -> Lecture flow, with a keyless TVmaze fetch that

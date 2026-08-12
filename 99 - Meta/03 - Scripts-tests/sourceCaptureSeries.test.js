@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-only
 /*
  * Tests for sourceCaptureSeries.js — the Series -> Season -> Episode hierarchy
  * (the Course -> Unit -> Lecture pattern applied to TV), the cascading keyless

@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-only
 /*
  * Parity + contract matrix for the two framework updaters (issue #14, ADR 0002).
  *

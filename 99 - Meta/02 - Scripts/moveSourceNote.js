@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-only
 /*
  * MOVE SOURCE NOTE — files the active note out of "00 - Inbox" into its type
  * folder under "01 - Sources".

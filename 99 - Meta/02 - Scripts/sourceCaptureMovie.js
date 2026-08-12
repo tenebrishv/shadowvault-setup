@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-only
 /*
  * Movie capture: keyless Wikidata auto-fetch with a disambiguation picker and
  * manual fallback. Returns { noteTitle, yamlFields, body }, or null if cancelled.

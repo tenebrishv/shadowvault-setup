@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-only
 /*
  * Lecture capture: validated Course -> Unit -> Lecturer picker, creating
  * stub notes for any that don't exist yet, then the lecture details.

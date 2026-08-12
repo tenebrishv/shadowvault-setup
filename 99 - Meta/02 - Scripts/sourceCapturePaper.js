@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-only
 /*
  * Paper capture: DOI auto-fetch (CrossRef) with manual fallback.
  * Returns { noteTitle, yamlFields, body }, or null if cancelled.
