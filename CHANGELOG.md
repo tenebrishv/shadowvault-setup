@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+## [2.16.0] - 2026-08-12
+
 ### Changed
 - **ShadowVault relicensed to the GNU AGPL-3.0 (AGPL-3.0-only), replacing
   PolyForm Noncommercial 1.0.0.** Open source instead of source-available:
@@ -615,7 +617,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ---
 
-[Unreleased]: https://github.com/tenebrishv/shadowvault-setup/compare/v2.15.0...HEAD
+[Unreleased]: https://github.com/tenebrishv/shadowvault-setup/compare/v2.16.0...HEAD
+[2.16.0]: https://github.com/tenebrishv/shadowvault-setup/compare/v2.15.0...v2.16.0
 [2.15.0]: https://github.com/tenebrishv/shadowvault-setup/compare/v2.14.0...v2.15.0
 [2.14.0]: https://github.com/tenebrishv/shadowvault-setup/compare/v2.13.0...v2.14.0
 [2.13.0]: https://github.com/tenebrishv/shadowvault-setup/compare/v2.12.0...v2.13.0

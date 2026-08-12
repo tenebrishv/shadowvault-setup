@@ -1,8 +1,8 @@
 {
   "name": "shadowvault",
   "repo": "tenebrishv/shadowvault-setup",
-  "version": "2.15.0",
-  "generated": "2026-08-12T04:06:31Z",
+  "version": "2.16.0",
+  "generated": "2026-08-12T04:13:58Z",
   "files": [
     { "path": ".obsidian/app.json", "sha256": "baac3c47062134887a96386e38df528eaf3e7a2a11b17c7525bfa1fe902a6e67", "class": "config" },
     { "path": ".obsidian/appearance.json", "sha256": "3fe51fa1780761a78d86836c6947d7723bb3cb694720e2c3bc8ea78ed8ceb9a6", "class": "config" },
@@ -187,7 +187,7 @@
     { "path": "99 - Meta/04 - Tooling/updaterParity.test.mjs", "sha256": "447206ce1acf9689210e195b051eaadad8f5b140c5c2db97188752d88b65aa16", "class": "core" },
     { "path": "99 - Meta/04 - Tooling/updaterParityHarness.mjs", "sha256": "8c13dcb5f8db8a49296bef8126467d9112725193f40e57675fda53462200d89e", "class": "core" },
     { "path": "99 - Meta/05 - Views/badge-table/view.js", "sha256": "0982a059bd2ded1fc80fed671efa1191ab514ab45f56b568e70c385ba9e244c3", "class": "core" },
-    { "path": "CHANGELOG.md", "sha256": "3699c584f06c3ac306888f49f2ca8e999a7be94915b9b94c23618d50508c7595", "class": "core" },
+    { "path": "CHANGELOG.md", "sha256": "29e7929559b68d9d6a18f26d8a4ddd5c89c74da0aedef06bfbc86a23c83a4efe", "class": "core" },
     { "path": "LICENSE", "sha256": "b18d03cd8f847e2b3f482349c4d4e7980e65358f8bf7bcd0f5c04b8660cc3ca4", "class": "core" },
     { "path": "NOTICE", "sha256": "027cba3b954eaf32678f03e00ff35f9e3fb32a6122d57a37c51a1a292001071f", "class": "core" },
     { "path": "README.md", "sha256": "af059310c2007ef0c907296da1406b2150b04b8c84e87eebe5c83d2366898cf2", "class": "core" },
