@@ -23,6 +23,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
   it — the menu only appears on an explicit `/`.
 
 ### Added
+- **`GLOSSARY.md` in `99 - Meta/01 - Documentation/`** — the vault's vocabulary,
+  published for the first time. Every distributed copy shipped fourteen
+  documentation files and zero vocabulary reference, for a system whose
+  differentiator is a precise note taxonomy: the domain model that pins these
+  terms is a local-only working file and never reached a reader. The glossary
+  defines source-dependence, Source / Literature / Permanent notes, Promotion,
+  the Source recap, Section notes, the four growth stages, and MOC /
+  Curriculum MOC, and is linked from the README's documentation table.
+
 - **A "Why AGPL, and why the change" paragraph in `README.md` § Licence.** The
   section already explained what the licence permits; it never said why the
   project moved off PolyForm Noncommercial in 2.16.0. It now names the three
@@ -30,6 +39,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
   vault's own user scripts run inside, the fact that a noncommercial licence is
   not open source and left the repo displaying no licence name, and that
   restricting private internal use was never the goal.
+
+### Fixed
+- **Two `README.md` claims that stopped being true when the literature /
+  permanent boundary was redefined.** The Knowledge Flow diagram drew the
+  pipeline as a linear conveyor, implying every note rides from Source through
+  Literature to Permanent; it now shows Permanent Note reachable directly — an
+  idea you form yourself is born permanent and never was a literature note —
+  with Promotion drawn as the conditional move it is. And the "Atomic notes"
+  core principle read *"one idea per permanent note"*, implying atomicity is
+  what permanent notes have and literature notes lack; both synthesis layers are
+  atomic, and source-dependence is the discriminator.
 
 ## [2.17.0] – 2026-08-12
 

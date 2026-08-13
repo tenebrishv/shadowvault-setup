@@ -26,16 +26,17 @@ The goal is to build a system that helps transform information into understandin
 | [UPDATING.md](99%20-%20Meta/01%20-%20Documentation/UPDATING.md)                           | Updating the vault to a new release without touching your notes                           |
 | [STRUCTURE.md](99%20-%20Meta/01%20-%20Documentation/STRUCTURE.md)                         | Folder tree, naming conventions, philosophy                                               |
 | [WORKFLOWS.md](99%20-%20Meta/01%20-%20Documentation/WORKFLOWS.md)                         | Knowledge flow, note maturity, daily notes                                                |
+| [GLOSSARY.md](99%20-%20Meta/01%20-%20Documentation/GLOSSARY.md)                           | The vault's vocabulary: source, literature and permanent notes, recaps, MOCs, growth      |
 | [TEMPLATES.md](99%20-%20Meta/01%20-%20Documentation/TEMPLATES.md)                         | All templates and the Source Capture system                                               |
 | [METADATA.md](99%20-%20Meta/01%20-%20Documentation/METADATA.md)                           | YAML frontmatter schema and tags                                                          |
 | [REVIEW-SYSTEM.md](99%20-%20Meta/01%20-%20Documentation/REVIEW-SYSTEM.md)                 | Review scheduling and Dataview queries                                                    |
 | [PLUGINS.md](99%20-%20Meta/01%20-%20Documentation/PLUGINS.md)                             | Required and optional community plugins                                                   |
-| [CSS.md](99%20-%20Meta/01%20-%20Documentation/CSS.md)                                     | Future implementation: CSS snippets (notebook backgrounds, daily themes, sidebar colours)                        |
+| [CSS.md](99%20-%20Meta/01%20-%20Documentation/CSS.md)                                     | Future implementation: CSS snippets (notebook backgrounds, daily themes, sidebar colours) |
 | [EXTERNAL-INTEGRATIONS.md](99%20-%20Meta/01%20-%20Documentation/EXTERNAL-INTEGRATIONS.md) | Zotero, Raindrop, Snipd, etc.                                                             |
 | [DESIGN-PHILOSOPHY.md](99%20-%20Meta/01%20-%20Documentation/DESIGN-PHILOSOPHY.md)         | Core principles behind the vault's design                                                 |
 | [INSPIRATION.md](99%20-%20Meta/01%20-%20Documentation/INSPIRATION.md)                     | Inspirations: Zettelkasten, Evergreen Notes, LYT, Progressive Summarization, Tallguyjenks |
 | [ROADMAP.md](99%20-%20Meta/01%20-%20Documentation/ROADMAP.md)                             | Planned improvements and ideas                                                            |
-| [CHANGELOG.md](CHANGELOG.md)                         | Added, changed, fixed and removed between versions                                                            |
+| [CHANGELOG.md](CHANGELOG.md)                                                              | Added, changed, fixed and removed between versions                                        |
 | [SUPPORT.md](99%20-%20Meta/01%20-%20Documentation/SUPPORT.md)                             | How to support the project (donations)                                                    |
 
 ---
@@ -54,11 +55,11 @@ Full guide on [SETUP](99%20-%20Meta/01%20-%20Documentation/SETUP.md)
 ## Core Principles
 
 - **Links over folders** – navigation happens through connections, not hierarchies.
-- **Atomic notes** – one idea per permanent note, stated as a claim.
+- **Atomic notes** – one idea per note, stated as a claim. Literature and permanent notes are both atomic; what separates them is whether the idea still needs its source to make sense.
 - **Nothing is ever finished** – notes (including evergreen ones) are living, always open to revision.
 - **Avoid the collector's fallacy** – capture without connection is hoarding.
 
-This is a short excerpt. See the full set of 10 in [DESIGN-PHILOSOPHY.md](99%20-%20Meta/01%20-%20Documentation/DESIGN-PHILOSOPHY.md).
+This is a short excerpt. See the full set of 11 in [DESIGN-PHILOSOPHY.md](99%20-%20Meta/01%20-%20Documentation/DESIGN-PHILOSOPHY.md).
 
 ---
 
@@ -68,21 +69,26 @@ Every piece of information follows a path through the vault:
 
 ```text
 External World
-      ↓
-Capture
-      ↓
-Source
-      ↓
-Literature Note
-      ↓
-Permanent Note
-      ↓
-MOC / Project
+       │
+       ▼
+    Capture ─────────────────────────┐
+       │                             │
+       ▼                             │
+    Source                           │
+       │                             │
+       ▼                             ▼
+Literature Note ··promotion··▶ Permanent Note
+needs its source               stands on its own
+                                     │
+                                     ▼
+                               MOC / Project
 ```
 
-Not every note reaches the end. The purpose is to identify and develop ideas worth keeping.
+Not every note reaches the end, and not every note starts at the top.
 
-See [WORKFLOWS](99%20-%20Meta/01%20-%20Documentation/WORKFLOWS.md)
+**The literature/permanent split is a property of the note, not a stage it passes through.** A note is a *literature* note while its idea still needs its source to be intelligible, and a *permanent* note when the claim stands on its own. An idea you form yourself is **born permanent** – it never was a literature note. **Promotion** (dotted above) is the conditional move between the two, prompted by review; most literature notes never make it, and that is a correct outcome rather than a backlog.
+
+See [WORKFLOWS](99%20-%20Meta/01%20-%20Documentation/WORKFLOWS.md) and the [GLOSSARY](99%20-%20Meta/01%20-%20Documentation/GLOSSARY.md)
 
 ---
 ## Vault Structure (simplified)
