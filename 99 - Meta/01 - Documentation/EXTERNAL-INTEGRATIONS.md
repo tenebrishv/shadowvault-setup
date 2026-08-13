@@ -70,8 +70,8 @@ Tools you intend to implement **next**.
 | Tool | Purpose | Platform | Priority |
 |------|---------|----------|----------|
 | **Zotero** | PDF archival, annotation, research paper export via Better BibTeX + Zotero Integration plugin | All | Medium |
-| **Raindrop** | Article/bookmark save‑for‑later; the chosen article-capture pipeline (see WORKFLOWS.md: Article → Raindrop → Source Note) | Web/Extension | Medium |
-| **Obsidian Web Clipper** | Quick-capture web pages/ideas into the Inbox to defer context switching | Browser extension | Low — Raindrop covers the article path; Web Clipper is for quick fleeting capture only |
+| **Obsidian Web Clipper** | Clip articles and selections straight into `00 - Inbox/` with the vault's own frontmatter and filename prefixes; also the only web-highlight capture the vault has | Browser extension (Chrome/Firefox/Safari incl. iOS/Edge) | **High** — keyless, first-party, schema-exact. Covers the *capture* half of the Article workflow today. Parallel fast-path to Templater Source Capture, not a replacement: no vault read access, so no stub-birthing (Lecture/Series) and no `mx-uid` (Video). Tracked as issues #64–#66; see `research/obsidian-web-clipper.md`. |
+| **Raindrop** | Read-later **queue** outside the vault: collections, cross-device sync, an archived copy independent of Obsidian | Web/Extension | Medium — no longer "the article pipeline"; Web Clipper covers capture keylessly. Raindrop's remaining value is queuing and out-of-vault archival, and it is account-gated (ADR 0014 tier 2). Adopt only if a triage buffer outside the vault is genuinely wanted. |
 
 ---
 

@@ -17,7 +17,7 @@ README:[README](../../README.md)
 - [x] **Unit template with semester tag** – added YAML field `semester:` to `(TEMPLATE) Unit MOC.md` and to the Unit stub created inline by `sourceCaptureLecture.js`.
 - [ ]  **Zotero integration** – set up Better BibTeX + Zotero Integration plugin; define highlight colour convention.
 - [x] **Media Extended** – chosen as the in-Obsidian video engine; plugin installed. `sourceCaptureYoutube.js` emits the MX player embed plus `media:` and a minted `mx-uid:`, so the source note *is* MX's media-note (no `media-lib/` duplicate), and screenshots route to `07 - Attachments/Screenshots`. Capture is view-gated: watch in a side-pane player view, not the inline embed (issue #26).
-- [ ] **Obsidian Web Clipper** – remaining piece for quick web/article capture into the Inbox (Raindrop handles the fuller article pipeline; see EXTERNAL-INTEGRATIONS.md).
+- [ ] **Obsidian Web Clipper** – ship two importable templates (`Article`, `Thought`) that emit the vault's exact frontmatter and `(` / `=` filename prefixes straight into `00 - Inbox/`, plus a `SETUP.md` install step. Keyless; Interpreter is optional and must not appear in a shipped template. Blocked on one check: does Obsidian 1.13's URI allowlist suppress the confirmation dialog after the first clip? See `research/obsidian-web-clipper.md`; tracked as issues #64 (verify), #65 (templates), #66 (docs).
 
 ---
 

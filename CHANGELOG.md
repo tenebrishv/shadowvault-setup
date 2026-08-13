@@ -22,6 +22,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
   author's daily editing workflow, and it is inert for adopters who don't use
   it — the menu only appears on an explicit `/`.
 
+- **Web Clipper, not Raindrop, is now documented as the Article capture
+  pipeline.** `WORKFLOWS.md`'s Article Workflow read `Article → Raindrop →
+  Source Note`, and `EXTERNAL-INTEGRATIONS.md` ranked Web Clipper "Low" on the
+  grounds that "Raindrop covers the article path." Neither is installed yet,
+  and Web Clipper (tracked as issues #64–#66) is keyless and schema-exact where
+  Raindrop is account-gated (ADR 0014 tier 2) — so it's the better default for
+  the actual capture step. Raindrop is repositioned as an optional read-later
+  queue in front of it, not the pipeline itself.
+
 ### Added
 - **Podcast capture auto-fetches from Apple's iTunes Search API (keyless).** It
   was the last fully-manual auto-fetchable type — six prompts, no network path.

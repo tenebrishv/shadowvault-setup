@@ -116,7 +116,9 @@ Research Rabbit → Connected Papers → Zotero → Annotations → Literature N
 
 ### Article Workflow
 
-Article → Raindrop → Source Note → Literature Note → Permanent Note
+Article → Web Clipper → 00 - Inbox → Move Source Note → Literature Note → Permanent Note
+
+Raindrop is an optional read-later front-end (queue articles outside the vault, then clip when ready) — see EXTERNAL-INTEGRATIONS.md.
 
 Articles are processed lighter than books.
 
