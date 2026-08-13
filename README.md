@@ -151,6 +151,17 @@ Check [Note Maturity Model](99%20-%20Meta/01%20-%20Documentation/WORKFLOWS.md#No
 - Writing about, reviewing or quoting the project is unaffected — AGPL does not
   restrict fair use or rights you have by law.
 
+**Why AGPL, and why the change.** ShadowVault was source-available under
+PolyForm Noncommercial until 2.16.0. Three things argued for the move. The
+vault bundles plugins licensed AGPL-3.0 and GPL-3.0 — Templater, Excalidraw and
+Style Settings — and its own user scripts run *inside* Templater, so a
+copyleft-compatible licence removes a question a noncommercial one left open.
+A noncommercial licence is also not open source, and GitHub does not recognise
+it, so the repo displayed no licence name at all. And restricting private
+internal use was never the goal: the obligation that matters here is on
+redistribution, and AGPL states it in terms courts and companies already
+understand.
+
 Notes you capture into your own vault are yours. The licence covers
 ShadowVault's own scripts, templates, docs and example scaffolding only, and
 grants no rights in anything you capture with it.

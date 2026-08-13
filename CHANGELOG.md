@@ -5,6 +5,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+### Added
+- **A "Why AGPL, and why the change" paragraph in `README.md` § Licence.** The
+  section already explained what the licence permits; it never said why the
+  project moved off PolyForm Noncommercial in 2.16.0. It now names the three
+  reasons — copyleft compatibility with the bundled AGPL/GPL plugins that the
+  vault's own user scripts run inside, the fact that a noncommercial licence is
+  not open source and left the repo displaying no licence name, and that
+  restricting private internal use was never the goal.
+
 ## [2.17.0] – 2026-08-12
 
 ### Added
