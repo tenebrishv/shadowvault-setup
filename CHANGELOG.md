@@ -6,6 +6,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ## [Unreleased]
 
 ### Changed
+- **The Zotero highlight-colour convention is now consistent everywhere it's
+  written down.** `WORKFLOWS.md` and `EXTERNAL-INTEGRATIONS.md` documented
+  Yellow/Green/Pink/Purple/Blue, but `sourceCapturePaper.js`'s shipped Literature
+  Note body drifted to Orange/Green/Red/Purple/Blue during the per-type script
+  refactor — so every captured paper carried a table that didn't match either
+  doc. All three now agree on one colour set and wording (Yellow / Green / Pink
+  / Purple / Blue), reconciled during triage on issues #62–#63.
+
 - **Snipd is documented as a companion capture tool, not a pipeline source.**
   `EXTERNAL-INTEGRATIONS.md` said Snipd *"feeds the Podcast source type"* and
   `WORKFLOWS.md` drew `Podcast → Snipd / Airr → Timestamp Notes` with no seam,

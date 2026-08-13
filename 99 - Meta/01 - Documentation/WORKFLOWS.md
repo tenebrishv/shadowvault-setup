@@ -96,11 +96,11 @@ Book → Zotero → Source Note → Literature Note → Permanent Notes → MOCs
 
 | Colour | Meaning |
 |--------|---------|
-| Yellow | Important to author |
+| Yellow | Important point by author |
 | Green | Important to me |
-| Pink | Disagreement |
-| Purple | Investigate later |
-| Blue | Added later |
+| Pink | Disagree with author |
+| Purple | Follow-up needed |
+| Blue | Notes added later |
 
 
 ---

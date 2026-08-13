@@ -132,7 +132,7 @@ When you add an integration, document:
 | Yellow | Important point by author |
 | Green | Important to me |
 | Pink | Disagree with author |
-| Purple | Literary note to look up later |
+| Purple | Follow-up needed |
 | Blue | Notes added later |
 
 ---
