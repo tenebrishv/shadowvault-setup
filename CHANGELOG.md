@@ -6,6 +6,22 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ## [Unreleased]
 
 ### Changed
+- **Mathpix is out; recommend `obsidian-latex-ocr` (or `obsidian-ocrlatex`) in
+  local mode for screenshot-to-LaTeX.** Mathpix has no keyless or free-tier
+  programmatic path — every call needs `app_id`/`app_key`, and its consumer
+  Snip app's free tier has shrunk to 10 images/month — pure ADR 0014 tier 3.
+  `pix2tex`/LaTeX-OCR ships its own local API server
+  (`pip install "pix2tex[api]"` → `python -m pix2tex.api.run`, `127.0.0.1`,
+  zero auth, MIT), and two community Obsidian plugins already wrap it as a
+  backend. `EXTERNAL-INTEGRATIONS.md`'s Considered row now points at that local
+  path instead of Mathpix, and `PLUGINS.md` adds `obsidian-latex-ocr` to the
+  Recommended table as adopter-installed (same shape as Media Extended, since
+  it needs a local Python/Docker setup that can't be bundled under
+  `.obsidian/plugins/`). No script changes — the adopter can still point
+  either plugin at Mathpix or SimpleTex manually with their own key, and
+  anyone who installs neither keeps today's manual LaTeX typing / plain
+  screenshots.
+
 - **The Zotero highlight-colour convention is now consistent everywhere it's
   written down.** `WORKFLOWS.md` and `EXTERNAL-INTEGRATIONS.md` documented
   Yellow/Green/Pink/Purple/Blue, but `sourceCapturePaper.js`'s shipped Literature
