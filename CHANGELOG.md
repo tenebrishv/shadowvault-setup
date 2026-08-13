@@ -6,6 +6,21 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ## [Unreleased]
 
 ### Changed
+- **Glasp is adopted as an optional companion integration for web-highlight
+  social sync — never a default, never wired into capture scripts.**
+  `EXTERNAL-INTEGRATIONS.md` moves it out of Considered into Planned, framed
+  the same way as Snipd/PastReads: its Obsidian community plugin
+  (`obsidian-glasp-plugin`) does real scheduled, incremental sync, but two
+  caveats gate adoption. The free tier is public-by-default with no private
+  opt-out — private highlighting costs Pro ($12.50/mo) or Unlimited
+  ($30/mo), so "free account" does not mean "free and private." And every
+  re-sync is a full `vault.modify()` overwrite, not a merge — a hand edit
+  made inside an already-imported note is silently wiped on the next run.
+  `WORKFLOWS.md`'s Article Workflow now notes Glasp as an aside alongside
+  Raindrop, and restates that Web Clipper's Highlighter — no account,
+  private by default — stays the default way to get web highlights into
+  this vault. Closes #70.
+
 - **Mathpix is out; recommend `obsidian-latex-ocr` (or `obsidian-ocrlatex`) in
   local mode for screenshot-to-LaTeX.** Mathpix has no keyless or free-tier
   programmatic path — every call needs `app_id`/`app_key`, and its consumer

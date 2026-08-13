@@ -120,6 +120,14 @@ Article → Web Clipper → 00 - Inbox → Move Source Note → Literature Note 
 
 Raindrop is an optional read-later front-end (queue articles outside the vault, then clip when ready) — see EXTERNAL-INTEGRATIONS.md.
 
+Glasp is an optional companion for readers who specifically want a social/discovery
+layer on top of their web highlights — Web Clipper's Highlighter remains the default,
+account-free, private-by-default way to capture them. Glasp's Obsidian plugin syncs
+into its own note tree, not into a Source note, and overwrites that note wholesale on
+every re-sync; carry the essentials (URL, title, key highlights) into an Article note
+via `(TEMPLATE) Source Capture` yourself, the same manual step Snipd/PastReads already
+require (see EXTERNAL-INTEGRATIONS.md).
+
 Articles are processed lighter than books.
 
 ---
