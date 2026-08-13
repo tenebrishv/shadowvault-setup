@@ -5,6 +5,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+### Changed
+- **Obsidian's core Slash Commands plugin now ships enabled.** It was off in the
+  shipped `core-plugins.json`, so typing `/` in the editor did nothing; it now
+  opens the command menu inline. Enabled because it is part of the vault
+  author's daily editing workflow, and it is inert for adopters who don't use
+  it — the menu only appears on an explicit `/`.
+
 ### Added
 - **A "Why AGPL, and why the change" paragraph in `README.md` § Licence.** The
   section already explained what the licence permits; it never said why the
