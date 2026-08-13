@@ -6,6 +6,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ## [Unreleased]
 
 ### Changed
+- **Snipd is documented as a companion capture tool, not a pipeline source.**
+  `EXTERNAL-INTEGRATIONS.md` said Snipd *"feeds the Podcast source type"* and
+  `WORKFLOWS.md` drew `Podcast → Snipd / Airr → Timestamp Notes` with no seam,
+  both of which read as an automated hand-off. There is none, and there won't
+  be: Snipd's official Obsidian plugin syncs snips into its own `Snipd/` tree
+  through a private, undocumented backend behind device-code auth, so
+  `sourceCapturePodcast.js` has no contract to fetch from. Carrying host, guest,
+  URL, date and quotes into a Podcast source note is a manual step, and both
+  docs now say so.
+
 - **Obsidian's core Slash Commands plugin now ships enabled.** It was off in the
   shipped `core-plugins.json`, so typing `/` in the editor did nothing; it now
   opens the command menu inline. Enabled because it is part of the vault

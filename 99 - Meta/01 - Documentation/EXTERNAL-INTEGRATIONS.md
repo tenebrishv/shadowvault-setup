@@ -82,7 +82,7 @@ Tools under evaluation – no commitment yet.
 | Tool | Purpose | Platform | Notes |
 |------|---------|----------|-------|
 | **Fabric** | AI‑assisted research and capture | Web | Subscription? Overlaps with getrecall.ai |
-| **Snipd** | Podcast timestamped notes and reviews | iOS/Android | Good for mobile; feeds the Podcast source type |
+| **Snipd** | Podcast timestamped notes and reviews | iOS/Android | Good for mobile. A **companion capture tool, not a pipeline source**: its official Obsidian plugin syncs snips into its own `Snipd/` note tree, and carrying the essentials (host, guest, URL, date, key quotes) into a Podcast source note is a **manual** step. It cannot feed `sourceCapturePodcast.js` — the plugin talks to a private, undocumented backend behind device-code auth, so there is no third-party contract to build on (issue #67; `research/snipd-podcast-capture.md`). |
 | **getrecall.ai** | AI summaries for YouTube, PDFs, podcasts, web; chat with notes | Web | Freemium; broadest coverage of the AI-summary tools |
 | **Mathpix** | Screenshot → LaTeX conversion | All | Useful for STEM notes |
 | **PastReads** | Pull highlights from Kindle, Apple Books, web, Readwise | Browser extension | Free; overlaps with the **Kindle Highlights** plugin already in PLUGINS.md — pick one importer |

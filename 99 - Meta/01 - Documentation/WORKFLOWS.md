@@ -133,8 +133,13 @@ Video → Source Capture → Timestamp Notes → Literature Note → Permanent N
 
 ### Podcast Workflow
 
-Podcast → Snipd / Airr → Timestamp Notes → Literature Note → Permanent Notes
+Podcast → Snipd / Airr → *(manual carry-over)* → Source Capture → Timestamp Notes → Literature Note → Permanent Notes
 
+Snipd and Airr are listening-side tools: they capture snips on the phone, and
+Snipd's official Obsidian plugin syncs them into its own `Snipd/` folder. **That
+folder is not the source note.** Re-enter the essentials — host, guest, episode
+URL, date, key quotes — into a Podcast note via `(TEMPLATE) Source Capture`
+yourself; nothing auto-fetches them (see EXTERNAL-INTEGRATIONS.md and issue #67).
 
 Extract ideas, not transcripts.
 
