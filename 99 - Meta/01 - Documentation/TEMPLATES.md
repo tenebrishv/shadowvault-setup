@@ -48,7 +48,7 @@ The primary intake tool. Run via Templater command: **Insert Template** → `(TE
 | 📜 Paper | `&` | `source/paper` | CrossRef (via DOI) |
 | 🎥 YouTube | `+` | `source/youtube` | YouTube oEmbed API |
 | 🎬 Video | `+` | `source/video` | Manual |
-| 🎧 Podcast | `%` | `source/podcast` | Manual |
+| 🎧 Podcast | `%` | `source/podcast` | iTunes Search (keyless), show → episode |
 | 🐦 Tweet | `!` | `source/tweet` | Twitter oEmbed API |
 | 💭 Thought | `=` | `note/thought` | Manual |
 | 🎓 Lecture | `§` | `source/lecture` | Smart pickers (Course/Unit/Lecturer) |
@@ -92,6 +92,36 @@ Series
 The episode is the Source note (`source/episode`); the Series and Season are
 MOCs. See [ADR 0013](../../docs/adr/0013-tv-containment-hierarchy.md).
 
+### Podcast Automation
+
+Podcast capture asks for a show name, then narrows:
+
+- Searches Apple's keyless iTunes Search API for the show and offers the matches
+- Lists that show's episodes to pick from; because the episode lookup only
+  returns recent episodes, the picker also offers **Search by episode title**
+  for anything further back, and **Enter by hand** at any point
+- Fills `title`, `url` (the Apple Podcasts episode page), `publish_date` and
+  `general_subject` from the chosen episode
+
+Two fields deliberately stay human:
+
+- **`host` is pre-filled, not written.** iTunes only has a *show*-level
+  `artistName`, which is whatever the feed put in `<itunes:author>` — the host
+  for *99% Invisible* (Roman Mars), the publisher for *The Daily* (The New York
+  Times). It is offered in the prompt for confirmation because it is right about
+  half the time, and confirming is cheaper than typing.
+- **`guest` has no source at all.** iTunes carries no guest field at either
+  level, so it stays a plain prompt.
+
+**No artwork is read, and this is a terms constraint rather than an oversight.**
+Apple's legal notice for this API governs *Promo Content* — "previews of songs
+and music videos, album art, and App icons" — and requires it to sit next to a
+"Download on iTunes" badge. Plain text metadata and a store link fall outside
+that definition entirely, which is what makes this integration clean; taking
+`artworkUrl600` would pull the badge obligation onto every adopter, the same
+redistribution burden [ADR 0014](../../docs/adr/0014-external-data-source-credential-ladder.md)
+rejected TMDb over. Don't add a `thumbnail` field here from iTunes.
+
 ---
 
 ## Source Capture Architecture
@@ -109,7 +139,7 @@ All type-specific logic (prompts, auto-fetch, YAML fields, note body) lives in `
 | `sourceCapturePaper.js` | Paper — CrossRef DOI lookup + manual fallback |
 | `sourceCaptureYoutube.js` | YouTube — oEmbed lookup + manual fallback |
 | `sourceCaptureVideo.js` | Video (non-YouTube) — manual |
-| `sourceCapturePodcast.js` | Podcast — manual |
+| `sourceCapturePodcast.js` | Podcast — keyless iTunes Search show picker, then an episode picker, with a title-search rung for back-catalogue episodes and a manual fallback |
 | `sourceCaptureTweet.js` | Tweet — oEmbed lookup + manual fallback |
 | `sourceCaptureThought.js` | Thought — manual |
 | `sourceCaptureLecture.js` | Lecture — Course/Unit/Lecturer picker-or-create flow plus lecture details |

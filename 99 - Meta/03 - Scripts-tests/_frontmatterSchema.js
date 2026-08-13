@@ -301,7 +301,8 @@ const CAPTURE = {
         required: ["platform", "channel", "url", "released", "watched"],
     },
     Podcast: {
-        promptScript: ["Episode 42", "Host Name", "Guest Name", "https://podcast.example/42", "2022-11-11", "Philosophy"],
+        // Show name(skip iTunes lookup), Title, Host, Guest, URL, Date, Subject
+        promptScript: ["", "Episode 42", "Host Name", "Guest Name", "https://podcast.example/42", "2022-11-11", "Philosophy"],
         required: ["host", "guest", "url", "publish_date", "general_subject"],
     },
     Tweet: {

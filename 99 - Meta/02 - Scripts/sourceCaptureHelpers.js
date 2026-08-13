@@ -15,9 +15,16 @@ async function requiredPrompt(tp, label) {
     return val;
 }
 
-async function optionalPrompt(tp, label) {
-    const hint = label + "  (Enter to skip)";
-    const val = await tp.system.prompt(hint);
+// `defaultValue` pre-fills the input box (Templater's second prompt argument).
+// It exists for values an API supplied that are a good guess but not good
+// enough to write silently — sourceCapturePodcast.js's `host` is the case that
+// motivated it: iTunes' show-level `artistName` is the host about half the time
+// and the publisher the rest, so it is offered for confirmation rather than
+// trusted. The hint flips with it, because "Enter to skip" is a lie once the
+// box is populated — Enter then accepts the default.
+async function optionalPrompt(tp, label, defaultValue) {
+    const hint = label + (defaultValue ? "  (Enter to accept)" : "  (Enter to skip)");
+    const val = await tp.system.prompt(hint, defaultValue);
     if (val === null) return null;
     return val.trim();
 }

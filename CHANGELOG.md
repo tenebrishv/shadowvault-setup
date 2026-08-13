@@ -23,6 +23,38 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
   it — the menu only appears on an explicit `/`.
 
 ### Added
+- **Podcast capture auto-fetches from Apple's iTunes Search API (keyless).** It
+  was the last fully-manual auto-fetchable type — six prompts, no network path.
+  Capture now asks for a show name, offers the matching podcasts, then lists
+  that show's episodes, filling `title`, `url` (the Apple Podcasts episode
+  page), `publish_date` and `general_subject` from the one picked. iTunes is
+  ADR 0014 **tier 0** — no key, no account — so this ships on by default and
+  needs no adopter setup.
+
+  Two fields stay human on purpose. `host` is **pre-filled for confirmation,
+  never written silently**: iTunes only exposes a show-level `artistName`, which
+  is the host for *99% Invisible* (Roman Mars) and the publisher for *The Daily*
+  (The New York Times) — right about half the time, sampled across five shows.
+  `guest` has no source at all in the API and stays a plain prompt.
+  `helpers.optionalPrompt` grew an optional `defaultValue` argument to support
+  the prefill, and flips its own "Enter to skip" hint to "Enter to accept" when
+  one is present.
+
+  Three fallback rungs, so the floor never drops below today's behaviour:
+  skipping the show-name prompt, a network failure, or a search matching nothing
+  all land on the original six manual prompts, and the episode picker itself
+  offers a **title search** (for back-catalogue episodes, which the episode
+  lookup truncates away) and a **hand-entry** escape.
+
+  **No artwork is read, and that is a terms decision.** Apple's legal notice
+  covers *Promo Content* — "previews of songs and music videos, album art, and
+  App icons" — and attaches a mandatory "Download on iTunes" badge to it. The
+  text metadata and store link this reads fall outside that definition, which is
+  what makes the integration clean; `artworkUrl600` would drag the badge
+  obligation onto every adopter of a redistributable framework, the same burden
+  ADR 0014 vetoed TMDb over. A regression test asserts no artwork or audio URL
+  reaches a captured note. Closes #73.
+
 - **`GLOSSARY.md` in `99 - Meta/01 - Documentation/`** — the vault's vocabulary,
   published for the first time. Every distributed copy shipped fourteen
   documentation files and zero vocabulary reference, for a system whose
