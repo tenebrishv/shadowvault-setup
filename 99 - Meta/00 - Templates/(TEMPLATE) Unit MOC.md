@@ -15,6 +15,7 @@ created: <% tp.date.now("YYYY-MM-DDTHH:mm") %>
 LIST
 FROM #source/lecture
 WHERE contains(unit, [[]])
+AND (this.course = null OR contains(course, this.course))
 SORT date_given ASC
 ```
 

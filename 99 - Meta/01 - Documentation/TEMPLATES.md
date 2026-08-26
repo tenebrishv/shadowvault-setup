@@ -33,9 +33,10 @@ The primary intake tool. Run via Templater command: **Insert Template** → `(TE
 - For **Lecture**: validated pickers for Course → Unit → Lecturer
   - Lists existing Courses (`#course` in `04 - MOCS/Courses/`)
   - Lists Units belonging to that course (via `course:` frontmatter)
+  - Names a newly created Unit **course-qualified** — `Cognitive Psychology – Unit 1`, never a bare `Unit 1` — because `04 - MOCS/Units` is flat and generic unit names (`Unit 1`, `U1`, `todas`) collide across courses; a picked Unit keeps whatever it is already called
   - Pre‑fills Lecturer from course's `default_lecturer` field
   - Creates missing Courses/Units/People on the fly — stubs are born from the real template files (`(TEMPLATE) Course MOC.md`, `(TEMPLATE) Unit MOC.md`, `(TEMPLATE) Person.md`) via Templater, so stub and template can't drift apart
-- Renames file with type prefix (e.g., `{` for Book, `§` for Lecture)
+- Renames file with type prefix (e.g., `{` for Book, `§` for Lecture) — **after** Templater has finished writing the note, not during the template run, because renaming the open note mid-write makes Obsidian reload the view and drop the body
 - Adds YAML frontmatter with `id`, `created`, `review`, `status: inbox`, `growth: seedling`
 - Generates a rich note body (callouts, tables, timestamp placeholders)
 
@@ -60,7 +61,7 @@ The primary intake tool. Run via Templater command: **Insert Template** → `(TE
 Lecture capture automatically:
 
 - Creates Course notes if missing
-- Creates Unit notes if missing
+- Creates Unit notes if missing, named `<Course> – <Unit>`
 - Creates Lecturer notes if missing
 - Connects lecture to course hierarchy
 
@@ -68,7 +69,7 @@ Result:
 
 ```text
 Course
-└── Unit
+└── Course – Unit
     └── Lecture
 ```
 
@@ -205,7 +206,7 @@ Bind it to a hotkey via **Templater → Settings → Template Hotkeys**, which a
 | File | Used for | Filled on creation |
 |------|----------|--------------------|
 | `(TEMPLATE) Course MOC.md` | New course stub (`#course`) | `default_lecturer` is written back (as a quoted wikilink) once the first lecture's lecturer is picked |
-| `(TEMPLATE) Unit MOC.md` | New unit stub (`#course-unit`) | `course` is set to the picked course |
+| `(TEMPLATE) Unit MOC.md` | New unit stub (`#course-unit`), named `<Course> – <Unit>` | `course` is set to the picked course |
 | `(TEMPLATE) Person.md` | New person stub (`agent/person`) — the Lecturer picker in `sourceCaptureLecture.js` only offers `09 - Entities/Agents` notes tagged `agent/person`, since that folder also holds Organizations/Countries/Synthetic agents | — |
 | `(TEMPLATE) Series MOC.md` | New series stub (`#series`) | `publisher` (network or streaming service), `general_subject` (genres), `released`, `thumbnail` and `url`, all from the TVmaze fetch |
 | `(TEMPLATE) Season MOC.md` | New season stub (`#series-season`) | `series` is set to the picked series; `released` and `episode_count` come from TVmaze's `/seasons` call |

@@ -98,6 +98,7 @@ test("assembles base frontmatter, the type's fields, and the body", async () => 
     const { tp } = setup({ type: "Book", capture: CAPTURE });
 
     const note = await orchestrator(tp);
+    await orchestrator.pendingRename();  // never leave a deferred rename running into the next test
 
     assert.match(note, /^---\ntags: source\/book\n/);
     assert.match(note, /type: source\n/);
@@ -109,6 +110,7 @@ test("assembles base frontmatter, the type's fields, and the body", async () => 
 test("uses the registry's tag for the picked type", async () => {
     const { tp } = setup({ type: "Thought", capture: CAPTURE });
     const note = await orchestrator(tp);
+    await orchestrator.pendingRename();  // never leave a deferred rename running into the next test
 
     assert.match(note, /tags: note\/thought\n/);
     assert.match(note, /type: thought\n/, "Thought is the one type that isn't a source");
@@ -118,11 +120,28 @@ test("renames the note to the type prefix plus the sanitized title", async () =>
     const { tp, app } = setup({ type: "Book", capture: CAPTURE });
 
     await orchestrator(tp);
+    await orchestrator.pendingRename();
 
     assert.deepEqual(app.renames, [{
         from: "00 - Inbox/Untitled.md",
         to: "00 - Inbox/{ Atomic Habits.md",
     }]);
+});
+
+test("the rename is deferred until after the orchestrator returns", async () => {
+    // Templater writes tR only AFTER this module returns, and it writes the
+    // frontmatter and the body through two different paths. Renaming the open
+    // note inside that window makes Obsidian reload the view from disk and drop
+    // the body, leaving a note with properties and nothing else — the bug this
+    // deferral exists to prevent. So "no rename yet" at return time is the
+    // contract, not an implementation detail.
+    const { tp, app } = setup({ type: "Book", capture: CAPTURE });
+
+    await orchestrator(tp);
+    assert.deepEqual(app.renames, [], "renaming during the template run loses the body");
+
+    await orchestrator.pendingRename();
+    assert.equal(app.renames.length, 1, "and it still happens once Templater is done");
 });
 
 test("rename strips filename-illegal characters from the title", async () => {
@@ -132,6 +151,7 @@ test("rename strips filename-illegal characters from the title", async () => {
     });
 
     await orchestrator(tp);
+    await orchestrator.pendingRename();
 
     assert.equal(app.renames[0].to, "00 - Inbox/+ What! A Guide part 12.md");
 });
@@ -149,6 +169,7 @@ test("renames within the folder the note already lives in", async () => {
     });
 
     await orchestrator(tp);
+    await orchestrator.pendingRename();
 
     assert.equal(app.renames[0].to, "01 - Sources/Papers/& Atomic Habits.md");
 });
@@ -157,6 +178,7 @@ test("skips the rename when the module returns no title", async () => {
     const { tp, app } = setup({ type: "Thought", capture: { ...CAPTURE, noteTitle: "" } });
 
     const note = await orchestrator(tp);
+    await orchestrator.pendingRename();
 
     assert.deepEqual(app.renames, [], "nothing to rename to");
     assert.ok(note.length > 0, "the note is still assembled");
@@ -168,6 +190,7 @@ test("cancelling the type picker produces no note and no rename", async () => {
     const { tp, app, notices } = setup({ type: null, capture: CAPTURE });
 
     const note = await orchestrator(tp);
+    await orchestrator.pendingRename();
 
     assert.equal(note, "");
     assert.deepEqual(app.renames, []);
@@ -178,6 +201,7 @@ test("a module returning null (user cancelled mid-capture) produces no note and 
     const { tp, app } = setup({ type: "Book", capture: null });
 
     const note = await orchestrator(tp);
+    await orchestrator.pendingRename();
 
     assert.equal(note, "");
     assert.deepEqual(app.renames, []);

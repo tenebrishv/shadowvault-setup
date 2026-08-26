@@ -5,6 +5,42 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+### Fixed
+- **Lecture capture: a same-named Unit in a second course no longer hijacks the
+  first course's Unit note.** `04 - MOCS/Units` is flat and `createStub` returns
+  early when the path already exists, so typing `Unit 1` under a second course
+  silently reused the first course's note — which kept pointing at the *other*
+  course in its `course:` field, and whose Dataview list then mixed lectures
+  from both. `pickUnit`'s course filter actively hid this: the colliding note
+  was left out of the list you were shown, so "it isn't there" looked like a
+  reason to create it. Newly created Unit notes are now **course-qualified** —
+  `Cognitive Psychology – Unit 1` — exactly as Season notes are series-qualified
+  (ADR 0013 §3, which recorded this as the open bug it sidestepped). A Unit
+  picked off the list keeps whatever it is already called, so vaults captured
+  before this fix keep working; a typed name that already carries its course is
+  not qualified twice. `(TEMPLATE) Unit MOC.md`'s Lectures query also gained
+  `AND (this.course = null OR contains(course, this.course))`, which scopes the
+  list correctly even for the bare, already-collided Unit notes an existing
+  vault holds. Typed Course/Unit/Lecturer names now go through
+  `helpers.sanitizeTitle` as well, since all three become filenames. Closes #58.
+
+- **Captured notes no longer come out with their properties and an empty body.**
+  Templater writes the note *after* the orchestrator returns, and it writes it in
+  two pieces: `append_template_to_active_file` splits `tR`, pushes the body
+  through `editor.replaceSelection`, hands the frontmatter to
+  `metadataEditor.insertProperties`, then waits 100 ms and calls `view.save()`.
+  Renaming the open note from inside the template landed a file-rename event in
+  the middle of that window — Obsidian reloaded the view from disk, the reload
+  won over the not-yet-saved editor buffer, and the note kept the properties
+  (which went to the file) and lost the body, with no error, because nothing
+  threw. Lecture capture was the reliable repro: its three stub creations and
+  two `processFrontMatter` writes back up the file-event queue enough to push
+  the rename's reload into that 100 ms gap. The rename is now handed to a
+  background task that waits for the body to appear on disk (50 ms poll, 5 s
+  ceiling) before touching the filename, and reports a failed rename in a Notice
+  instead of leaving an unhandled rejection.
+
+
 ### Changed
 - **Glasp is adopted as an optional companion integration for web-highlight
   social sync — never a default, never wired into capture scripts.**

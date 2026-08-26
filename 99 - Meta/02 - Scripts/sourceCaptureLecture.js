@@ -69,20 +69,54 @@ function linkTargetName(value) {
         .trim();
 }
 
+// Returns { name, created } — `created` distinguishes a name the user just
+// typed (about to become a filename, so it is cleaned here) from one picked
+// off the list (an existing basename, already safe). Mirrors
+// sourceCaptureSeries.js:65-72.
 async function pickOrCreate(tp, helpers, label, existingItems) {
     const choices = [...existingItems.sort(), "➕ Create New"];
     const picked = await tp.system.suggester(choices, choices, false, label);
     if (!picked) return null;
-    if (picked !== "➕ Create New") return picked;
-    return await helpers.requiredPrompt(tp, `New ${label}`);
+    if (picked !== "➕ Create New") return { name: picked, created: false };
+
+    const fresh = await helpers.requiredPrompt(tp, `New ${label}`);
+    if (!fresh) return null;
+    const clean = helpers.sanitizeTitle(fresh);
+    if (!clean) {
+        new Notice(`That ${label.toLowerCase()} name has no usable characters.`);
+        return null;
+    }
+    return { name: clean, created: true };
 }
+
+// Unit notes are COURSE-QUALIFIED — "Cognitive Psychology – Unit 1", never
+// "Unit 1".
+//
+// The Units folder is flat and createStub returns early when the path already
+// exists, so a bare "Unit 1" typed under a second course silently adopts the
+// FIRST course's unit note — which keeps pointing at that other course in its
+// `course:` field, and whose Dataview list then mixes lectures from both.
+// pickUnit's own course filter hides the collision rather than catching it: the
+// colliding note is filtered out of the list you are shown, so "it isn't there"
+// looks like a reason to create it. Unit names are generic by design ("Unidad
+// 1", "U1", "todas"), which makes this the common case, not an edge one.
+//
+// Same fix, and the same shape, as sourceCaptureSeries.js's series-qualified
+// season names (ADR 0013 §3, which recorded this bug as #58 and left it open).
+// The separator is the en dash the vault already uses inside lecture titles.
+//
+// Already-qualified input is passed through untouched, so re-typing the name
+// the picker showed you cannot build "Course – Course – Unit 1".
+const UNIT_SEPARATOR = " – ";
+const unitNoteName = (course, unit) =>
+    unit.startsWith(course + UNIT_SEPARATOR) ? unit : `${course}${UNIT_SEPARATOR}${unit}`;
 
 async function pickCourse(tp, helpers) {
     const courseFiles = await getNotesInFolder(COURSE_FOLDER);
-    const courseNames = courseFiles.map(f => f.basename);
-    const course = await pickOrCreate(tp, helpers, "Course", courseNames);
-    if (!course) return null;
+    const picked = await pickOrCreate(tp, helpers, "Course", courseFiles.map(f => f.basename));
+    if (!picked) return null;
 
+    const course = picked.name;
     const coursePath = `${COURSE_FOLDER}/${course}.md`;
     const created = await createStub(tp, TEMPLATES.course, COURSE_FOLDER, course);
     return { course, coursePath, created };
@@ -96,10 +130,13 @@ async function pickUnit(tp, helpers, course) {
         if (!courseField) return false;
         return String(courseField).replaceAll("[[", "").replaceAll("]]", "").includes(course);
     });
-    const unitNames = matchingUnits.map(f => f.basename);
-    const unit = await pickOrCreate(tp, helpers, "Unit", unitNames);
-    if (!unit) return null;
+    const picked = await pickOrCreate(tp, helpers, "Unit", matchingUnits.map(f => f.basename));
+    if (!picked) return null;
 
+    // Only a freshly typed name gets qualified. A picked one is already a note
+    // in this course's list, whatever it happens to be called — including the
+    // bare names any vault captured before this fix.
+    const unit = picked.created ? unitNoteName(course, picked.name) : picked.name;
     await createStub(tp, TEMPLATES.unit, UNIT_FOLDER, unit, { course: `[[${course}]]` });
     return unit;
 }
@@ -118,9 +155,10 @@ async function pickLecturer(tp, helpers, coursePath) {
         peopleNames.unshift(defaultLecturer);
     }
 
-    const lecturer = await pickOrCreate(tp, helpers, "Lecturer", peopleNames);
-    if (!lecturer) return null;
+    const picked = await pickOrCreate(tp, helpers, "Lecturer", peopleNames);
+    if (!picked) return null;
 
+    const lecturer = picked.name;
     await createStub(tp, TEMPLATES.person, AGENTS_FOLDER, lecturer);
     return lecturer;
 }
