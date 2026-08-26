@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+## [2.17.1] – 2026-08-26
+
 ### Fixed
 - **Lecture capture: a same-named Unit in a second course no longer hijacks the
   first course's Unit note.** `04 - MOCS/Units` is flat and `createStub` returns
@@ -823,7 +825,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ---
 
-[Unreleased]: https://github.com/tenebrishv/shadowvault-setup/compare/v2.17.0...HEAD
+[Unreleased]: https://github.com/tenebrishv/shadowvault-setup/compare/v2.17.1...HEAD
+[2.17.1]: https://github.com/tenebrishv/shadowvault-setup/compare/v2.17.0...v2.17.1
 [2.17.0]: https://github.com/tenebrishv/shadowvault-setup/compare/v2.16.0...v2.17.0
 [2.16.0]: https://github.com/tenebrishv/shadowvault-setup/compare/v2.15.0...v2.16.0
 [2.15.0]: https://github.com/tenebrishv/shadowvault-setup/compare/v2.14.0...v2.15.0
