@@ -33,7 +33,7 @@ function createMockTp({ prompts = [], suggestions = [], fileTitle, templates = [
     // prompt argument (the pre-filled value) per call, so a test can assert
     // that a prefill was *offered* — which is the whole contract for a value
     // the reader is meant to confirm rather than one written silently.
-    const calls = { prompts: [], promptDefaults: [], suggestions: [], renames: [], createNew: [] };
+    const calls = { prompts: [], promptDefaults: [], suggestions: [], suggesterChoices: [], renames: [], createNew: [] };
 
     return {
         ...(user ? { user } : {}),
@@ -48,6 +48,7 @@ function createMockTp({ prompts = [], suggestions = [], fileTitle, templates = [
             },
             async suggester(displayItems, actualValues, throwOnCancel, placeholder) {
                 calls.suggestions.push(placeholder);
+                calls.suggesterChoices.push(displayItems);
                 if (suggestionQueue.length === 0) {
                     throw new Error(`tp.system.suggester(${placeholder}) called with no scripted answer left`);
                 }

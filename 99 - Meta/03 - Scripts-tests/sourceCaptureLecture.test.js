@@ -120,6 +120,64 @@ test("Lecture: default_lecturer accepts quoted-link and unquoted-link frontmatte
     }
 });
 
+test("Lecture: the course's default_lecturer is offered first in the Lecturer picker", async () => {
+    installMockNotice();
+    // Agents folder sorts "Aaron Early" ahead of "Dr. Vance" alphabetically;
+    // the default lecturer must still be the highlighted (first) row.
+    const { state } = installMockApp({
+        folders: {
+            "04 - MOCS/Courses": ["Cognitive Psychology"],
+            "04 - MOCS/Units": ["Unit 1"],
+            "09 - Entities/Agents": ["Aaron Early", "Dr. Vance", "Zoe Late"],
+        },
+        files: {
+            "04 - MOCS/Courses/Cognitive Psychology.md": { frontmatter: { default_lecturer: "[[Dr. Vance]]" } },
+            "04 - MOCS/Units/Unit 1.md": { frontmatter: { course: "[[Cognitive Psychology]]" } },
+            "09 - Entities/Agents/Aaron Early.md": { frontmatter: { tags: "agent/person" } },
+            "09 - Entities/Agents/Dr. Vance.md": { frontmatter: { tags: "agent/person" } },
+            "09 - Entities/Agents/Zoe Late.md": { frontmatter: { tags: "agent/person" } },
+        },
+    });
+    const tp = createMockTp({
+        suggestions: ["Cognitive Psychology", "Unit 1", "Dr. Vance"],
+        prompts: ["Intro to Memory", "", "", "", ""],
+        templates: ALL_TEMPLATES,
+        vaultState: state,
+    });
+
+    await sourceCaptureLecture(tp, helpers);
+
+    const lecturerChoices = tp._calls.suggesterChoices[2];
+    assert.equal(lecturerChoices[0], "Dr. Vance", "default lecturer must head the list");
+    assert.deepEqual(lecturerChoices, ["Dr. Vance", "Aaron Early", "Zoe Late", "➕ Create New"]);
+});
+
+test("Lecture: a default_lecturer with no Person note yet still heads the list", async () => {
+    installMockNotice();
+    const { state } = installMockApp({
+        folders: {
+            "04 - MOCS/Courses": ["Cognitive Psychology"],
+            "04 - MOCS/Units": ["Unit 1"],
+            "09 - Entities/Agents": ["Aaron Early"],
+        },
+        files: {
+            "04 - MOCS/Courses/Cognitive Psychology.md": { frontmatter: { default_lecturer: "[[Dr. Vance]]" } },
+            "04 - MOCS/Units/Unit 1.md": { frontmatter: { course: "[[Cognitive Psychology]]" } },
+            "09 - Entities/Agents/Aaron Early.md": { frontmatter: { tags: "agent/person" } },
+        },
+    });
+    const tp = createMockTp({
+        suggestions: ["Cognitive Psychology", "Unit 1", "Dr. Vance"],
+        prompts: ["Intro to Memory", "", "", "", ""],
+        templates: ALL_TEMPLATES,
+        vaultState: state,
+    });
+
+    await sourceCaptureLecture(tp, helpers);
+
+    assert.deepEqual(tp._calls.suggesterChoices[2], ["Dr. Vance", "Aaron Early", "➕ Create New"]);
+});
+
 test("Lecture: a second course's same-named unit gets its own note, not the first course's (#58)", async () => {
     installMockNotice();
     // "Unit 1" already exists and belongs to Cognitive Psychology. The picker

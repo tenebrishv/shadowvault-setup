@@ -73,8 +73,16 @@ function linkTargetName(value) {
 // typed (about to become a filename, so it is cleaned here) from one picked
 // off the list (an existing basename, already safe). Mirrors
 // sourceCaptureSeries.js:65-72.
-async function pickOrCreate(tp, helpers, label, existingItems) {
-    const choices = [...existingItems.sort(), "➕ Create New"];
+//
+// `preferredFirst`, when given, is hoisted to the top of the otherwise
+// alphabetical list so Obsidian's suggester highlights it by default (it
+// auto-highlights the first row). The lecturer picker uses this to
+// pre-select the course's `default_lecturer`; without it the in-place
+// `.sort()` here would scatter that name back into alphabetical order.
+async function pickOrCreate(tp, helpers, label, existingItems, preferredFirst = "") {
+    const rest = existingItems.filter(item => item !== preferredFirst).sort();
+    const ordered = preferredFirst ? [preferredFirst, ...rest] : rest;
+    const choices = [...ordered, "➕ Create New"];
     const picked = await tp.system.suggester(choices, choices, false, label);
     if (!picked) return null;
     if (picked !== "➕ Create New") return { name: picked, created: false };
@@ -150,12 +158,15 @@ async function pickLecturer(tp, helpers, coursePath) {
     }
 
     const peopleFiles = await getPersonNotes(AGENTS_FOLDER);
-    let peopleNames = peopleFiles.map(f => f.basename);
+    const peopleNames = peopleFiles.map(f => f.basename);
+    // Keep the course's default lecturer on the list even when they have no
+    // Person note yet; pickOrCreate then hoists them to the top so the
+    // suggester lands on them by default.
     if (defaultLecturer && !peopleNames.includes(defaultLecturer)) {
-        peopleNames.unshift(defaultLecturer);
+        peopleNames.push(defaultLecturer);
     }
 
-    const picked = await pickOrCreate(tp, helpers, "Lecturer", peopleNames);
+    const picked = await pickOrCreate(tp, helpers, "Lecturer", peopleNames, defaultLecturer);
     if (!picked) return null;
 
     const lecturer = picked.name;

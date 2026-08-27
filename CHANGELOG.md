@@ -121,6 +121,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
   restricting private internal use was never the goal.
 
 ### Fixed
+- **Lecture capture: the course's `default_lecturer` is now pre-selected in the
+  Lecturer picker.** `pickLecturer` read the course's `default_lecturer` and
+  moved that name to the front of the list, but only when the person had no
+  note yet — and `pickOrCreate` then ran an in-place `.sort()` that scattered
+  it back into alphabetical order regardless. So after picking a course, the
+  Lecturer suggester never landed on that course's usual lecturer. `pickOrCreate`
+  takes an optional `preferredFirst` argument that it hoists above the sorted
+  rest (Obsidian's suggester auto-highlights the first row), and `pickLecturer`
+  passes the resolved default lecturer — kept on the list whether or not they
+  have a Person note.
 - **Two `README.md` claims that stopped being true when the literature /
   permanent boundary was redefined.** The Knowledge Flow diagram drew the
   pipeline as a linear conveyor, implying every note rides from Source through
